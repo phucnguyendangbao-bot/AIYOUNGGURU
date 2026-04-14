@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BrightWay Scholars – Sửa & Nhận xét CV Học Bổng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg: linear-gradient(145deg,#e8eeff 0%,#dde8ff 20%,#e5deff 50%,#d6e9ff 80%,#e0f0ff 100%);
+  --glass: rgba(255,255,255,0.62);
+  --glass-border: rgba(255,255,255,0.85);
+  --grad: linear-gradient(135deg,#6366f1,#7c3aed);
+  --grad-green: linear-gradient(135deg,#34d399,#059669);
+  --text-dark: #1a1a3e;
+  --text-mid: #374151;
+  --text-soft: #6b7280;
+  --accent: #6366f1;
+  --accent2: #7c3aed;
+  --shadow: 0 4px 16px rgba(99,102,241,0.1);
+  --shadow-lg: 0 12px 32px rgba(99,102,241,0.18);
+  --font: 'Be Vietnam Pro', sans-serif;
+  --font-display: 'Nunito','Be Vietnam Pro',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  background-attachment:fixed;
+  color:var(--text-mid);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;top:-15%;left:-10%;width:55vw;height:55vw;
+  background:radial-gradient(circle,rgba(130,100,255,0.18),transparent 65%);
+  border-radius:50%;pointer-events:none;z-index:0;
+  animation:blobFloat 14s ease-in-out infinite;
+}
+body::after{
+  content:'';position:fixed;bottom:-15%;right:-10%;width:50vw;height:50vw;
+  background:radial-gradient(circle,rgba(99,165,255,0.16),transparent 65%);
+  border-radius:50%;pointer-events:none;z-index:0;
+  animation:blobFloat 18s ease-in-out infinite reverse;
+}
+@keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(3%,-3%) scale(1.04)}}
+
+/* ── NAV ── */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,0.82);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,0.85);
+  box-shadow:0 2px 12px rgba(99,102,241,0.08);
+}
+.nav-inner{
+  max-width:900px;margin:0 auto;
+  padding:12px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.nav-logo{
+  font-family:var(--font-display);font-weight:900;font-size:1rem;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  text-decoration:none;white-space:nowrap;
+}
+.nav-back{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(99,102,241,0.1);color:var(--accent);
+  font-weight:700;font-size:.82rem;
+  padding:7px 16px;border-radius:999px;
+  text-decoration:none;transition:all .2s;
+  border:1px solid rgba(99,102,241,0.18);
+}
+.nav-back:hover{background:var(--grad);color:#fff;border-color:transparent;}
+
+/* ── HERO ── */
+.hero{
+  max-width:900px;margin:0 auto;padding:40px 24px 0;
+  position:relative;z-index:1;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);
+  border-radius:999px;padding:5px 14px;font-size:.78rem;font-weight:700;
+  color:var(--accent);margin-bottom:16px;
+}
+.hero-title{
+  font-family:var(--font-display);font-weight:900;
+  font-size:clamp(1.6rem,4vw,2.4rem);color:var(--text-dark);
+  line-height:1.2;margin-bottom:10px;
+}
+.hero-title span{
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-sub{font-size:.95rem;color:var(--text-soft);line-height:1.6;max-width:520px;}
+
+/* ── MAIN CARD ── */
+.main-card{
+  max-width:900px;margin:28px auto 40px;padding:0 24px;
+  position:relative;z-index:1;
+}
+.card-box{
+  background:rgba(255,255,255,0.65);
+  border:1.5px solid rgba(255,255,255,0.9);
+  border-radius:24px;
+  backdrop-filter:blur(14px);
+  box-shadow:var(--shadow-lg);
+  overflow:hidden;
+}
+
+/* ── STEP INDICATOR ── */
+.steps{
+  display:flex;align-items:center;gap:0;
+  padding:20px 28px 0;
+}
+.step-item{display:flex;align-items:center;gap:8px;}
+.step-num{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;font-weight:800;flex-shrink:0;
+  background:rgba(99,102,241,0.1);color:var(--text-soft);
+  border:1.5px solid rgba(99,102,241,0.15);
+  transition:all .3s;
+}
+.step-num.active{background:var(--grad);color:#fff;border-color:transparent;}
+.step-num.done{background:rgba(16,185,129,0.15);color:#059669;border-color:rgba(16,185,129,0.3);}
+.step-label{font-size:.78rem;font-weight:700;color:var(--text-soft);transition:color .3s;}
+.step-label.active{color:var(--accent);}
+.step-label.done{color:#059669;}
+.step-line{flex:1;height:2px;background:rgba(99,102,241,0.12);margin:0 8px;border-radius:999px;}
+.step-line.done{background:rgba(16,185,129,0.3);}
+
+/* ── FORM AREA ── */
+.form-area{padding:24px 28px 28px;}
+
+/* Input section */
+.section-label{
+  font-weight:800;font-size:.82rem;color:var(--accent);
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+}
+.input-wrap{position:relative;margin-bottom:20px;}
+.cv-textarea{
+  width:100%;min-height:220px;resize:vertical;
+  border:1.5px solid rgba(99,102,241,0.2);
+  border-radius:14px;padding:14px 16px;
+  font-size:.88rem;font-family:var(--font);
+  color:var(--text-dark);background:rgba(255,255,255,0.8);
+  outline:none;transition:border-color .2s,box-shadow .2s;
+  line-height:1.7;
+}
+.cv-textarea:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 4px rgba(99,102,241,0.1);
+}
+.cv-textarea::placeholder{color:rgba(107,114,128,0.6);}
+.char-count{
+  position:absolute;bottom:10px;right:14px;
+  font-size:.72rem;color:var(--text-soft);pointer-events:none;
+}
+
+/* Options */
+.options-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  margin-bottom:20px;
+}
+@media(max-width:520px){.options-grid{grid-template-columns:1fr;}}
+.opt-card{
+  border:1.5px solid rgba(99,102,241,0.15);
+  border-radius:12px;padding:12px 14px;
+  cursor:pointer;transition:all .2s;
+  background:rgba(255,255,255,0.6);
+}
+.opt-card:hover{border-color:rgba(99,102,241,0.4);background:rgba(99,102,241,0.04);}
+.opt-card.selected{
+  border-color:var(--accent);
+  background:rgba(99,102,241,0.08);
+  box-shadow:0 0 0 3px rgba(99,102,241,0.12);
+}
+.opt-card input[type=checkbox]{display:none;}
+.opt-card-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.opt-icon{font-size:1rem;}
+.opt-name{font-weight:700;font-size:.82rem;color:var(--text-dark);}
+.opt-desc{font-size:.75rem;color:var(--text-soft);line-height:1.45;}
+.opt-check{
+  width:18px;height:18px;border-radius:5px;border:2px solid rgba(99,102,241,0.3);
+  margin-left:auto;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.opt-card.selected .opt-check{background:var(--accent);border-color:var(--accent);}
+.opt-check-icon{display:none;color:#fff;font-size:.65rem;font-weight:900;}
+.opt-card.selected .opt-check-icon{display:block;}
+
+/* Submit */
+.submit-btn{
+  width:100%;padding:14px;border-radius:14px;border:none;cursor:pointer;
+  background:var(--grad);color:#fff;
+  font-family:var(--font-display);font-weight:800;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .25s;box-shadow:0 4px 16px rgba(99,102,241,0.3);
+  position:relative;overflow:hidden;
+}
+.submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(99,102,241,0.4);}
+.submit-btn:disabled{opacity:.65;cursor:not-allowed;transform:none;}
+.submit-btn .spinner{
+  width:18px;height:18px;border:2.5px solid rgba(255,255,255,0.4);
+  border-top-color:#fff;border-radius:50%;
+  animation:spin .7s linear infinite;display:none;
+}
+.submit-btn.loading .btn-text{display:none;}
+.submit-btn.loading .spinner{display:block;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── RESULT AREA ── */
+.result-area{display:none;padding:24px 28px 28px;}
+
+/* Score ring */
+.score-section{
+  display:flex;align-items:center;gap:24px;
+  background:linear-gradient(135deg,rgba(99,102,241,0.06),rgba(124,58,237,0.04));
+  border:1.5px solid rgba(99,102,241,0.14);
+  border-radius:18px;padding:20px 24px;margin-bottom:20px;
+}
+@media(max-width:540px){.score-section{flex-direction:column;text-align:center;}}
+.score-ring{
+  width:84px;height:84px;flex-shrink:0;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.score-ring svg{position:absolute;top:0;left:0;transform:rotate(-90deg);}
+.score-ring-bg{fill:none;stroke:rgba(99,102,241,0.12);stroke-width:7;}
+.score-ring-fill{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 1.2s ease;}
+.score-value{
+  font-family:var(--font-display);font-weight:900;font-size:1.5rem;
+  color:var(--text-dark);line-height:1;position:relative;z-index:1;text-align:center;
+}
+.score-value span{display:block;font-size:.65rem;font-weight:600;color:var(--text-soft);margin-top:2px;}
+.score-meta{}
+.score-level{
+  font-family:var(--font-display);font-weight:800;font-size:1.1rem;
+  color:var(--text-dark);margin-bottom:4px;
+}
+.score-verdict{font-size:.84rem;color:var(--text-soft);line-height:1.5;}
+
+/* Result blocks */
+.result-blocks{display:flex;flex-direction:column;gap:14px;}
+.result-block{
+  background:rgba(255,255,255,0.72);border:1.5px solid rgba(255,255,255,0.9);
+  border-radius:16px;overflow:hidden;box-shadow:var(--shadow);
+}
+.result-block-head{
+  padding:13px 18px;display:flex;align-items:center;gap:10px;cursor:pointer;
+  transition:background .15s;user-select:none;
+}
+.result-block-head:hover{background:rgba(99,102,241,0.04);}
+.result-block-icon{font-size:1rem;flex-shrink:0;}
+.result-block-title{font-weight:800;font-size:.88rem;color:var(--text-dark);flex:1;}
+.result-block-badge{
+  font-size:.72rem;font-weight:700;padding:2px 10px;border-radius:999px;
+}
+.badge-danger{background:rgba(239,68,68,0.1);color:#dc2626;border:1px solid rgba(239,68,68,0.2);}
+.badge-warn{background:rgba(245,158,11,0.1);color:#d97706;border:1px solid rgba(245,158,11,0.2);}
+.badge-ok{background:rgba(16,185,129,0.1);color:#059669;border:1px solid rgba(16,185,129,0.2);}
+.badge-info{background:rgba(99,102,241,0.1);color:var(--accent);border:1px solid rgba(99,102,241,0.2);}
+.result-block-arrow{
+  width:18px;height:18px;stroke:rgba(99,102,241,0.5);flex-shrink:0;
+  transition:transform .3s;
+}
+.result-block-body{
+  padding:0 18px 14px;border-top:1px solid rgba(99,102,241,0.07);
+  font-size:.84rem;color:var(--text-mid);line-height:1.65;
+}
+.result-block-body.collapsed{display:none;}
+.result-block.open .result-block-arrow{transform:rotate(180deg);}
+
+/* Lists inside result */
+.result-list{list-style:none;display:flex;flex-direction:column;gap:6px;padding-top:8px;}
+.result-list li{
+  display:flex;gap:8px;align-items:flex-start;
+  padding:8px 12px;border-radius:10px;font-size:.82rem;
+}
+.result-list li.good{background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.12);}
+.result-list li.bad{background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.12);}
+.result-list li.tip{background:rgba(99,102,241,0.05);border:1px solid rgba(99,102,241,0.12);}
+.result-list li::before{flex-shrink:0;margin-top:1px;}
+.result-list li.good::before{content:'✅';}
+.result-list li.bad::before{content:'❌';}
+.result-list li.tip::before{content:'💡';}
+
+/* Suggested rewrite box */
+.rewrite-box{
+  background:rgba(254,249,195,0.7);border:1.5px solid rgba(251,191,36,0.35);
+  border-radius:12px;padding:14px 16px;margin-top:10px;
+  font-size:.82rem;color:#92400e;line-height:1.65;
+  white-space:pre-wrap;
+}
+.rewrite-box-label{font-weight:800;margin-bottom:6px;display:block;}
+
+/* Action buttons */
+.result-actions{
+  display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;
+}
+.action-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 18px;border-radius:12px;border:none;cursor:pointer;
+  font-family:var(--font);font-weight:700;font-size:.82rem;
+  transition:all .2s;
+}
+.action-btn-primary{
+  background:var(--grad);color:#fff;
+  box-shadow:0 3px 12px rgba(99,102,241,0.25);
+}
+.action-btn-primary:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(99,102,241,0.35);}
+.action-btn-secondary{
+  background:rgba(99,102,241,0.1);color:var(--accent);
+  border:1.5px solid rgba(99,102,241,0.18);
+}
+.action-btn-secondary:hover{background:rgba(99,102,241,0.18);}
+
+/* ── TIPS SIDEBAR / BOTTOM ── */
+.tips-strip{
+  max-width:900px;margin:0 auto 32px;padding:0 24px;
+  position:relative;z-index:1;
+}
+.tips-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+}
+@media(max-width:640px){.tips-grid{grid-template-columns:1fr;}}
+.tip-mini{
+  background:rgba(255,255,255,0.6);border:1.5px solid rgba(255,255,255,0.9);
+  border-radius:14px;padding:14px 16px;
+  font-size:.78rem;
+}
+.tip-mini-icon{font-size:1.1rem;margin-bottom:6px;}
+.tip-mini-title{font-weight:800;font-size:.82rem;color:var(--text-dark);margin-bottom:4px;}
+.tip-mini-desc{color:var(--text-soft);line-height:1.5;}
+
+/* ── LOADING SKELETON ── */
+.skeleton{
+  background:linear-gradient(90deg,rgba(99,102,241,0.06) 25%,rgba(99,102,241,0.12) 50%,rgba(99,102,241,0.06) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.5s infinite;
+  border-radius:8px;
+}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ── FOOTER ── */
+.footer{
+  text-align:center;padding:20px;
+  font-size:.8rem;color:var(--text-soft);
+  position:relative;z-index:1;
+}
+.footer a{color:var(--accent);text-decoration:none;font-weight:600;}
+
+/* ── HIDDEN ── */
+.hidden{display:none!important;}
+
+/* ══════════════════════════════════════════════
+   SECTIONS MỚI: Score Breakdown / Why-not-GPT / Before-After
+   ══════════════════════════════════════════════ */
+.section-wrap{
+  max-width:900px;margin:0 auto 40px;padding:0 24px;
+  position:relative;z-index:1;
+}
+.section-head{text-align:center;margin-bottom:22px;}
+.section-eyebrow{
+  display:inline-block;
+  background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);
+  color:var(--accent);font-weight:700;font-size:.72rem;
+  padding:4px 12px;border-radius:999px;
+  text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;
+}
+.section-title{
+  font-family:var(--font-display);font-weight:900;
+  font-size:clamp(1.4rem,3.2vw,1.9rem);color:var(--text-dark);
+  line-height:1.25;margin-bottom:8px;
+}
+.section-title span{
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.section-sub{font-size:.9rem;color:var(--text-soft);max-width:560px;margin:0 auto;line-height:1.6;}
+
+/* ── SCORE BREAKDOWN ── */
+.score-breakdown{
+  background:rgba(255,255,255,0.65);
+  border:1.5px solid rgba(255,255,255,0.9);
+  border-radius:24px;
+  backdrop-filter:blur(14px);
+  box-shadow:var(--shadow-lg);
+  padding:28px;
+}
+.sb-top{
+  display:flex;align-items:center;gap:20px;
+  padding-bottom:22px;margin-bottom:22px;
+  border-bottom:1px dashed rgba(99,102,241,0.2);
+}
+.sb-overall{
+  width:110px;height:110px;flex-shrink:0;
+  border-radius:50%;
+  background:var(--grad);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:#fff;
+  box-shadow:0 8px 24px rgba(99,102,241,0.35);
+  position:relative;
+}
+.sb-overall::after{
+  content:'';position:absolute;inset:4px;border-radius:50%;
+  border:2px solid rgba(255,255,255,0.35);
+}
+.sb-overall-num{font-family:var(--font-display);font-weight:900;font-size:2rem;line-height:1;}
+.sb-overall-max{font-size:.72rem;opacity:.85;margin-top:2px;font-weight:600;}
+.sb-overall-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-top:6px;opacity:.9;}
+.sb-top-title{font-family:var(--font-display);font-weight:800;font-size:1.1rem;color:var(--text-dark);margin-bottom:4px;}
+.sb-top-desc{font-size:.85rem;color:var(--text-soft);line-height:1.5;}
+.sb-badge-good{
+  display:inline-block;margin-top:8px;
+  background:rgba(16,185,129,0.12);color:#059669;
+  font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px;
+  border:1px solid rgba(16,185,129,0.25);
+}
+.sb-items{display:flex;flex-direction:column;gap:14px;}
+.sb-item{display:flex;align-items:center;gap:14px;}
+.sb-item-label{
+  width:160px;flex-shrink:0;
+  font-weight:700;font-size:.85rem;color:var(--text-dark);
+  display:flex;align-items:center;gap:6px;
+}
+.sb-item-label .sb-icon{font-size:1rem;}
+.sb-bar{flex:1;height:10px;border-radius:999px;background:rgba(99,102,241,0.1);overflow:hidden;position:relative;}
+.sb-bar-fill{
+  height:100%;border-radius:999px;background:var(--grad);
+  transition:width 1s cubic-bezier(.2,.8,.2,1);
+}
+.sb-bar-fill.green{background:var(--grad-green);}
+.sb-bar-fill.amber{background:linear-gradient(135deg,#fbbf24,#f59e0b);}
+.sb-item-num{
+  width:46px;flex-shrink:0;text-align:right;
+  font-family:var(--font-display);font-weight:800;font-size:.95rem;color:var(--text-dark);
+}
+.sb-note{
+  margin-top:20px;padding:12px 14px;
+  background:rgba(99,102,241,0.06);border-radius:12px;
+  border-left:3px solid var(--accent);
+  font-size:.82rem;color:var(--text-mid);line-height:1.55;
+}
+@media(max-width:560px){
+  .sb-top{flex-direction:column;text-align:center;gap:14px;}
+  .sb-item-label{width:130px;font-size:.78rem;}
+}
+
+/* ── WHY NOT CHATGPT ── */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:640px){.why-grid{grid-template-columns:1fr;}}
+.why-card{
+  background:rgba(255,255,255,0.65);
+  border:1.5px solid rgba(255,255,255,0.9);
+  border-radius:18px;
+  backdrop-filter:blur(14px);
+  box-shadow:var(--shadow);
+  padding:20px;
+  display:flex;gap:14px;
+  transition:transform .25s,box-shadow .25s;
+}
+.why-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.why-icon-wrap{
+  width:44px;height:44px;flex-shrink:0;
+  border-radius:12px;
+  background:var(--grad);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;color:#fff;
+  box-shadow:0 4px 12px rgba(99,102,241,0.3);
+}
+.why-card-title{
+  font-family:var(--font-display);font-weight:800;font-size:.98rem;
+  color:var(--text-dark);margin-bottom:6px;line-height:1.3;
+}
+.why-card-desc{font-size:.83rem;color:var(--text-soft);line-height:1.55;}
+.why-compare{
+  margin-top:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  font-size:.72rem;font-weight:700;
+}
+.why-compare-gpt{color:#9ca3af;text-decoration:line-through;}
+.why-compare-arrow{color:var(--accent);}
+.why-compare-us{color:var(--accent);}
+
+/* ── BEFORE / AFTER ── */
+.ba-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:stretch;}
+@media(max-width:720px){
+  .ba-grid{grid-template-columns:1fr;gap:12px;}
+  .ba-arrow{transform:rotate(90deg);margin:0 auto;}
+}
+.ba-card{
+  border-radius:18px;
+  backdrop-filter:blur(14px);
+  box-shadow:var(--shadow);
+  padding:22px;
+  display:flex;flex-direction:column;
+}
+.ba-card.before{
+  border:1.5px solid rgba(239,68,68,0.25);
+  background:linear-gradient(180deg,rgba(254,226,226,0.55),rgba(255,255,255,0.7));
+}
+.ba-card.after{
+  border:1.5px solid rgba(16,185,129,0.3);
+  background:linear-gradient(180deg,rgba(209,250,229,0.55),rgba(255,255,255,0.7));
+}
+.ba-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;
+  padding:4px 10px;border-radius:999px;
+  width:fit-content;margin-bottom:14px;
+}
+.ba-card.before .ba-label{background:rgba(239,68,68,0.12);color:#dc2626;}
+.ba-card.after  .ba-label{background:rgba(16,185,129,0.12);color:#059669;}
+.ba-text{
+  font-size:.92rem;line-height:1.65;color:var(--text-dark);
+  padding:14px;border-radius:12px;
+  background:rgba(255,255,255,0.7);
+  border:1px dashed rgba(0,0,0,0.06);
+  flex:1;
+}
+.ba-text mark{
+  background:rgba(16,185,129,0.18);color:#065f46;
+  padding:1px 4px;border-radius:4px;font-weight:600;
+}
+.ba-meta{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;}
+.ba-tag{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:999px;}
+.ba-card.before .ba-tag{background:rgba(239,68,68,0.1);color:#b91c1c;}
+.ba-card.after  .ba-tag{background:rgba(16,185,129,0.12);color:#047857;}
+.ba-arrow{
+  display:flex;align-items:center;justify-content:center;
+  width:40px;color:var(--accent);font-size:1.5rem;flex-shrink:0;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">BrightWay Scholars</a>
+    <a href="page2.html" class="nav-back" style="margin-right:10px;">🎓 Học bổng theo trường</a>
+    <a href="index.html" class="nav-back">← Trang chủ</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">🎯 AI chuyên cho CV học bổng — không phải chatbot chung chung</div>
+  <h1 class="hero-title">Biết CV của bạn <span>yếu ở đâu</span> — và sửa đúng chỗ</h1>
+  <p class="hero-sub">Phân tích CV theo đúng tiêu chí hội đồng học bổng quan tâm: Leadership, Impact, Storytelling, Scholarship Fit. Nhận điểm số, điểm yếu cụ thể và gợi ý viết lại có thể dùng ngay — trong chưa đầy 30 giây.</p>
+</div>
+
+<!-- MAIN -->
+<div class="main-card">
+  <div class="card-box">
+
+    <!-- STEPS -->
+    <div class="steps">
+      <div class="step-item">
+        <div class="step-num active" id="step1Num">1</div>
+        <div class="step-label active" id="step1Label">Dán nội dung</div>
+      </div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-item">
+        <div class="step-num" id="step2Num">2</div>
+        <div class="step-label" id="step2Label">Chọn loại đánh giá</div>
+      </div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-item">
+        <div class="step-num" id="step3Num">3</div>
+        <div class="step-label" id="step3Label">Xem kết quả</div>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="form-area" id="formArea">
+
+      <div class="section-label">📄 Nội dung CV / Bài luận</div>
+      <div class="input-wrap">
+        <textarea class="cv-textarea" id="cvInput" placeholder="Dán toàn bộ nội dung CV học bổng hoặc bài luận của bạn vào đây...&#10;&#10;Ví dụ: Họ tên, mục tiêu, thành tích học tập, hoạt động ngoại khoá, kế hoạch tương lai..." oninput="updateChar()"></textarea>
+        <span class="char-count" id="charCount">0 ký tự</span>
+      </div>
+
+      <div class="section-label">🔍 Chọn tiêu chí đánh giá</div>
+      <div class="options-grid" id="optGrid">
+        <label class="opt-card selected" onclick="toggleOpt(this)">
+          <input type="checkbox" checked>
+          <div class="opt-card-head">
+            <span class="opt-icon">📊</span>
+            <span class="opt-name">Cấu trúc & Trình bày</span>
+            <span class="opt-check"><span class="opt-check-icon">✓</span></span>
+          </div>
+          <div class="opt-desc">Bố cục rõ ràng, thứ tự hợp lý, dễ đọc</div>
+        </label>
+        <label class="opt-card selected" onclick="toggleOpt(this)">
+          <input type="checkbox" checked>
+          <div class="opt-card-head">
+            <span class="opt-icon">🏆</span>
+            <span class="opt-name">Thành tích & Minh chứng</span>
+            <span class="opt-check"><span class="opt-check-icon">✓</span></span>
+          </div>
+          <div class="opt-desc">Thành tích có số liệu, cụ thể và thuyết phục</div>
+        </label>
+        <label class="opt-card selected" onclick="toggleOpt(this)">
+          <input type="checkbox" checked>
+          <div class="opt-card-head">
+            <span class="opt-icon">🎯</span>
+            <span class="opt-name">Mục tiêu & Định hướng</span>
+            <span class="opt-check"><span class="opt-check-icon">✓</span></span>
+          </div>
+          <div class="opt-desc">Mục tiêu rõ ràng, phù hợp với học bổng</div>
+        </label>
+        <label class="opt-card selected" onclick="toggleOpt(this)">
+          <input type="checkbox" checked>
+          <div class="opt-card-head">
+            <span class="opt-icon">✍️</span>
+            <span class="opt-name">Ngôn ngữ & Văn phong</span>
+            <span class="opt-check"><span class="opt-check-icon">✓</span></span>
+          </div>
+          <div class="opt-desc">Dùng từ chuyên nghiệp, tránh lỗi diễn đạt</div>
+        </label>
+        <label class="opt-card selected" onclick="toggleOpt(this)">
+          <input type="checkbox" checked>
+          <div class="opt-card-head">
+            <span class="opt-icon">💡</span>
+            <span class="opt-name">Điểm nổi bật cá nhân</span>
+            <span class="opt-check"><span class="opt-check-icon">✓</span></span>
+          </div>
+          <div class="opt-desc">Câu chuyện riêng, tạo ấn tượng với hội đồng</div>
+        </label>
+        <label class="opt-card selected" onclick="toggleOpt(this)">
+          <input type="checkbox" checked>
+          <div class="opt-card-head">
+            <span class="opt-icon">🔧</span>
+            <span class="opt-name">Gợi ý cải thiện cụ thể</span>
+            <span class="opt-check"><span class="opt-check-icon">✓</span></span>
+          </div>
+          <div class="opt-desc">Đề xuất viết lại hoặc bổ sung những phần yếu</div>
+        </label>
+      </div>
+
+      <button class="submit-btn" id="submitBtn" onclick="submitCV()">
+        <span class="btn-text">🚀 Phân tích CV ngay</span>
+        <div class="spinner"></div>
+      </button>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result-area" id="resultArea">
+      <!-- Score -->
+      <div class="score-section" id="scoreSection">
+        <div class="score-ring" id="scoreRing">
+          <svg viewBox="0 0 84 84" width="84" height="84">
+            <circle class="score-ring-bg" cx="42" cy="42" r="35"/>
+            <circle class="score-ring-fill" id="scoreCircle" cx="42" cy="42" r="35"
+              stroke-dasharray="219.9" stroke-dashoffset="219.9"
+              stroke="url(#ringGrad)"/>
+            <defs>
+              <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#6366f1"/>
+                <stop offset="100%" stop-color="#7c3aed"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="score-value" id="scoreValue">--<span>/ 100</span></div>
+        </div>
+        <div class="score-meta">
+          <div class="score-level" id="scoreLevel">Đang phân tích...</div>
+          <div class="score-verdict" id="scoreVerdict">AI đang xem xét nội dung CV của bạn.</div>
+        </div>
+      </div>
+
+      <!-- Result blocks (dynamic) -->
+      <div class="result-blocks" id="resultBlocks"></div>
+
+      <!-- Actions -->
+      <div class="result-actions">
+        <button class="action-btn action-btn-primary" onclick="resetForm()">🔄 Phân tích lại</button>
+        <button class="action-btn action-btn-secondary" onclick="copyResult()">📋 Sao chép kết quả</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════ SECTION: CV SCORE BREAKDOWN (demo) ══════ -->
+<div class="section-wrap" id="scoreBreakdownSection">
+  <div class="section-head">
+    <div class="section-eyebrow">📊 Rubric đánh giá</div>
+    <h2 class="section-title">Điểm CV được <span>chia theo năng lực</span>, không chỉ một con số</h2>
+    <p class="section-sub">Hội đồng học bổng nhìn CV qua nhiều lăng kính khác nhau. BrightWay Scholars cũng vậy — mỗi năng lực được chấm riêng để bạn biết chính xác nên đầu tư chỉnh sửa ở đâu.</p>
+  </div>
+
+  <div class="score-breakdown">
+    <div class="sb-top">
+      <div class="sb-overall">
+        <div class="sb-overall-num">78</div>
+        <div class="sb-overall-max">/ 100</div>
+        <div class="sb-overall-label">Overall</div>
+      </div>
+      <div class="sb-top-text">
+        <div class="sb-top-title">CV của bạn đang ở mức “Khá — gần chạm ngưỡng cạnh tranh”</div>
+        <div class="sb-top-desc">Điểm mạnh ở Scholarship Fit và Impact. Cần nâng Leadership và Storytelling để vào nhóm top ứng viên.</div>
+        <span class="sb-badge-good">↑ +12 điểm so với phiên bản trước</span>
+      </div>
+    </div>
+
+    <div class="sb-items">
+      <div class="sb-item">
+        <div class="sb-item-label"><span class="sb-icon">🧭</span> Leadership</div>
+        <div class="sb-bar"><div class="sb-bar-fill amber" style="width:72%"></div></div>
+        <div class="sb-item-num">72</div>
+      </div>
+      <div class="sb-item">
+        <div class="sb-item-label"><span class="sb-icon">🎯</span> Impact</div>
+        <div class="sb-bar"><div class="sb-bar-fill green" style="width:81%"></div></div>
+        <div class="sb-item-num">81</div>
+      </div>
+      <div class="sb-item">
+        <div class="sb-item-label"><span class="sb-icon">🧱</span> Clarity</div>
+        <div class="sb-bar"><div class="sb-bar-fill" style="width:76%"></div></div>
+        <div class="sb-item-num">76</div>
+      </div>
+      <div class="sb-item">
+        <div class="sb-item-label"><span class="sb-icon">📖</span> Storytelling</div>
+        <div class="sb-bar"><div class="sb-bar-fill amber" style="width:74%"></div></div>
+        <div class="sb-item-num">74</div>
+      </div>
+      <div class="sb-item">
+        <div class="sb-item-label"><span class="sb-icon">🎓</span> Scholarship Fit</div>
+        <div class="sb-bar"><div class="sb-bar-fill green" style="width:83%"></div></div>
+        <div class="sb-item-num">83</div>
+      </div>
+    </div>
+
+    <div class="sb-note">
+      💡 Điểm số giúp bạn biết mình đang yếu ở đâu để ưu tiên chỉnh sửa đúng chỗ — thay vì viết lại cả CV một cách mơ hồ.
+    </div>
+  </div>
+</div>
+
+<!-- ══════ SECTION: WHY NOT CHATGPT ══════ -->
+<div class="section-wrap" id="whyNotGpt">
+  <div class="section-head">
+    <div class="section-eyebrow">⚡ Khác biệt cốt lõi</div>
+    <h2 class="section-title">Vì sao không chỉ <span>dùng ChatGPT</span>?</h2>
+    <p class="section-sub">ChatGPT là công cụ tổng quát. BrightWay Scholars được thiết kế riêng cho một việc duy nhất: giúp CV học bổng của bạn qua vòng hồ sơ.</p>
+  </div>
+
+  <div class="why-grid">
+
+    <div class="why-card">
+      <div class="why-icon-wrap">🧠</div>
+      <div>
+        <div class="why-card-title">Không cần biết cách prompt</div>
+        <div class="why-card-desc">Chỉ dán CV, chọn tiêu chí, nhận kết quả. Bạn không phải học cách “hỏi AI cho đúng” — workflow đã được chuẩn hoá sẵn cho CV học bổng.</div>
+        <div class="why-compare">
+          <span class="why-compare-gpt">“Bạn hãy xem CV này giúp mình”</span>
+          <span class="why-compare-arrow">→</span>
+          <span class="why-compare-us">1 click, có kết quả</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-icon-wrap">🎯</div>
+      <div>
+        <div class="why-card-title">Chấm theo tiêu chí học bổng</div>
+        <div class="why-card-desc">Rubric 5 trục: Leadership, Impact, Clarity, Storytelling, Scholarship Fit — đúng những gì hội đồng nhìn vào, thay vì nhận xét chung chung kiểu “CV của bạn khá ổn”.</div>
+        <div class="why-compare">
+          <span class="why-compare-gpt">Góp ý chung chung</span>
+          <span class="why-compare-arrow">→</span>
+          <span class="why-compare-us">Rubric rõ ràng</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-icon-wrap">🔍</div>
+      <div>
+        <div class="why-card-title">Chỉ điểm yếu theo nhóm năng lực</div>
+        <div class="why-card-desc">Biết chính xác bạn đang yếu ở Leadership hay Storytelling, câu nào cần viết lại, phần nào thiếu số liệu — không phải đoán mò.</div>
+        <div class="why-compare">
+          <span class="why-compare-gpt">“Hãy viết hay hơn”</span>
+          <span class="why-compare-arrow">→</span>
+          <span class="why-compare-us">Yếu ở đâu, sửa gì</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-icon-wrap">✏️</div>
+      <div>
+        <div class="why-card-title">Output dùng được ngay</div>
+        <div class="why-card-desc">Mỗi gợi ý đi kèm một phiên bản viết lại có thể copy-paste thẳng vào CV. Bạn biết phải làm gì tiếp theo, không mất thêm một buổi để “diễn giải AI”.</div>
+        <div class="why-compare">
+          <span class="why-compare-gpt">Đoạn văn dài dòng</span>
+          <span class="why-compare-arrow">→</span>
+          <span class="why-compare-us">Câu viết lại sẵn</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════ SECTION: BEFORE / AFTER ══════ -->
+<div class="section-wrap" id="beforeAfter">
+  <div class="section-head">
+    <div class="section-eyebrow">✨ Ví dụ thực tế</div>
+    <h2 class="section-title">Một dòng CV, <span>hai thế giới khác nhau</span></h2>
+    <p class="section-sub">Cùng một trải nghiệm, nhưng hội đồng học bổng đọc hoàn toàn khác nhau. Đây là cách BrightWay Scholars viết lại theo tinh thần “rõ hành động — rõ tác động — rõ kết quả”.</p>
+  </div>
+
+  <div class="ba-grid">
+
+    <div class="ba-card before">
+      <div class="ba-label">❌ Trước khi tối ưu</div>
+      <div class="ba-text">
+        “Tham gia câu lạc bộ tình nguyện và hỗ trợ nhiều hoạt động cho sinh viên.”
+      </div>
+      <div class="ba-meta">
+        <span class="ba-tag">Không có số liệu</span>
+        <span class="ba-tag">Không rõ vai trò</span>
+        <span class="ba-tag">Không đo được impact</span>
+      </div>
+    </div>
+
+    <div class="ba-arrow">→</div>
+
+    <div class="ba-card after">
+      <div class="ba-label">✅ Sau khi tối ưu</div>
+      <div class="ba-text">
+        “<mark>Điều phối 12 thành viên</mark> trong câu lạc bộ tình nguyện, tổ chức <mark>4 hoạt động</mark> hỗ trợ tân sinh viên, tiếp cận <mark>hơn 300 sinh viên</mark> trong học kỳ đầu.”
+      </div>
+      <div class="ba-meta">
+        <span class="ba-tag">Leadership rõ</span>
+        <span class="ba-tag">Số liệu cụ thể</span>
+        <span class="ba-tag">Impact đo lường được</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TIPS -->
+<div class="tips-strip">
+  <div class="tips-grid">
+    <div class="tip-mini">
+      <div class="tip-mini-icon">📌</div>
+      <div class="tip-mini-title">Dán toàn bộ nội dung</div>
+      <div class="tip-mini-desc">Càng đầy đủ, AI càng cho nhận xét chính xác. Bao gồm cả thông tin cá nhân, thành tích, mục tiêu.</div>
+    </div>
+    <div class="tip-mini">
+      <div class="tip-mini-icon">🎯</div>
+      <div class="tip-mini-title">Chọn đúng tiêu chí</div>
+      <div class="tip-mini-desc">Nếu bạn cần gợi ý viết lại, hãy giữ lại mục "Gợi ý cải thiện cụ thể".</div>
+    </div>
+    <div class="tip-mini">
+      <div class="tip-mini-icon">🔁</div>
+      <div class="tip-mini-title">Thử nhiều lần</div>
+      <div class="tip-mini-desc">Sau khi chỉnh sửa, dán lại CV để xem điểm số có cải thiện chưa.</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <a href="index.html">BrightWay Scholars</a> © 2025 — Kết quả chỉ mang tính tham khảo từ AI.
+</div>
+
+<script>
+// ── Utils ──
+function updateChar() {
+  const v = document.getElementById('cvInput').value;
+  document.getElementById('charCount').textContent = v.length + ' ký tự';
+}
+
+function toggleOpt(label) {
+  label.classList.toggle('selected');
+  label.querySelector('input').checked = label.classList.contains('selected');
+}
+
+function getSelectedOpts() {
+  const cards = document.querySelectorAll('.opt-card');
+  const selected = [];
+  cards.forEach(c => { if (c.classList.contains('selected')) selected.push(c.querySelector('.opt-name').textContent); });
+  return selected;
+}
+
+function setStepDone(step) {
+  document.getElementById('step' + step + 'Num').className = 'step-num done';
+  document.getElementById('step' + step + 'Label').className = 'step-label done';
+  if (step < 3) document.getElementById('line' + step).classList.add('done');
+}
+function setStepActive(step) {
+  document.getElementById('step' + step + 'Num').className = 'step-num active';
+  document.getElementById('step' + step + 'Label').className = 'step-label active';
+}
+
+// ── Submit ──
+async function submitCV() {
+  const cv = document.getElementById('cvInput').value.trim();
+  if (cv.length < 100) {
+    alert('Vui lòng dán ít nhất 100 ký tự nội dung CV/bài luận để AI có thể phân tích chính xác.');
+    return;
+  }
+  const opts = getSelectedOpts();
+  if (opts.length === 0) {
+    alert('Vui lòng chọn ít nhất một tiêu chí đánh giá.');
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  setStepDone(1); setStepDone(2); setStepActive(3);
+
+  // Show result area with loading state
+  document.getElementById('formArea').style.display = 'none';
+  document.getElementById('resultArea').style.display = 'block';
+  document.getElementById('resultBlocks').innerHTML = '<div class="skeleton" style="height:64px;margin-bottom:10px;"></div><div class="skeleton" style="height:64px;margin-bottom:10px;"></div><div class="skeleton" style="height:64px;"></div>';
+
+  const cvTruncated = cv.slice(0, 1500); // giới hạn để tránh JSON bị cắt
+
+  const prompt = `Chuyên gia học bổng. Phân tích CV theo tiêu chí: ${opts.join(', ')}.
+
+CV:
+"""
+${cvTruncated}
+"""
+
+Trả về JSON thuần (KHÔNG markdown, KHÔNG giải thích thêm):
+{"score":75,"level":"Khá","verdict":"Nhận xét ngắn 1 câu.","blocks":[{"icon":"📊","title":"Tên tiêu chí","status":"warn","badge":"Khá","goods":["điểm tốt ngắn"],"bads":["điểm yếu ngắn"],"tips":["gợi ý ngắn"],"rewrite":""}]}
+
+Quy tắc NGHIÊM NGẶT:
+- Mỗi block: tối đa 1 good, 1 bad, 1 tip. Mỗi cái tối đa 10 từ.
+- verdict tối đa 15 từ
+- rewrite để trống "" trừ khi tiêu chí "Gợi ý cải thiện cụ thể" được chọn (tối đa 20 từ)
+- JSON phải hoàn chỉnh từ { đến }`;
+
+  try {
+    const response = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+
+    const text = await response.text();
+    let data;
+    try { data = JSON.parse(text); } catch { throw new Error('Lỗi server: ' + text.slice(0, 120)); }
+    if (!response.ok) throw new Error(data.error || 'Lỗi ' + response.status);
+    // Backend giờ trả về { content: "..." } trực tiếp
+    const raw = (data.content || '').replace(/```json|```/g, '').trim();
+    const result = JSON.parse(raw);
+    renderResult(result);
+
+  } catch (e) {
+    document.getElementById('resultBlocks').innerHTML = `
+      <div style="text-align:center;padding:24px;color:#dc2626;font-size:.88rem;line-height:1.8;">
+        ⚠️ <strong>Lỗi:</strong> ${e.message}
+      </div>`;
+    console.error('CV Review Error:', e);
+  }
+
+  btn.classList.remove('loading');
+  btn.disabled = false;
+  setStepDone(3);
+}
+
+// ── Render ──
+function renderResult(r) {
+  // Score ring
+  const score = Math.min(100, Math.max(0, r.score || 0));
+  document.getElementById('scoreValue').innerHTML = score + '<span>/ 100</span>';
+  document.getElementById('scoreLevel').textContent = r.level || '';
+  document.getElementById('scoreVerdict').textContent = r.verdict || '';
+
+  // Animate ring
+  const circ = 2 * Math.PI * 35; // ~219.9
+  const offset = circ - (score / 100) * circ;
+  setTimeout(() => {
+    const el = document.getElementById('scoreCircle');
+    el.style.strokeDashoffset = offset;
+    // Color based on score
+    const color = score >= 80 ? '#059669' : score >= 60 ? '#d97706' : '#dc2626';
+    el.style.stroke = color;
+  }, 100);
+
+  // Blocks
+  const container = document.getElementById('resultBlocks');
+  container.innerHTML = '';
+
+  (r.blocks || []).forEach((b, i) => {
+    const goodsHtml = (b.goods || []).map(g => `<li class="good">${g}</li>`).join('');
+    const badsHtml = (b.bads || []).map(g => `<li class="bad">${g}</li>`).join('');
+    const tipsHtml = (b.tips || []).map(g => `<li class="tip">${g}</li>`).join('');
+    const rewriteHtml = b.rewrite ? `<div class="rewrite-box"><span class="rewrite-box-label">✏️ Gợi ý viết lại:</span>${b.rewrite}</div>` : '';
+
+    const block = document.createElement('div');
+    block.className = 'result-block';
+    block.id = 'block' + i;
+    block.innerHTML = `
+      <div class="result-block-head" onclick="toggleBlock(${i})">
+        <span class="result-block-icon">${b.icon || '📝'}</span>
+        <span class="result-block-title">${b.title || ''}</span>
+        <span class="result-block-badge badge-${b.status || 'info'}">${b.badge || ''}</span>
+        <svg class="result-block-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="result-block-body collapsed" id="body${i}">
+        <ul class="result-list">
+          ${goodsHtml}${badsHtml}${tipsHtml}
+        </ul>
+        ${rewriteHtml}
+      </div>`;
+    container.appendChild(block);
+
+    // Auto-open first block and danger/warn blocks
+    if (i === 0 || b.status === 'danger') {
+      setTimeout(() => toggleBlock(i), 200 + i * 100);
+    }
+  });
+}
+
+function toggleBlock(i) {
+  const block = document.getElementById('block' + i);
+  const body = document.getElementById('body' + i);
+  const isOpen = !body.classList.contains('collapsed');
+  body.classList.toggle('collapsed', isOpen);
+  block.classList.toggle('open', !isOpen);
+}
+
+function resetForm() {
+  document.getElementById('formArea').style.display = 'block';
+  document.getElementById('resultArea').style.display = 'none';
+  // Reset steps
+  document.getElementById('step1Num').className = 'step-num active';
+  document.getElementById('step1Label').className = 'step-label active';
+  ['2','3'].forEach(s => {
+    document.getElementById('step'+s+'Num').className = 'step-num';
+    document.getElementById('step'+s+'Label').className = 'step-label';
+  });
+  document.getElementById('line1').classList.remove('done');
+  document.getElementById('line2').classList.remove('done');
+}
+
+function copyResult() {
+  let text = 'KẾT QUẢ PHÂN TÍCH CV HỌC BỔNG - BrightWay Scholars\n\n';
+  text += 'Điểm: ' + document.getElementById('scoreValue').textContent + '\n';
+  text += 'Đánh giá: ' + document.getElementById('scoreLevel').textContent + '\n';
+  text += 'Nhận xét: ' + document.getElementById('scoreVerdict').textContent + '\n\n';
+
+  document.querySelectorAll('.result-block').forEach(b => {
+    const title = b.querySelector('.result-block-title')?.textContent || '';
+    const badge = b.querySelector('.result-block-badge')?.textContent || '';
+    text += `--- ${title} (${badge}) ---\n`;
+    b.querySelectorAll('.result-list li').forEach(li => {
+      text += '• ' + li.textContent.trim() + '\n';
+    });
+    const rw = b.querySelector('.rewrite-box');
+    if (rw) text += '\n' + rw.textContent.trim() + '\n';
+    text += '\n';
+  });
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✅ Đã sao chép!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  });
+}
+</script>
+</body>
+</html>
