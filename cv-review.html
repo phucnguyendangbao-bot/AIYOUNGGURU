@@ -451,6 +451,93 @@ body::after{
   .sb-item-label{width:130px;font-size:.78rem;}
 }
 
+/* ── PROGRESS SECTION ── */
+.progress-empty{
+  background:rgba(255,255,255,0.55);
+  border:1.5px dashed rgba(99,102,241,0.3);
+  border-radius:20px;
+  padding:48px 24px;text-align:center;
+}
+.progress-empty-icon{font-size:2.4rem;margin-bottom:10px;opacity:.6;}
+.progress-empty-title{
+  font-family:var(--font-display);font-weight:800;font-size:1.05rem;
+  color:var(--text-dark);margin-bottom:6px;
+}
+.progress-empty-desc{font-size:.88rem;color:var(--text-soft);max-width:380px;margin:0 auto;line-height:1.5;}
+
+.progress-wrap{
+  background:rgba(255,255,255,0.65);
+  border:1.5px solid rgba(255,255,255,0.9);
+  border-radius:24px;
+  backdrop-filter:blur(14px);
+  box-shadow:var(--shadow-lg);
+  padding:24px 26px;
+}
+
+.progress-chart-wrap{
+  margin-top:20px;padding:16px;
+  background:rgba(255,255,255,0.55);
+  border-radius:14px;
+  border:1px solid rgba(99,102,241,0.12);
+}
+.progress-chart-head{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:12px;
+}
+.progress-chart-title{
+  font-weight:700;font-size:.85rem;color:var(--text-dark);
+}
+.progress-chart-count{
+  font-size:.75rem;color:var(--text-soft);
+  background:rgba(99,102,241,0.08);
+  padding:3px 10px;border-radius:999px;font-weight:600;
+}
+.progress-chart{width:100%;overflow-x:auto;}
+.progress-chart svg{display:block;width:100%;height:auto;min-width:280px;}
+
+/* So sánh từng trục */
+.sb-item-num.up{color:#059669;}
+.sb-item-num.down{color:#dc2626;}
+.sb-delta{
+  font-size:.7rem;font-weight:700;margin-left:4px;
+}
+.sb-delta.up{color:#059669;}
+.sb-delta.down{color:#dc2626;}
+
+.progress-bottom{
+  display:flex;align-items:center;gap:12px;margin-top:18px;
+}
+.progress-bottom .sb-note{flex:1;margin-top:0;}
+.progress-clear-btn{
+  flex-shrink:0;
+  background:rgba(220,38,38,0.08);
+  color:#dc2626;
+  border:1px solid rgba(220,38,38,0.2);
+  padding:8px 14px;border-radius:10px;
+  font-size:.78rem;font-weight:700;cursor:pointer;
+  font-family:var(--font);
+  transition:all .2s;
+}
+.progress-clear-btn:hover{background:rgba(220,38,38,0.15);}
+@media(max-width:560px){
+  .progress-bottom{flex-direction:column;align-items:stretch;}
+}
+
+.sb-badge-bad{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(220,38,38,0.1);color:#dc2626;
+  font-size:.78rem;font-weight:700;
+  padding:5px 12px;border-radius:999px;
+  border:1px solid rgba(220,38,38,0.2);
+}
+.sb-badge-neutral{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(107,114,128,0.1);color:var(--text-soft);
+  font-size:.78rem;font-weight:700;
+  padding:5px 12px;border-radius:999px;
+  border:1px solid rgba(107,114,128,0.2);
+}
+
 /* ── WHY NOT CHATGPT ── */
 .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 @media(max-width:640px){.why-grid{grid-template-columns:1fr;}}
@@ -687,58 +774,56 @@ body::after{
   </div>
 </div>
 
-<!-- ══════ SECTION: CV SCORE BREAKDOWN (demo) ══════ -->
+<!-- ══════ SECTION: CV PROGRESS HISTORY ══════ -->
 <div class="section-wrap" id="scoreBreakdownSection">
   <div class="section-head">
-    <div class="section-eyebrow">📊 Rubric đánh giá</div>
-    <h2 class="section-title">Điểm CV được <span>chia theo năng lực</span>, không chỉ một con số</h2>
-    <p class="section-sub">Hội đồng học bổng nhìn CV qua nhiều lăng kính khác nhau. BrightWay Scholars cũng vậy — mỗi năng lực được chấm riêng để bạn biết chính xác nên đầu tư chỉnh sửa ở đâu.</p>
+    <div class="section-eyebrow">📈 Tiến triển của bạn</div>
+    <h2 class="section-title">Theo dõi <span>CV cải thiện</span> qua từng lần phân tích</h2>
+    <p class="section-sub">Mỗi lần bạn phân tích CV, kết quả được lưu lại để bạn thấy chính xác mình đã tiến bộ ở năng lực nào — và còn yếu ở đâu.</p>
   </div>
 
-  <div class="score-breakdown">
+  <!-- Empty state: chưa có lần nào -->
+  <div class="progress-empty" id="progressEmpty">
+    <div class="progress-empty-icon">📊</div>
+    <div class="progress-empty-title">Chưa có dữ liệu phân tích</div>
+    <div class="progress-empty-desc">Phân tích CV lần đầu ở trên, biểu đồ tiến triển sẽ hiện ngay tại đây.</div>
+  </div>
+
+  <!-- Có data: hiện chart + breakdown + so sánh -->
+  <div class="progress-wrap" id="progressWrap" style="display:none;">
+
+    <!-- Top: tổng điểm + so sánh lần trước -->
     <div class="sb-top">
       <div class="sb-overall">
-        <div class="sb-overall-num">78</div>
+        <div class="sb-overall-num" id="progOverallNum">--</div>
         <div class="sb-overall-max">/ 100</div>
-        <div class="sb-overall-label">Overall</div>
+        <div class="sb-overall-label" id="progOverallLabel">Lần mới nhất</div>
       </div>
       <div class="sb-top-text">
-        <div class="sb-top-title">CV của bạn đang ở mức “Khá — gần chạm ngưỡng cạnh tranh”</div>
-        <div class="sb-top-desc">Điểm mạnh ở Scholarship Fit và Impact. Cần nâng Leadership và Storytelling để vào nhóm top ứng viên.</div>
-        <span class="sb-badge-good">↑ +12 điểm so với phiên bản trước</span>
+        <div class="sb-top-title" id="progTopTitle">CV của bạn</div>
+        <div class="sb-top-desc" id="progTopDesc">Đây là lần phân tích đầu tiên. Hãy quay lại sau khi chỉnh sửa CV để thấy tiến triển.</div>
+        <span class="sb-badge-good" id="progBadge" style="display:none;"></span>
       </div>
     </div>
 
-    <div class="sb-items">
-      <div class="sb-item">
-        <div class="sb-item-label"><span class="sb-icon">🧭</span> Leadership</div>
-        <div class="sb-bar"><div class="sb-bar-fill amber" style="width:72%"></div></div>
-        <div class="sb-item-num">72</div>
+    <!-- Line chart tiến triển -->
+    <div class="progress-chart-wrap" id="progressChartWrap" style="display:none;">
+      <div class="progress-chart-head">
+        <span class="progress-chart-title">📈 Điểm tổng qua các lần phân tích</span>
+        <span class="progress-chart-count" id="progressCount">0 lần</span>
       </div>
-      <div class="sb-item">
-        <div class="sb-item-label"><span class="sb-icon">🎯</span> Impact</div>
-        <div class="sb-bar"><div class="sb-bar-fill green" style="width:81%"></div></div>
-        <div class="sb-item-num">81</div>
-      </div>
-      <div class="sb-item">
-        <div class="sb-item-label"><span class="sb-icon">🧱</span> Clarity</div>
-        <div class="sb-bar"><div class="sb-bar-fill" style="width:76%"></div></div>
-        <div class="sb-item-num">76</div>
-      </div>
-      <div class="sb-item">
-        <div class="sb-item-label"><span class="sb-icon">📖</span> Storytelling</div>
-        <div class="sb-bar"><div class="sb-bar-fill amber" style="width:74%"></div></div>
-        <div class="sb-item-num">74</div>
-      </div>
-      <div class="sb-item">
-        <div class="sb-item-label"><span class="sb-icon">🎓</span> Scholarship Fit</div>
-        <div class="sb-bar"><div class="sb-bar-fill green" style="width:83%"></div></div>
-        <div class="sb-item-num">83</div>
-      </div>
+      <div class="progress-chart" id="progressChart"></div>
     </div>
 
-    <div class="sb-note">
-      💡 Điểm số giúp bạn biết mình đang yếu ở đâu để ưu tiên chỉnh sửa đúng chỗ — thay vì viết lại cả CV một cách mơ hồ.
+    <!-- 5 trục rubric: hiện điểm hiện tại + so sánh với lần trước -->
+    <div class="sb-items" id="progRubricItems"></div>
+
+    <!-- Note + nút xóa lịch sử -->
+    <div class="progress-bottom">
+      <div class="sb-note">
+        💡 Dữ liệu lịch sử được lưu trên trình duyệt của bạn. Nếu xóa cache, lịch sử sẽ mất.
+      </div>
+      <button class="progress-clear-btn" onclick="clearProgressHistory()">🗑️ Xóa lịch sử</button>
     </div>
   </div>
 </div>
@@ -935,9 +1020,10 @@ ${cvTruncated}
 """
 
 Trả về JSON thuần (KHÔNG markdown, KHÔNG giải thích thêm):
-{"score":75,"level":"Khá","verdict":"Nhận xét ngắn 1 câu.","blocks":[{"icon":"📊","title":"Tên tiêu chí","status":"warn","badge":"Khá","goods":["điểm tốt ngắn"],"bads":["điểm yếu ngắn"],"tips":["gợi ý ngắn"],"rewrite":""}]}
+{"score":75,"level":"Khá","verdict":"Nhận xét ngắn 1 câu.","rubric":{"leadership":70,"impact":75,"clarity":80,"storytelling":65,"scholarshipFit":78},"blocks":[{"icon":"📊","title":"Tên tiêu chí","status":"warn","badge":"Khá","goods":["điểm tốt ngắn"],"bads":["điểm yếu ngắn"],"tips":["gợi ý ngắn"],"rewrite":""}]}
 
 Quy tắc NGHIÊM NGẶT:
+- rubric: chấm 5 trục từ 0-100, đánh giá khắt khe theo chuẩn hội đồng học bổng quốc tế
 - Mỗi block: tối đa 1 good, 1 bad, 1 tip. Mỗi cái tối đa 10 từ.
 - verdict tối đa 15 từ
 - rewrite để trống "" trừ khi tiêu chí "Gợi ý cải thiện cụ thể" được chọn (tối đa 20 từ)
@@ -1024,6 +1110,10 @@ function renderResult(r) {
       setTimeout(() => toggleBlock(i), 200 + i * 100);
     }
   });
+
+  // Lưu vào lịch sử + cập nhật section tiến triển
+  saveProgress(r);
+  renderProgressSection();
 }
 
 function toggleBlock(i) {
@@ -1073,6 +1163,196 @@ function copyResult() {
     setTimeout(() => btn.textContent = orig, 2000);
   });
 }
+// ══════════════════════════════════════════════════
+// ── PROGRESS HISTORY (localStorage) ──
+// ══════════════════════════════════════════════════
+const PROGRESS_KEY = 'brightway_cv_history_v1';
+const MAX_HISTORY = 12; // giữ tối đa 12 lần gần nhất
+
+const RUBRIC_AXES = [
+  { key:'leadership',    label:'Leadership',      icon:'🧭' },
+  { key:'impact',        label:'Impact',          icon:'🎯' },
+  { key:'clarity',       label:'Clarity',         icon:'🧱' },
+  { key:'storytelling',  label:'Storytelling',    icon:'📖' },
+  { key:'scholarshipFit',label:'Scholarship Fit', icon:'🎓' },
+];
+
+function loadHistory() {
+  try {
+    const raw = localStorage.getItem(PROGRESS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveProgress(result) {
+  if (!result || typeof result.score !== 'number') return;
+  const history = loadHistory();
+  history.push({
+    ts: Date.now(),
+    score: result.score,
+    level: result.level || '',
+    verdict: result.verdict || '',
+    rubric: result.rubric || null,
+  });
+  // chỉ giữ MAX_HISTORY lần gần nhất
+  while (history.length > MAX_HISTORY) history.shift();
+  try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(history)); } catch {}
+}
+
+function clearProgressHistory() {
+  if (!confirm('Xóa toàn bộ lịch sử phân tích CV? Hành động này không hoàn tác được.')) return;
+  try { localStorage.removeItem(PROGRESS_KEY); } catch {}
+  renderProgressSection();
+}
+
+function barColor(v) {
+  if (v >= 80) return 'green';
+  if (v >= 65) return '';
+  return 'amber';
+}
+
+function renderProgressSection() {
+  const history = loadHistory();
+  const empty = document.getElementById('progressEmpty');
+  const wrap  = document.getElementById('progressWrap');
+
+  if (history.length === 0) {
+    empty.style.display = 'block';
+    wrap.style.display  = 'none';
+    return;
+  }
+
+  empty.style.display = 'none';
+  wrap.style.display  = 'block';
+
+  const latest = history[history.length - 1];
+  const prev   = history.length >= 2 ? history[history.length - 2] : null;
+
+  // ── Top: overall + so sánh ──
+  document.getElementById('progOverallNum').textContent = latest.score;
+  document.getElementById('progOverallLabel').textContent =
+    'Lần thứ ' + history.length;
+
+  document.getElementById('progTopTitle').textContent =
+    'CV của bạn ở mức "' + (latest.level || '—') + '"';
+  document.getElementById('progTopDesc').textContent =
+    latest.verdict || '';
+
+  const badge = document.getElementById('progBadge');
+  if (prev) {
+    const delta = latest.score - prev.score;
+    badge.style.display = 'inline-flex';
+    if (delta > 0) {
+      badge.className = 'sb-badge-good';
+      badge.textContent = '↑ +' + delta + ' điểm so với lần trước';
+    } else if (delta < 0) {
+      badge.className = 'sb-badge-bad';
+      badge.textContent = '↓ ' + delta + ' điểm so với lần trước';
+    } else {
+      badge.className = 'sb-badge-neutral';
+      badge.textContent = '= Giữ nguyên điểm so với lần trước';
+    }
+  } else {
+    badge.style.display = 'none';
+  }
+
+  // ── Rubric 5 trục + so sánh ──
+  const rubricBox = document.getElementById('progRubricItems');
+  rubricBox.innerHTML = '';
+  if (latest.rubric) {
+    RUBRIC_AXES.forEach(ax => {
+      const v = latest.rubric[ax.key];
+      if (typeof v !== 'number') return;
+      const prevV = prev && prev.rubric ? prev.rubric[ax.key] : null;
+      let deltaHtml = '';
+      if (typeof prevV === 'number') {
+        const d = v - prevV;
+        if (d > 0) deltaHtml = `<span class="sb-delta up">▲${d}</span>`;
+        else if (d < 0) deltaHtml = `<span class="sb-delta down">▼${Math.abs(d)}</span>`;
+      }
+      const row = document.createElement('div');
+      row.className = 'sb-item';
+      row.innerHTML = `
+        <div class="sb-item-label"><span class="sb-icon">${ax.icon}</span> ${ax.label}</div>
+        <div class="sb-bar"><div class="sb-bar-fill ${barColor(v)}" style="width:${v}%"></div></div>
+        <div class="sb-item-num">${v}${deltaHtml}</div>`;
+      rubricBox.appendChild(row);
+    });
+  }
+
+  // ── Line chart ──
+  const chartWrap = document.getElementById('progressChartWrap');
+  if (history.length >= 2) {
+    chartWrap.style.display = 'block';
+    document.getElementById('progressCount').textContent = history.length + ' lần';
+    drawLineChart(history);
+  } else {
+    chartWrap.style.display = 'none';
+  }
+}
+
+function drawLineChart(history) {
+  const W = 600, H = 200, PAD_L = 36, PAD_R = 16, PAD_T = 16, PAD_B = 32;
+  const innerW = W - PAD_L - PAD_R;
+  const innerH = H - PAD_T - PAD_B;
+  const n = history.length;
+
+  // Y axis: 0–100
+  const yTicks = [0, 25, 50, 75, 100];
+  const yToPx = v => PAD_T + innerH - (v / 100) * innerH;
+  const xToPx = i => n === 1 ? PAD_L + innerW/2 : PAD_L + (i / (n - 1)) * innerW;
+
+  // Grid + Y labels
+  let gridSvg = '';
+  yTicks.forEach(t => {
+    const y = yToPx(t);
+    gridSvg += `<line x1="${PAD_L}" y1="${y}" x2="${W - PAD_R}" y2="${y}" stroke="rgba(99,102,241,0.08)" stroke-width="1"/>`;
+    gridSvg += `<text x="${PAD_L - 6}" y="${y + 3}" text-anchor="end" font-size="9" fill="#9ca3af" font-family="sans-serif">${t}</text>`;
+  });
+
+  // Path
+  const points = history.map((h, i) => `${xToPx(i)},${yToPx(h.score)}`);
+  const linePath = 'M' + points.join(' L');
+  // Area dưới line
+  const areaPath = linePath +
+    ` L${xToPx(n-1)},${yToPx(0)} L${xToPx(0)},${yToPx(0)} Z`;
+
+  // Dots + score labels + x labels
+  let dotsSvg = '';
+  history.forEach((h, i) => {
+    const cx = xToPx(i), cy = yToPx(h.score);
+    const color = h.score >= 80 ? '#059669' : h.score >= 65 ? '#6366f1' : '#d97706';
+    dotsSvg += `<circle cx="${cx}" cy="${cy}" r="4.5" fill="${color}" stroke="#fff" stroke-width="2"/>`;
+    // Score label phía trên dot
+    dotsSvg += `<text x="${cx}" y="${cy - 10}" text-anchor="middle" font-size="10" font-weight="700" fill="${color}" font-family="sans-serif">${h.score}</text>`;
+    // X label: "Lần N" hoặc ngày
+    const lbl = 'L' + (i + 1);
+    dotsSvg += `<text x="${cx}" y="${H - 14}" text-anchor="middle" font-size="9" fill="#6b7280" font-family="sans-serif">${lbl}</text>`;
+    // Date nhỏ phía dưới
+    const d = new Date(h.ts);
+    const dateStr = (d.getMonth()+1) + '/' + d.getDate();
+    dotsSvg += `<text x="${cx}" y="${H - 3}" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="sans-serif">${dateStr}</text>`;
+  });
+
+  const svg = `
+    <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="lineAreaGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#6366f1" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      ${gridSvg}
+      <path d="${areaPath}" fill="url(#lineAreaGrad)"/>
+      <path d="${linePath}" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+      ${dotsSvg}
+    </svg>`;
+  document.getElementById('progressChart').innerHTML = svg;
+}
+
+// Render section ngay khi load page (để hiện lịch sử cũ nếu có)
+document.addEventListener('DOMContentLoaded', renderProgressSection);
+
 </script>
 </body>
 </html>
