@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lộ trình apply học bổng – BrightWay Scholars</title>
+<meta name="description" content="Lộ trình chuẩn bị apply học bổng: cần chuẩn bị gì, vào lúc nào, tìm ở đâu và nhờ ai hỗ trợ. Hướng dẫn rõ ràng cho học sinh, sinh viên." />
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg: linear-gradient(145deg, #e8eeff 0%, #dde8ff 20%, #e5deff 50%, #d6e9ff 80%, #e0f0ff 100%);
+  --glass: rgba(255,255,255,0.62);
+  --glass-border: rgba(255,255,255,0.85);
+  --grad: linear-gradient(135deg,#5b7cfa 0%,#7c5bf5 50%,#9f5bea 100%);
+  --grad-btn: linear-gradient(135deg,#6b8eff 0%,#8b6bff 100%);
+  --text-dark: #1a1a3e;
+  --text-mid: #3a3a6e;
+  --text-soft: #6b7aaa;
+  --accent: #6366f1;
+  --accent2: #a78bfa;
+  --white: #ffffff;
+  --shadow: 0 8px 32px rgba(99,102,241,0.15);
+  --shadow-lg: 0 16px 48px rgba(99,102,241,0.2);
+  --font: 'Be Vietnam Pro', system-ui, sans-serif;
+  --font-display: 'Nunito', 'Be Vietnam Pro', sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  background-attachment:fixed;
+  color:var(--text-dark);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.6;
+}
+body::before{
+  content:'';position:fixed;top:-15%;left:-10%;width:55vw;height:55vw;
+  background:radial-gradient(circle,rgba(130,100,255,0.18),transparent 65%);
+  border-radius:50%;pointer-events:none;z-index:0;
+  animation:blobFloat 14s ease-in-out infinite;
+}
+body::after{
+  content:'';position:fixed;bottom:-15%;right:-10%;width:50vw;height:50vw;
+  background:radial-gradient(circle,rgba(99,165,255,0.16),transparent 65%);
+  border-radius:50%;pointer-events:none;z-index:0;
+  animation:blobFloat 18s ease-in-out infinite reverse;
+}
+@keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(3%,-3%) scale(1.04)}}
+
+/* ── NAVBAR ── */
+.lp-nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,0.78);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,0.9);
+  box-shadow:0 2px 20px rgba(99,102,241,0.08);
+}
+.lp-nav-inner{
+  max-width:1200px;margin:0 auto;padding:0 24px;
+  height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.lp-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.lp-logo-emoji{
+  width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  background:var(--grad);font-size:20px;
+  box-shadow:0 4px 16px rgba(99,102,241,0.3);
+}
+.lp-logo-text{font-family:var(--font-display);font-weight:900;font-size:1.05rem;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap;}
+.lp-nav-links{display:flex;align-items:center;gap:28px;}
+.lp-nav-links a{font-size:.875rem;font-weight:600;color:var(--text-mid);text-decoration:none;transition:color .2s;}
+.lp-nav-links a:hover{color:var(--accent);}
+.lp-nav-cta{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--grad-btn);color:#fff;font-weight:700;font-size:.875rem;
+  padding:9px 20px;border-radius:999px;border:none;cursor:pointer;
+  box-shadow:0 6px 20px rgba(99,102,241,0.35);
+  transition:transform .2s,box-shadow .2s;white-space:nowrap;text-decoration:none;
+}
+.lp-nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(99,102,241,0.4);}
+@media(max-width:768px){.lp-nav-links{display:none;}}
+
+/* ── CONTAINER ── */
+.container{max-width:1200px;margin:0 auto;padding:0 24px;position:relative;z-index:1;}
+
+/* ── HERO ── */
+.rm-hero{padding:64px 24px 40px;text-align:center;position:relative;z-index:1;max-width:900px;margin:0 auto;}
+.rm-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.22);
+  color:var(--accent);font-weight:700;font-size:.78rem;
+  padding:5px 14px;border-radius:999px;margin-bottom:18px;letter-spacing:.04em;
+}
+.rm-tag::before{content:'🗺️';font-size:.85rem;}
+.rm-hero h1{
+  font-family:var(--font-display);font-weight:800;
+  font-size:clamp(1.8rem,4.2vw,2.7rem);line-height:1.2;
+  color:var(--text-dark);margin-bottom:18px;
+}
+.rm-hero h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.rm-hero-sub{font-size:1.05rem;color:var(--text-soft);line-height:1.7;margin-bottom:28px;max-width:680px;margin-left:auto;margin-right:auto;}
+.rm-hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--grad-btn);color:#fff;font-weight:700;font-size:.92rem;
+  padding:12px 26px;border-radius:999px;border:none;cursor:pointer;
+  box-shadow:0 8px 24px rgba(99,102,241,0.35);
+  transition:transform .2s,box-shadow .2s;text-decoration:none;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(99,102,241,0.45);}
+.btn-outline{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.72);color:var(--accent);font-weight:700;font-size:.92rem;
+  padding:12px 26px;border-radius:999px;border:1.5px solid rgba(99,102,241,0.3);cursor:pointer;
+  backdrop-filter:blur(8px);transition:all .2s;text-decoration:none;
+}
+.btn-outline:hover{background:#fff;border-color:var(--accent);transform:translateY(-2px);}
+
+/* ── SECTION ── */
+.rm-section{padding:32px 0 24px;}
+.rm-section-hd{margin-bottom:24px;text-align:center;max-width:780px;margin-left:auto;margin-right:auto;}
+.rm-section-hd .eyebrow{
+  display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:8px;
+}
+.rm-section-hd h2{
+  font-family:var(--font-display);font-size:clamp(1.5rem,3vw,2rem);font-weight:800;
+  color:var(--text-dark);margin-bottom:8px;
+}
+.rm-section-hd p{color:var(--text-soft);font-size:.95rem;}
+
+/* ── INTRO BOX ── */
+.rm-intro{
+  background:rgba(255,255,255,0.65);
+  border:1.5px solid rgba(255,255,255,0.92);
+  border-radius:24px;padding:28px 32px;
+  backdrop-filter:blur(12px);box-shadow:var(--shadow);
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+}
+@media(max-width:768px){.rm-intro{grid-template-columns:1fr;padding:22px;}}
+.rm-intro-item{display:flex;flex-direction:column;gap:8px;}
+.rm-intro-item .num{
+  font-family:var(--font-display);font-weight:900;font-size:1.6rem;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.rm-intro-item h4{font-family:var(--font-display);font-weight:800;font-size:1rem;color:var(--text-dark);}
+.rm-intro-item p{font-size:.88rem;color:var(--text-soft);line-height:1.6;}
+
+/* ── STAGES TIMELINE ── */
+.rm-stages{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+@media(max-width:880px){.rm-stages{grid-template-columns:1fr;}}
+.rm-stage{
+  background:rgba(255,255,255,0.68);
+  border:1.5px solid rgba(255,255,255,0.92);
+  border-radius:22px;padding:24px;
+  backdrop-filter:blur(12px);box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+  transition:transform .25s,box-shadow .25s;
+}
+.rm-stage:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.rm-stage::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:5px;
+  background:var(--g,var(--grad));
+}
+.rm-stage-1{--g:linear-gradient(90deg,#6366f1,#818cf8);}
+.rm-stage-2{--g:linear-gradient(90deg,#6ea8fe,#4f8df7);}
+.rm-stage-3{--g:linear-gradient(90deg,#a78bfa,#7c3aed);}
+.rm-stage-4{--g:linear-gradient(90deg,#34d399,#059669);}
+.rm-stage-head{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.rm-stage-num{
+  width:48px;height:48px;border-radius:14px;flex-shrink:0;
+  background:var(--g);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-weight:900;font-size:1.3rem;
+  box-shadow:0 6px 18px rgba(99,102,241,0.25);
+}
+.rm-stage-meta .label{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--accent);}
+.rm-stage-meta h3{font-family:var(--font-display);font-weight:800;font-size:1.05rem;color:var(--text-dark);margin-top:2px;}
+.rm-stage ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;}
+.rm-stage li{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:.88rem;color:var(--text-mid);line-height:1.5;
+}
+.rm-stage li::before{
+  content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);
+  flex-shrink:0;margin-top:8px;
+}
+
+/* ── 3-COL GROUPS ── */
+.rm-groups{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+@media(max-width:900px){.rm-groups{grid-template-columns:1fr;}}
+.rm-group{
+  background:rgba(255,255,255,0.68);
+  border:1.5px solid rgba(255,255,255,0.92);
+  border-radius:20px;padding:22px;
+  backdrop-filter:blur(12px);box-shadow:var(--shadow);
+  display:flex;flex-direction:column;gap:14px;
+  transition:transform .25s;
+}
+.rm-group:hover{transform:translateY(-3px);}
+.rm-group-icon{
+  width:46px;height:46px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;
+  background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(167,139,250,0.15));
+}
+.rm-group h3{font-family:var(--font-display);font-weight:800;font-size:1.05rem;color:var(--text-dark);}
+.rm-group p.desc{font-size:.85rem;color:var(--text-soft);line-height:1.55;}
+.rm-group ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;}
+.rm-group li{
+  display:flex;align-items:center;gap:8px;
+  font-size:.85rem;color:var(--text-mid);
+  padding:7px 12px;background:rgba(99,102,241,0.06);
+  border-radius:10px;border:1px solid rgba(99,102,241,0.12);
+}
+.rm-group li::before{content:'✓';color:#059669;font-weight:800;flex-shrink:0;}
+
+/* ── CARD GRID (where to find / who to ask) ── */
+.rm-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;}
+.rm-info-card{
+  background:rgba(255,255,255,0.7);
+  border:1.5px solid rgba(255,255,255,0.92);
+  border-radius:18px;padding:20px;
+  backdrop-filter:blur(12px);box-shadow:var(--shadow);
+  display:flex;flex-direction:column;gap:10px;
+  transition:transform .25s,box-shadow .25s;
+}
+.rm-info-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.rm-info-card .ico{
+  width:42px;height:42px;border-radius:12px;
+  background:var(--grad);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+  box-shadow:0 4px 14px rgba(99,102,241,0.25);
+}
+.rm-info-card h4{font-family:var(--font-display);font-weight:800;font-size:.98rem;color:var(--text-dark);}
+.rm-info-card p{font-size:.85rem;color:var(--text-soft);line-height:1.55;}
+.rm-info-card .tip{
+  font-size:.78rem;color:var(--accent);font-weight:600;
+  padding-top:8px;border-top:1px dashed rgba(99,102,241,0.2);
+}
+
+/* ── VERTICAL TIMELINE ── */
+.rm-timeline{
+  position:relative;max-width:780px;margin:0 auto;padding:10px 0;
+}
+.rm-timeline::before{
+  content:'';position:absolute;left:24px;top:10px;bottom:10px;width:3px;
+  background:linear-gradient(180deg,#6366f1,#a78bfa,#34d399);
+  border-radius:3px;
+}
+@media(max-width:600px){.rm-timeline::before{left:18px;}}
+.rm-tl-item{
+  position:relative;padding:0 0 22px 64px;
+}
+@media(max-width:600px){.rm-tl-item{padding-left:52px;}}
+.rm-tl-item::before{
+  content:'';position:absolute;left:16px;top:6px;width:19px;height:19px;
+  border-radius:50%;background:#fff;border:4px solid var(--accent);
+  box-shadow:0 0 0 4px rgba(99,102,241,0.15);
+}
+@media(max-width:600px){.rm-tl-item::before{left:10px;width:17px;height:17px;border-width:3px;}}
+.rm-tl-month{
+  display:inline-block;font-family:var(--font-display);font-weight:800;
+  font-size:.78rem;color:#fff;
+  background:var(--grad);padding:3px 12px;border-radius:999px;
+  margin-bottom:6px;letter-spacing:.03em;
+}
+.rm-tl-item h4{font-family:var(--font-display);font-weight:800;font-size:1rem;color:var(--text-dark);margin-bottom:5px;}
+.rm-tl-item p{font-size:.88rem;color:var(--text-soft);line-height:1.6;}
+
+/* ── CHECKLIST ── */
+.rm-checklist{
+  background:rgba(255,255,255,0.68);
+  border:1.5px solid rgba(255,255,255,0.92);
+  border-radius:22px;padding:26px 30px;
+  backdrop-filter:blur(12px);box-shadow:var(--shadow);
+  max-width:780px;margin:0 auto;
+}
+.rm-check-list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;}
+@media(max-width:600px){.rm-check-list{grid-template-columns:1fr;}}
+.rm-check-list li{
+  display:flex;align-items:center;gap:10px;
+  font-size:.92rem;color:var(--text-mid);
+  padding:10px 12px;border-radius:12px;
+  cursor:pointer;transition:background .15s;
+  user-select:none;
+}
+.rm-check-list li:hover{background:rgba(99,102,241,0.06);}
+.rm-check-list li .box{
+  width:20px;height:20px;border-radius:6px;
+  border:2px solid rgba(99,102,241,0.4);background:#fff;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.rm-check-list li .box::after{
+  content:'';width:10px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;
+  transform:rotate(-45deg) translate(1px,-1px);opacity:0;transition:opacity .2s;
+}
+.rm-check-list li.done .box{background:var(--grad);border-color:transparent;}
+.rm-check-list li.done .box::after{opacity:1;}
+.rm-check-list li.done{color:var(--text-soft);text-decoration:line-through;}
+.rm-check-progress{
+  margin-top:18px;padding-top:16px;border-top:1px dashed rgba(99,102,241,0.2);
+  display:flex;align-items:center;gap:12px;
+}
+.rm-check-bar{flex:1;height:8px;background:rgba(99,102,241,0.12);border-radius:999px;overflow:hidden;}
+.rm-check-fill{height:100%;background:var(--grad);width:0%;transition:width .35s;border-radius:999px;}
+.rm-check-text{font-size:.82rem;font-weight:700;color:var(--accent);white-space:nowrap;}
+
+/* ── FINAL CTA ── */
+.rm-cta-final{
+  background:var(--grad);color:#fff;
+  border-radius:28px;padding:48px 32px;text-align:center;
+  position:relative;overflow:hidden;
+  box-shadow:0 20px 50px rgba(99,102,241,0.35);
+  margin:24px 0;
+}
+.rm-cta-final::before{
+  content:'';position:absolute;top:-30%;right:-10%;width:280px;height:280px;
+  border-radius:50%;background:rgba(255,255,255,0.08);
+}
+.rm-cta-final::after{
+  content:'';position:absolute;bottom:-30%;left:-10%;width:240px;height:240px;
+  border-radius:50%;background:rgba(255,255,255,0.06);
+}
+.rm-cta-final h2{
+  font-family:var(--font-display);font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800;
+  margin-bottom:12px;position:relative;z-index:1;
+}
+.rm-cta-final p{font-size:1rem;opacity:.92;max-width:600px;margin:0 auto 24px;position:relative;z-index:1;}
+.rm-cta-final .btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;}
+.btn-light{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#fff;color:var(--accent);font-weight:700;font-size:.92rem;
+  padding:12px 26px;border-radius:999px;border:none;cursor:pointer;
+  text-decoration:none;transition:transform .2s,box-shadow .2s;
+  box-shadow:0 6px 20px rgba(0,0,0,0.15);
+}
+.btn-light:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,0.2);}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.15);color:#fff;font-weight:700;font-size:.92rem;
+  padding:12px 26px;border-radius:999px;border:1.5px solid rgba(255,255,255,0.4);cursor:pointer;
+  text-decoration:none;transition:all .2s;backdrop-filter:blur(8px);
+}
+.btn-ghost:hover{background:rgba(255,255,255,0.25);}
+
+/* ── FOOTER ── */
+.lp-footer{
+  position:relative;z-index:1;
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(12px);
+  border-top:1px solid rgba(255,255,255,0.85);
+  margin-top:24px;
+}
+.lp-footer-inner{
+  max-width:1200px;margin:0 auto;padding:24px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;
+}
+.lp-footer-logo{display:flex;align-items:center;gap:8px;}
+.lp-footer-logo .emoji{width:32px;height:32px;border-radius:8px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.lp-footer-logo span{font-family:var(--font-display);font-weight:900;font-size:.9rem;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.lp-footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.lp-footer-links a{font-size:.82rem;color:var(--text-soft);text-decoration:none;font-weight:600;transition:color .2s;}
+.lp-footer-links a:hover{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="lp-nav">
+  <div class="lp-nav-inner">
+    <a href="index.html" class="lp-logo">
+      <div class="lp-logo-emoji">🎓</div>
+      <span class="lp-logo-text">BrightWay Scholars</span>
+    </a>
+    <div class="lp-nav-links">
+      <a href="index.html">Trang chủ</a>
+      <a href="page2.html">Tra cứu trường</a>
+      <a href="cv-review.html">Sửa CV</a>
+      <a href="scholarship-roadmap.html" style="color:var(--accent);">Lộ trình</a>
+    </div>
+    <a href="cv-review.html" class="lp-nav-cta">Sửa CV với AI →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="rm-hero">
+  <span class="rm-tag">Lộ trình apply học bổng</span>
+  <h1>Lộ trình apply học bổng: <span>cần chuẩn bị gì, vào lúc nào, ở đâu và nhờ ai</span></h1>
+  <p class="rm-hero-sub">Một bản hướng dẫn ngắn gọn để học sinh, sinh viên không bị rối khi chuẩn bị hồ sơ học bổng — từ giai đoạn đầu xây nền tảng đến lúc bấm nút nộp.</p>
+  <div class="rm-hero-btns">
+    <a href="#stages" class="btn-primary">Bắt đầu lập lộ trình</a>
+    <a href="cv-review.html" class="btn-outline">Xem công cụ sửa CV</a>
+  </div>
+</header>
+
+<!-- B. APPLY KHÔNG CHỈ LÀ NỘP HỒ SƠ -->
+<section class="rm-section container">
+  <div class="rm-section-hd">
+    <div class="eyebrow">Hiểu đúng từ đầu</div>
+    <h2>Apply học bổng không chỉ là nộp hồ sơ</h2>
+    <p>Đây là một quá trình dài. Hồ sơ chỉ là phần nổi của tảng băng — phía dưới là năng lực thật và câu chuyện của bạn.</p>
+  </div>
+  <div class="rm-intro">
+    <div class="rm-intro-item">
+      <div class="num">01</div>
+      <h4>Năng lực thật</h4>
+      <p>GPA, ngoại ngữ, hoạt động và kỹ năng chuyên môn được tích lũy qua nhiều tháng, không phải vài tuần trước deadline.</p>
+    </div>
+    <div class="rm-intro-item">
+      <div class="num">02</div>
+      <h4>Câu chuyện cá nhân</h4>
+      <p>Bạn là ai, đã trải qua điều gì, vì sao chọn ngành này, vì sao xứng đáng — đây là phần khó copy nhất nhưng quyết định nhiều nhất.</p>
+    </div>
+    <div class="rm-intro-item">
+      <div class="num">03</div>
+      <h4>Bộ hồ sơ thuyết phục</h4>
+      <p>CV, essay, thư giới thiệu, transcript… được sắp xếp thành một câu chuyện nhất quán, không rời rạc.</p>
+    </div>
+  </div>
+</section>
+
+<!-- C. 4 GIAI ĐOẠN -->
+<section class="rm-section container" id="stages">
+  <div class="rm-section-hd">
+    <div class="eyebrow">Timeline</div>
+    <h2>4 giai đoạn chuẩn bị</h2>
+    <p>Lộ trình ngược từ deadline. Càng bắt đầu sớm, áp lực càng giảm.</p>
+  </div>
+  <div class="rm-stages">
+    <div class="rm-stage rm-stage-1">
+      <div class="rm-stage-head">
+        <div class="rm-stage-num">1</div>
+        <div class="rm-stage-meta">
+          <div class="label">Giai đoạn nền</div>
+          <h3>12–18 tháng trước kỳ nộp</h3>
+        </div>
+      </div>
+      <ul>
+        <li>Kéo GPA lên mức ổn định, không để rớt môn</li>
+        <li>Xây hoạt động có chiều sâu, không chạy theo số lượng</li>
+        <li>Học tiếng Anh đều đặn, đặt mục tiêu chứng chỉ</li>
+        <li>Bắt đầu tìm hiểu các loại học bổng phù hợp</li>
+        <li>Lưu lại mọi bằng chứng thành tích: giấy khen, ảnh, link</li>
+      </ul>
+    </div>
+
+    <div class="rm-stage rm-stage-2">
+      <div class="rm-stage-head">
+        <div class="rm-stage-num">2</div>
+        <div class="rm-stage-meta">
+          <div class="label">Định hướng</div>
+          <h3>6–12 tháng trước kỳ nộp</h3>
+        </div>
+      </div>
+      <ul>
+        <li>Thi IELTS / TOEFL / SAT / GRE nếu cần</li>
+        <li>Chốt nước, chốt ngành, chốt nhóm học bổng mục tiêu</li>
+        <li>Viết bản nháp đầu tiên của CV</li>
+        <li>Xây khung bài luận: chủ đề, câu chuyện chính, thông điệp</li>
+        <li>Bắt đầu liên hệ người sẽ viết thư giới thiệu</li>
+      </ul>
+    </div>
+
+    <div class="rm-stage rm-stage-3">
+      <div class="rm-stage-head">
+        <div class="rm-stage-num">3</div>
+        <div class="rm-stage-meta">
+          <div class="label">Hoàn thiện hồ sơ</div>
+          <h3>3–6 tháng trước kỳ nộp</h3>
+        </div>
+      </div>
+      <ul>
+        <li>Hoàn thiện CV: chỉnh form, chỉnh nội dung, nhờ người review</li>
+        <li>Viết essay nghiêm túc, sửa nhiều lần, đọc to để kiểm tra</li>
+        <li>Chính thức xin thư giới thiệu, gửi brief rõ ràng</li>
+        <li>Chuẩn bị giấy tờ: transcript, bảng điểm dịch công chứng</li>
+        <li>Luyện phỏng vấn nếu học bổng có vòng phỏng vấn</li>
+      </ul>
+    </div>
+
+    <div class="rm-stage rm-stage-4">
+      <div class="rm-stage-head">
+        <div class="rm-stage-num">4</div>
+        <div class="rm-stage-meta">
+          <div class="label">Nộp & xác nhận</div>
+          <h3>1–2 tháng trước deadline</h3>
+        </div>
+      </div>
+      <ul>
+        <li>Kiểm tra từng trường thông tin trong form, không để trống</li>
+        <li>Kiểm tra tài liệu đính kèm: đúng định dạng, đúng dung lượng</li>
+        <li>Nộp sớm hơn deadline ít nhất 3–5 ngày</li>
+        <li>Xác nhận thư giới thiệu đã được gửi qua hệ thống</li>
+        <li>Lưu toàn bộ hồ sơ đã nộp vào một thư mục riêng</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- D. CẦN APPLY CÁI GÌ -->
+<section class="rm-section container">
+  <div class="rm-section-hd">
+    <div class="eyebrow">Checklist nội dung</div>
+    <h2>Cần apply những gì?</h2>
+    <p>Ba nhóm tài liệu chính. Mỗi nhóm phục vụ một mục đích khác nhau.</p>
+  </div>
+  <div class="rm-groups">
+    <div class="rm-group">
+      <div class="rm-group-icon">📚</div>
+      <h3>Nền tảng học thuật & tiếng Anh</h3>
+      <p class="desc">Phần định lượng — chứng minh bạn đủ năng lực học tập.</p>
+      <ul>
+        <li>IELTS / TOEFL</li>
+        <li>SAT / GRE / GMAT (nếu cần)</li>
+        <li>Bảng điểm / transcript</li>
+        <li>Chứng chỉ học thuật khác</li>
+      </ul>
+    </div>
+    <div class="rm-group">
+      <div class="rm-group-icon">🌟</div>
+      <h3>Hồ sơ cá nhân</h3>
+      <p class="desc">Phần định tính — kể câu chuyện và làm bạn nổi bật.</p>
+      <ul>
+        <li>CV / Resume</li>
+        <li>Personal statement / Essay</li>
+        <li>Thư giới thiệu (LOR)</li>
+        <li>Portfolio / Research proposal</li>
+      </ul>
+    </div>
+    <div class="rm-group">
+      <div class="rm-group-icon">📝</div>
+      <h3>Hồ sơ nộp chính thức</h3>
+      <p class="desc">Phần thủ tục — không có là không nộp được.</p>
+      <ul>
+        <li>Form học bổng đã điền</li>
+        <li>Form admission của trường</li>
+        <li>Hộ chiếu / giấy tờ tùy thân</li>
+        <li>Tài chính (nếu yêu cầu)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- E. TÌM HỌC BỔNG Ở ĐÂU -->
+<section class="rm-section container">
+  <div class="rm-section-hd">
+    <div class="eyebrow">Nguồn thông tin</div>
+    <h2>Tìm học bổng ở đâu?</h2>
+    <p>Đi từ nguồn chính thống ra, không tin ngay vào quảng cáo "học bổng dễ".</p>
+  </div>
+  <div class="rm-card-grid">
+    <div class="rm-info-card">
+      <div class="ico">🏫</div>
+      <h4>Website chính thức của trường</h4>
+      <p>Phần "Scholarships", "Financial Aid" hoặc "Admissions" của từng trường. Đây là nguồn chính xác và cập nhật nhất.</p>
+      <div class="tip">💡 Bookmark trang scholarship của 5–10 trường mục tiêu</div>
+    </div>
+    <div class="rm-info-card">
+      <div class="ico">🏛️</div>
+      <h4>Chính phủ & đại sứ quán</h4>
+      <p>Học bổng chính phủ (Chevening, Fulbright, MEXT, AAS, DAAD…) thường công bố trên website đại sứ quán hoặc tổ chức chính thức.</p>
+      <div class="tip">💡 Theo dõi fanpage đại sứ quán nước bạn quan tâm</div>
+    </div>
+    <div class="rm-info-card">
+      <div class="ico">🌐</div>
+      <h4>Cổng tổng hợp học bổng</h4>
+      <p>Các trang aggregator giúp lọc nhanh theo bậc học, ngành, nước. Tốt để khám phá, nhưng luôn xác minh lại từ trang gốc.</p>
+      <div class="tip">💡 Dùng để tìm ý tưởng, không dùng để nộp trực tiếp</div>
+    </div>
+    <div class="rm-info-card">
+      <div class="ico">👥</div>
+      <h4>Cộng đồng cựu du học sinh</h4>
+      <p>Group Facebook, diễn đàn, mentor chia sẻ kinh nghiệm thật. Học được cả cách viết hồ sơ và những lỗi cần tránh.</p>
+      <div class="tip">💡 Đặt câu hỏi cụ thể, đừng hỏi chung chung</div>
+    </div>
+  </div>
+</section>
+
+<!-- F. NÊN NHỜ AI -->
+<section class="rm-section container">
+  <div class="rm-section-hd">
+    <div class="eyebrow">Mạng lưới hỗ trợ</div>
+    <h2>Nên nhờ ai?</h2>
+    <p>Apply học bổng không phải việc làm một mình. Biết nhờ đúng người sẽ tiết kiệm rất nhiều thời gian.</p>
+  </div>
+  <div class="rm-card-grid">
+    <div class="rm-info-card">
+      <div class="ico">👨‍🏫</div>
+      <h4>Giáo viên / giảng viên</h4>
+      <p>Nhờ viết thư giới thiệu, nhận xét về năng lực học thuật, đôi khi nhờ giới thiệu cơ hội nghiên cứu.</p>
+      <div class="tip">💡 Xin sớm — ít nhất 1–2 tháng trước deadline</div>
+    </div>
+    <div class="rm-info-card">
+      <div class="ico">🔬</div>
+      <h4>Người hướng dẫn dự án</h4>
+      <p>Nhờ xác nhận vai trò, kỹ năng đã thể hiện trong dự án. Họ là người mô tả chính xác nhất bạn đã làm gì.</p>
+      <div class="tip">💡 Cung cấp lại tóm tắt dự án để họ dễ viết</div>
+    </div>
+    <div class="rm-info-card">
+      <div class="ico">🎓</div>
+      <h4>Anh chị từng apply thành công</h4>
+      <p>Nhờ review essay, kể kinh nghiệm phỏng vấn, chia sẻ tips về từng học bổng cụ thể.</p>
+      <div class="tip">💡 Hỏi cụ thể, không hỏi "cho em xin essay mẫu"</div>
+    </div>
+    <div class="rm-info-card">
+      <div class="ico">💬</div>
+      <h4>Bạn bè giỏi tiếng Anh</h4>
+      <p>Nhờ proofread bài luận, kiểm tra grammar, sửa cách diễn đạt cho tự nhiên hơn.</p>
+      <div class="tip">💡 Đổi qua đổi lại — bạn cũng giúp họ điều gì đó</div>
+    </div>
+    <div class="rm-info-card">
+      <div class="ico">🧭</div>
+      <h4>Mentor / cố vấn</h4>
+      <p>Nhờ định hướng tổng thể: chọn trường, chọn ngành, đánh giá hồ sơ tổng thể có hợp lý không.</p>
+      <div class="tip">💡 Mentor giỏi không cho đáp án, họ giúp bạn nghĩ rõ hơn</div>
+    </div>
+    <div class="rm-info-card">
+      <div class="ico">👨‍👩‍👧</div>
+      <h4>Gia đình</h4>
+      <p>Hỗ trợ tài chính, giấy tờ, sự ổn định tinh thần. Nói rõ kế hoạch và mong muốn để gia đình đồng hành.</p>
+      <div class="tip">💡 Đừng để gia đình biết quá muộn</div>
+    </div>
+  </div>
+</section>
+
+<!-- G. LỘ TRÌNH MẪU THEO THÁNG -->
+<section class="rm-section container">
+  <div class="rm-section-hd">
+    <div class="eyebrow">Roadmap mẫu</div>
+    <h2>Lộ trình mẫu theo tháng</h2>
+    <p>Một bản kế hoạch 12 tháng để bạn hình dung. Có thể co giãn theo thực tế.</p>
+  </div>
+  <div class="rm-timeline">
+    <div class="rm-tl-item">
+      <div class="rm-tl-month">Tháng 1–3</div>
+      <h4>Xác định mục tiêu & học tiếng Anh</h4>
+      <p>Lập danh sách nước, ngành, học bổng quan tâm. Đăng ký lớp IELTS/TOEFL nếu chưa thi. Tìm hiểu yêu cầu cụ thể của từng học bổng.</p>
+    </div>
+    <div class="rm-tl-item">
+      <div class="rm-tl-month">Tháng 4–6</div>
+      <h4>Thi chứng chỉ & xây hoạt động</h4>
+      <p>Thi IELTS/TOEFL/SAT. Tham gia hoạt động có chiều sâu (dự án, nghiên cứu, tình nguyện dài hạn). Bắt đầu phác thảo CV.</p>
+    </div>
+    <div class="rm-tl-item">
+      <div class="rm-tl-month">Tháng 7–9</div>
+      <h4>Viết essay & xin thư giới thiệu</h4>
+      <p>Tập trung viết essay, sửa nhiều bản. Liên hệ người viết LOR, gửi brief rõ ràng. Hoàn thiện CV bản chính thức.</p>
+    </div>
+    <div class="rm-tl-item">
+      <div class="rm-tl-month">Tháng 10–12</div>
+      <h4>Hoàn thiện hồ sơ & nộp</h4>
+      <p>Tổng hợp toàn bộ giấy tờ, kiểm tra form, nộp sớm hơn deadline. Theo dõi xác nhận từ hệ thống. Chuẩn bị phỏng vấn nếu cần.</p>
+    </div>
+  </div>
+</section>
+
+<!-- H. CHECKLIST CUỐI -->
+<section class="rm-section container">
+  <div class="rm-section-hd">
+    <div class="eyebrow">Trước khi bấm nộp</div>
+    <h2>Checklist cuối cùng</h2>
+    <p>Tick từng mục. Khi đủ hết, hồ sơ của bạn đã sẵn sàng.</p>
+  </div>
+  <div class="rm-checklist">
+    <ul class="rm-check-list" id="checklist">
+      <li><span class="box"></span>Đã có danh sách học bổng mục tiêu</li>
+      <li><span class="box"></span>Đã có CV bản hoàn thiện</li>
+      <li><span class="box"></span>Đã có chứng chỉ tiếng Anh hợp lệ</li>
+      <li><span class="box"></span>Đã có người viết thư giới thiệu</li>
+      <li><span class="box"></span>Đã có essay bản tốt, đã được review</li>
+      <li><span class="box"></span>Đã chuẩn bị transcript / bảng điểm</li>
+      <li><span class="box"></span>Đã kiểm tra deadline từng học bổng</li>
+      <li><span class="box"></span>Đã nộp sớm và lưu lại hồ sơ</li>
+    </ul>
+    <div class="rm-check-progress">
+      <div class="rm-check-bar"><div class="rm-check-fill" id="checkFill"></div></div>
+      <div class="rm-check-text" id="checkText">0 / 8</div>
+    </div>
+  </div>
+</section>
+
+<!-- I. CTA CUỐI -->
+<section class="container" style="padding-bottom:24px;">
+  <div class="rm-cta-final">
+    <h2>Bắt đầu từ lộ trình đúng, rồi tối ưu hồ sơ của bạn</h2>
+    <p>Có lộ trình rõ ràng là bước đầu tiên. Bước tiếp theo là tra cứu trường phù hợp và làm hồ sơ thật chỉn chu.</p>
+    <div class="btns">
+      <a href="page2.html" class="btn-light">🔍 Tra cứu học bổng</a>
+      <a href="cv-review.html" class="btn-ghost">✍️ Sửa CV với AI</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="lp-footer">
+  <div class="lp-footer-inner">
+    <div class="lp-footer-logo">
+      <div class="emoji">🎓</div>
+      <span>BrightWay Scholars</span>
+    </div>
+    <div class="lp-footer-links">
+      <a href="index.html">Trang chủ</a>
+      <a href="scholarship-roadmap.html">Lộ trình</a>
+      <a href="page2.html">Tra cứu trường</a>
+      <a href="cv-review.html">Sửa CV</a>
+    </div>
+    <div style="font-size:.78rem;color:var(--text-soft);">© 2025 BrightWay Scholars</div>
+  </div>
+</footer>
+
+<script>
+// Interactive checklist
+(function(){
+  const items = document.querySelectorAll('#checklist li');
+  const fill = document.getElementById('checkFill');
+  const text = document.getElementById('checkText');
+  const total = items.length;
+
+  function update(){
+    const done = document.querySelectorAll('#checklist li.done').length;
+    fill.style.width = (done/total*100) + '%';
+    text.textContent = done + ' / ' + total;
+  }
+
+  items.forEach(li => {
+    li.addEventListener('click', () => {
+      li.classList.toggle('done');
+      update();
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
