@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BrightWay Scholars – Sửa & Nhận xét CV Học Bổng</title>
+<title>BrightWay Scholars – Sửa & Nhận xét Portfolio Học Bổng</title>
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -638,9 +638,9 @@ body::after{
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-badge">🎯 AI chuyên cho CV học bổng — không phải chatbot chung chung</div>
-  <h1 class="hero-title">Biết CV của bạn <span>yếu ở đâu</span> — và sửa đúng chỗ</h1>
-  <p class="hero-sub">Phân tích CV theo đúng tiêu chí hội đồng học bổng quan tâm: Leadership, Impact, Storytelling, Scholarship Fit. Nhận điểm số, điểm yếu cụ thể và gợi ý viết lại có thể dùng ngay — trong chưa đầy 30 giây.</p>
+  <div class="hero-badge">🎯 AI chuyên cho portfolio học bổng — không phải chatbot chung chung</div>
+  <h1 class="hero-title">Biết portfolio của bạn <span>yếu ở đâu</span> — và sửa đúng chỗ</h1>
+  <p class="hero-sub">Phân tích portfolio theo đúng tiêu chí hội đồng học bổng quan tâm: Leadership, Impact, Storytelling, Scholarship Fit. Nhận điểm số, điểm yếu cụ thể và gợi ý viết lại có thể dùng ngay — trong chưa đầy 30 giây.</p>
 </div>
 
 <!-- MAIN -->
@@ -668,9 +668,9 @@ body::after{
     <!-- FORM -->
     <div class="form-area" id="formArea">
 
-      <div class="section-label">📄 Nội dung CV / Bài luận</div>
+      <div class="section-label">📄 Nội dung Portfolio / Bài luận</div>
       <div class="input-wrap">
-        <textarea class="cv-textarea" id="cvInput" placeholder="Dán toàn bộ nội dung CV học bổng hoặc bài luận của bạn vào đây...&#10;&#10;Ví dụ: Họ tên, mục tiêu, thành tích học tập, hoạt động ngoại khoá, kế hoạch tương lai..." oninput="updateChar()"></textarea>
+        <textarea class="cv-textarea" id="cvInput" placeholder="Dán toàn bộ nội dung portfolio học bổng hoặc bài luận của bạn vào đây...&#10;&#10;Ví dụ: Họ tên, mục tiêu, thành tích học tập, hoạt động ngoại khoá, kế hoạch tương lai..." oninput="updateChar()"></textarea>
         <span class="char-count" id="charCount">0 ký tự</span>
       </div>
 
@@ -733,7 +733,7 @@ body::after{
       </div>
 
       <button class="submit-btn" id="submitBtn" onclick="submitCV()">
-        <span class="btn-text">🚀 Phân tích CV ngay</span>
+        <span class="btn-text">🚀 Phân tích portfolio ngay</span>
         <div class="spinner"></div>
       </button>
     </div>
@@ -759,7 +759,7 @@ body::after{
         </div>
         <div class="score-meta">
           <div class="score-level" id="scoreLevel">Đang phân tích...</div>
-          <div class="score-verdict" id="scoreVerdict">AI đang xem xét nội dung CV của bạn.</div>
+          <div class="score-verdict" id="scoreVerdict">AI đang xem xét nội dung portfolio của bạn.</div>
         </div>
       </div>
 
@@ -780,15 +780,15 @@ body::after{
 <div class="section-wrap" id="scoreBreakdownSection">
   <div class="section-head">
     <div class="section-eyebrow">📈 Tiến triển của bạn</div>
-    <h2 class="section-title">Theo dõi <span>CV cải thiện</span> qua từng lần phân tích</h2>
-    <p class="section-sub">Mỗi lần bạn phân tích CV, kết quả được lưu lại để bạn thấy chính xác mình đã tiến bộ ở năng lực nào — và còn yếu ở đâu.</p>
+    <h2 class="section-title">Theo dõi <span>portfolio cải thiện</span> qua từng lần phân tích</h2>
+    <p class="section-sub">Mỗi lần bạn phân tích portfolio, kết quả được lưu lại để bạn thấy chính xác mình đã tiến bộ ở năng lực nào — và còn yếu ở đâu.</p>
   </div>
 
   <!-- Empty state: chưa có lần nào -->
   <div class="progress-empty" id="progressEmpty">
     <div class="progress-empty-icon">📊</div>
     <div class="progress-empty-title">Chưa có dữ liệu phân tích</div>
-    <div class="progress-empty-desc">Phân tích CV lần đầu ở trên, biểu đồ tiến triển sẽ hiện ngay tại đây.</div>
+    <div class="progress-empty-desc">Phân tích portfolio lần đầu ở trên, biểu đồ tiến triển sẽ hiện ngay tại đây.</div>
   </div>
 
   <!-- Có data: hiện chart + breakdown + so sánh -->
@@ -802,8 +802,8 @@ body::after{
         <div class="sb-overall-label" id="progOverallLabel">Lần mới nhất</div>
       </div>
       <div class="sb-top-text">
-        <div class="sb-top-title" id="progTopTitle">CV của bạn</div>
-        <div class="sb-top-desc" id="progTopDesc">Đây là lần phân tích đầu tiên. Hãy quay lại sau khi chỉnh sửa CV để thấy tiến triển.</div>
+        <div class="sb-top-title" id="progTopTitle">Portfolio của bạn</div>
+        <div class="sb-top-desc" id="progTopDesc">Đây là lần phân tích đầu tiên. Hãy quay lại sau khi chỉnh sửa portfolio để thấy tiến triển.</div>
         <span class="sb-badge-good" id="progBadge" style="display:none;"></span>
       </div>
     </div>
@@ -835,7 +835,7 @@ body::after{
   <div class="section-head">
     <div class="section-eyebrow">⚡ Khác biệt cốt lõi</div>
     <h2 class="section-title">Vì sao không chỉ <span>dùng ChatGPT</span>?</h2>
-    <p class="section-sub">ChatGPT là công cụ tổng quát. BrightWay Scholars được thiết kế riêng cho một việc duy nhất: giúp CV học bổng của bạn qua vòng hồ sơ.</p>
+    <p class="section-sub">ChatGPT là công cụ tổng quát. BrightWay Scholars được thiết kế riêng cho một việc duy nhất: giúp portfolio học bổng của bạn qua vòng hồ sơ.</p>
   </div>
 
   <div class="why-grid">
@@ -844,9 +844,9 @@ body::after{
       <div class="why-icon-wrap">🧠</div>
       <div>
         <div class="why-card-title">Không cần biết cách prompt</div>
-        <div class="why-card-desc">Chỉ dán CV, chọn tiêu chí, nhận kết quả. Bạn không phải học cách “hỏi AI cho đúng” — workflow đã được chuẩn hoá sẵn cho CV học bổng.</div>
+        <div class="why-card-desc">Chỉ dán portfolio, chọn tiêu chí, nhận kết quả. Bạn không phải học cách “hỏi AI cho đúng” — workflow đã được chuẩn hoá sẵn cho portfolio học bổng.</div>
         <div class="why-compare">
-          <span class="why-compare-gpt">“Bạn hãy xem CV này giúp mình”</span>
+          <span class="why-compare-gpt">“Bạn hãy xem portfolio này giúp mình”</span>
           <span class="why-compare-arrow">→</span>
           <span class="why-compare-us">1 click, có kết quả</span>
         </div>
@@ -857,7 +857,7 @@ body::after{
       <div class="why-icon-wrap">🎯</div>
       <div>
         <div class="why-card-title">Chấm theo tiêu chí học bổng</div>
-        <div class="why-card-desc">Rubric 5 trục: Leadership, Impact, Clarity, Storytelling, Scholarship Fit — đúng những gì hội đồng nhìn vào, thay vì nhận xét chung chung kiểu “CV của bạn khá ổn”.</div>
+        <div class="why-card-desc">Rubric 5 trục: Leadership, Impact, Clarity, Storytelling, Scholarship Fit — đúng những gì hội đồng nhìn vào, thay vì nhận xét chung chung kiểu “Portfolio của bạn khá ổn”.</div>
         <div class="why-compare">
           <span class="why-compare-gpt">Góp ý chung chung</span>
           <span class="why-compare-arrow">→</span>
@@ -883,7 +883,7 @@ body::after{
       <div class="why-icon-wrap">✏️</div>
       <div>
         <div class="why-card-title">Output dùng được ngay</div>
-        <div class="why-card-desc">Mỗi gợi ý đi kèm một phiên bản viết lại có thể copy-paste thẳng vào CV. Bạn biết phải làm gì tiếp theo, không mất thêm một buổi để “diễn giải AI”.</div>
+        <div class="why-card-desc">Mỗi gợi ý đi kèm một phiên bản viết lại có thể copy-paste thẳng vào portfolio. Bạn biết phải làm gì tiếp theo, không mất thêm một buổi để “diễn giải AI”.</div>
         <div class="why-compare">
           <span class="why-compare-gpt">Đoạn văn dài dòng</span>
           <span class="why-compare-arrow">→</span>
@@ -899,7 +899,7 @@ body::after{
 <div class="section-wrap" id="beforeAfter">
   <div class="section-head">
     <div class="section-eyebrow">✨ Ví dụ thực tế</div>
-    <h2 class="section-title">Một dòng CV, <span>hai thế giới khác nhau</span></h2>
+    <h2 class="section-title">Một dòng portfolio, <span>hai thế giới khác nhau</span></h2>
     <p class="section-sub">Cùng một trải nghiệm, nhưng hội đồng học bổng đọc hoàn toàn khác nhau. Đây là cách BrightWay Scholars viết lại theo tinh thần “rõ hành động — rõ tác động — rõ kết quả”.</p>
   </div>
 
@@ -950,7 +950,7 @@ body::after{
     <div class="tip-mini">
       <div class="tip-mini-icon">🔁</div>
       <div class="tip-mini-title">Thử nhiều lần</div>
-      <div class="tip-mini-desc">Sau khi chỉnh sửa, dán lại CV để xem điểm số có cải thiện chưa.</div>
+      <div class="tip-mini-desc">Sau khi chỉnh sửa, dán lại portfolio để xem điểm số có cải thiện chưa.</div>
     </div>
   </div>
 </div>
@@ -992,7 +992,7 @@ function setStepActive(step) {
 async function submitCV() {
   const cv = document.getElementById('cvInput').value.trim();
   if (cv.length < 100) {
-    alert('Vui lòng dán ít nhất 100 ký tự nội dung CV/bài luận để AI có thể phân tích chính xác.');
+    alert('Vui lòng dán ít nhất 100 ký tự nội dung portfolio/bài luận để AI có thể phân tích chính xác.');
     return;
   }
   const opts = getSelectedOpts();
@@ -1014,9 +1014,9 @@ async function submitCV() {
 
   const cvTruncated = cv.slice(0, 1500); // giới hạn để tránh JSON bị cắt
 
-  const prompt = `Chuyên gia học bổng. Phân tích CV theo tiêu chí: ${opts.join(', ')}.
+  const prompt = `Chuyên gia học bổng. Phân tích portfolio theo tiêu chí: ${opts.join(', ')}.
 
-CV:
+Portfolio:
 """
 ${cvTruncated}
 """
@@ -1144,7 +1144,7 @@ function resetForm() {
 }
 
 function copyResult() {
-  let text = 'KẾT QUẢ PHÂN TÍCH CV HỌC BỔNG - BrightWay Scholars\n\n';
+  let text = 'KẾT QUẢ PHÂN TÍCH PORTFOLIO HỌC BỔNG - BrightWay Scholars\n\n';
   text += 'Điểm: ' + document.getElementById('scoreValue').textContent + '\n';
   text += 'Đánh giá: ' + document.getElementById('scoreLevel').textContent + '\n';
   text += 'Nhận xét: ' + document.getElementById('scoreVerdict').textContent + '\n\n';
@@ -1205,7 +1205,7 @@ function saveProgress(result) {
 }
 
 function clearProgressHistory() {
-  if (!confirm('Xóa toàn bộ lịch sử phân tích CV? Hành động này không hoàn tác được.')) return;
+  if (!confirm('Xóa toàn bộ lịch sử phân tích portfolio? Hành động này không hoàn tác được.')) return;
   try { localStorage.removeItem(PROGRESS_KEY); } catch {}
   renderProgressSection();
 }
@@ -1239,7 +1239,7 @@ function renderProgressSection() {
     'Lần thứ ' + history.length;
 
   document.getElementById('progTopTitle').textContent =
-    'CV của bạn ở mức "' + (latest.level || '—') + '"';
+    'Portfolio của bạn ở mức "' + (latest.level || '—') + '"';
   document.getElementById('progTopDesc').textContent =
     latest.verdict || '';
 
