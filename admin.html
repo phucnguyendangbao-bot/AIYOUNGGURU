@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – BrightWay Scholars</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:linear-gradient(145deg,#e8eeff,#dde8ff,#e5deff);min-height:100vh;color:#1a1a3e;padding:20px;}
+.container{max-width:1100px;margin:0 auto;}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;background:#fff;padding:20px 28px;border-radius:16px;box-shadow:0 4px 16px rgba(99,102,241,0.1);}
+.header h1{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#5b7cfa,#9f5bea);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.btn{padding:10px 18px;border:none;border-radius:10px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.875rem;transition:transform .15s,box-shadow .15s;}
+.btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(99,102,241,0.25);}
+.btn-primary{background:linear-gradient(135deg,#6b8eff,#8b6bff);color:#fff;}
+.btn-danger{background:#ef4444;color:#fff;}
+.btn-secondary{background:#e5e7eb;color:#374151;}
+.btn-sm{padding:6px 12px;font-size:.8rem;}
+.card{background:#fff;border-radius:16px;padding:24px 28px;box-shadow:0 4px 16px rgba(99,102,241,0.08);margin-bottom:20px;}
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+.tab{padding:10px 18px;background:#fff;border:1.5px solid transparent;border-radius:10px;cursor:pointer;font-family:inherit;font-weight:600;color:#6b7aaa;transition:all .15s;}
+.tab.active{background:linear-gradient(135deg,#6b8eff,#8b6bff);color:#fff;}
+.tab:not(.active):hover{border-color:#a78bfa;color:#6366f1;}
+.form-grid{display:grid;gap:14px;margin-bottom:20px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:640px){.form-row{grid-template-columns:1fr;}}
+label{display:block;font-weight:600;color:#374151;margin-bottom:6px;font-size:.875rem;}
+input,textarea,select{width:100%;padding:10px 14px;border:1.5px solid #e5e7eb;border-radius:10px;font-family:inherit;font-size:.9rem;outline:none;transition:border-color .15s;}
+input:focus,textarea:focus,select:focus{border-color:#8b6bff;}
+textarea{resize:vertical;min-height:90px;}
+.list-item{display:flex;justify-content:space-between;align-items:flex-start;padding:14px;background:#f9fafb;border-radius:10px;margin-bottom:10px;gap:12px;}
+.list-item-content{flex:1;min-width:0;}
+.list-item-content h4{font-weight:700;margin-bottom:4px;color:#0f172a;}
+.list-item-content p{color:#6b7280;font-size:.85rem;line-height:1.5;}
+.list-item-actions{display:flex;gap:6px;flex-shrink:0;}
+.login-box{max-width:420px;margin:80px auto;background:#fff;padding:36px;border-radius:20px;box-shadow:0 10px 40px rgba(99,102,241,0.15);}
+.login-box h1{text-align:center;margin-bottom:24px;font-size:1.5rem;background:linear-gradient(135deg,#5b7cfa,#9f5bea);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.alert{padding:12px 16px;border-radius:10px;margin-bottom:16px;font-size:.875rem;}
+.alert-error{background:#fee2e2;color:#991b1b;}
+.alert-success{background:#d1fae5;color:#065f46;}
+.hidden{display:none !important;}
+.loading{text-align:center;padding:20px;color:#9ca3af;}
+.section-title{font-size:1.1rem;font-weight:700;margin-bottom:16px;color:#1a1a3e;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginView" class="login-box">
+  <h1>🎓 Admin Đăng Nhập</h1>
+  <div id="loginAlert"></div>
+  <div class="form-grid">
+    <div>
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="admin@brightway.vn">
+    </div>
+    <div>
+      <label>Mật khẩu</label>
+      <input type="password" id="loginPassword" placeholder="••••••••">
+    </div>
+    <button class="btn btn-primary" onclick="doLogin()">Đăng nhập</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminView" class="container hidden">
+  <div class="header">
+    <h1>BrightWay Scholars – Quản trị nội dung</h1>
+    <div>
+      <a href="index.html" class="btn btn-secondary" style="text-decoration:none;display:inline-block;">← Xem trang</a>
+      <button class="btn btn-danger" onclick="doLogout()">Đăng xuất</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="scholarships" onclick="switchTab('scholarships')">🎓 Học bổng</button>
+    <button class="tab" data-tab="news" onclick="switchTab('news')">📰 Tin tức</button>
+    <button class="tab" data-tab="students" onclick="switchTab('students')">👨‍🎓 Sinh viên</button>
+    <button class="tab" data-tab="partners" onclick="switchTab('partners')">🤝 Đối tác</button>
+    <button class="tab" data-tab="faqs" onclick="switchTab('faqs')">❓ FAQ</button>
+    <button class="tab" data-tab="universities" onclick="switchTab('universities')">🏛️ Trường ĐH</button>
+  </div>
+
+  <div id="alertBox"></div>
+
+  <!-- SCHOLARSHIPS -->
+  <div id="tab-scholarships" class="tab-panel">
+    <div class="card">
+      <h2 class="section-title">Thêm học bổng mới</h2>
+      <div class="form-grid">
+        <input id="sch_name" placeholder="Tên học bổng *">
+        <div class="form-row">
+          <input id="sch_value" placeholder="Giá trị (VD: 50000000 hoặc Toàn phần)">
+          <input id="sch_deadline" type="date">
+        </div>
+        <textarea id="sch_description" placeholder="Mô tả"></textarea>
+        <div class="form-row">
+          <input id="sch_apply_link" placeholder="Link đăng ký (https://...)">
+          <input id="sch_image_url" placeholder="URL ảnh (https://...)">
+        </div>
+        <button class="btn btn-primary" onclick="addScholarship()">+ Thêm học bổng</button>
+      </div>
+      <h2 class="section-title">Danh sách</h2>
+      <div id="scholarshipsList" class="loading">Đang tải...</div>
+    </div>
+  </div>
+
+  <!-- NEWS -->
+  <div id="tab-news" class="tab-panel hidden">
+    <div class="card">
+      <h2 class="section-title">Thêm bài viết mới</h2>
+      <div class="form-grid">
+        <input id="news_title" placeholder="Tiêu đề *">
+        <div class="form-row">
+          <input id="news_published_at" type="date">
+          <input id="news_image_url" placeholder="URL ảnh">
+        </div>
+        <textarea id="news_content" placeholder="Nội dung bài viết" rows="5"></textarea>
+        <button class="btn btn-primary" onclick="addNews()">+ Thêm bài viết</button>
+      </div>
+      <h2 class="section-title">Danh sách</h2>
+      <div id="newsList" class="loading">Đang tải...</div>
+    </div>
+  </div>
+
+  <!-- STUDENTS -->
+  <div id="tab-students" class="tab-panel hidden">
+    <div class="card">
+      <h2 class="section-title">Thêm câu chuyện sinh viên</h2>
+      <div class="form-grid">
+        <div class="form-row">
+          <input id="stu_name" placeholder="Tên sinh viên *">
+          <input id="stu_school" placeholder="Trường">
+        </div>
+        <input id="stu_scholarship" placeholder="Học bổng nhận được">
+        <input id="stu_avatar_url" placeholder="URL ảnh đại diện">
+        <textarea id="stu_story" placeholder="Câu chuyện / chia sẻ"></textarea>
+        <button class="btn btn-primary" onclick="addStudent()">+ Thêm câu chuyện</button>
+      </div>
+      <h2 class="section-title">Danh sách</h2>
+      <div id="studentsList" class="loading">Đang tải...</div>
+    </div>
+  </div>
+
+  <!-- PARTNERS -->
+  <div id="tab-partners" class="tab-panel hidden">
+    <div class="card">
+      <h2 class="section-title">Thêm đối tác mới</h2>
+      <div class="form-grid">
+        <input id="par_name" placeholder="Tên đối tác *">
+        <div class="form-row">
+          <input id="par_logo_url" placeholder="URL logo">
+          <input id="par_website" placeholder="Website (https://...)">
+        </div>
+        <textarea id="par_description" placeholder="Mô tả"></textarea>
+        <button class="btn btn-primary" onclick="addPartner()">+ Thêm đối tác</button>
+      </div>
+      <h2 class="section-title">Danh sách</h2>
+      <div id="partnersList" class="loading">Đang tải...</div>
+    </div>
+  </div>
+
+  <!-- FAQS -->
+  <div id="tab-faqs" class="tab-panel hidden">
+    <div class="card">
+      <h2 class="section-title">Thêm câu hỏi mới</h2>
+      <div class="form-grid">
+        <input id="faq_question" placeholder="Câu hỏi *">
+        <textarea id="faq_answer" placeholder="Câu trả lời *"></textarea>
+        <input id="faq_display_order" type="number" placeholder="Thứ tự hiển thị (1, 2, 3...)" value="0">
+        <button class="btn btn-primary" onclick="addFaq()">+ Thêm câu hỏi</button>
+      </div>
+      <h2 class="section-title">Danh sách</h2>
+  <!-- UNIVERSITIES -->
+  <div id="tab-universities" class="tab-panel hidden">
+    <div class="card">
+      <h2 class="section-title">Thêm trường đại học</h2>
+      <div class="form-grid">
+        <div class="form-row">
+          <input id="uni_code" placeholder="Mã trường (VD: HCMUT)">
+          <input id="uni_name" placeholder="Tên đầy đủ *">
+        </div>
+        <div class="form-row">
+          <select id="uni_sector">
+            <option value="">-- Chọn ngành * --</option>
+            <option value="cntt">💻 Công nghệ thông tin</option>
+            <option value="yte">🏥 Y tế</option>
+            <option value="tt">📺 Truyền thông</option>
+            <option value="tc">💰 Tài chính</option>
+            <option value="sp">📚 Sư phạm</option>
+            <option value="env">🌱 Môi trường &amp; Bền vững</option>
+            <option value="ai">🤖 AI &amp; Robotics</option>
+            <option value="bio">🧬 Biotech</option>
+          </select>
+          <select id="uni_region">
+            <option value="">Khu vực</option>
+            <option value="north">Miền Bắc</option>
+            <option value="central">Miền Trung</option>
+            <option value="south">Miền Nam</option>
+          </select>
+        </div>
+        <textarea id="uni_description" placeholder="Mô tả ngắn"></textarea>
+        <div class="form-row">
+          <input id="uni_logo_url" placeholder="URL logo">
+          <input id="uni_website" placeholder="Website">
+        </div>
+        <h3 style="font-weight:700;color:#374151;margin-top:8px;">📊 Yêu cầu tối thiểu (để trống nếu không yêu cầu)</h3>
+        <div class="form-row">
+          <input id="uni_min_gpa" type="number" step="0.1" placeholder="GPA tối thiểu (VD: 8.0)">
+          <input id="uni_min_thpt" type="number" step="0.1" placeholder="Điểm THPT tối thiểu (VD: 24.5)">
+        </div>
+        <div class="form-row">
+          <input id="uni_min_dgnl" type="number" step="1" placeholder="ĐGNL tối thiểu (VD: 850)">
+          <input id="uni_min_ielts" type="number" step="0.5" placeholder="IELTS tối thiểu (VD: 6.0)">
+        </div>
+        <h3 style="font-weight:700;color:#374151;margin-top:8px;">✅ Yêu cầu thêm (tích nếu bắt buộc)</h3>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+          <label style="display:flex;align-items:center;gap:6px;font-weight:500;"><input type="checkbox" id="uni_req_award"> 🏅 Giải thưởng</label>
+          <label style="display:flex;align-items:center;gap:6px;font-weight:500;"><input type="checkbox" id="uni_req_english"> 🌐 Tiếng Anh</label>
+          <label style="display:flex;align-items:center;gap:6px;font-weight:500;"><input type="checkbox" id="uni_req_activities"> ⚡ Ngoại khóa</label>
+          <label style="display:flex;align-items:center;gap:6px;font-weight:500;"><input type="checkbox" id="uni_req_portfolio"> 📁 Portfolio</label>
+          <label style="display:flex;align-items:center;gap:6px;font-weight:500;"><input type="checkbox" id="uni_req_essay"> ✍️ Bài luận</label>
+          <label style="display:flex;align-items:center;gap:6px;font-weight:500;"><input type="checkbox" id="uni_req_conduct"> ⭐ Hạnh kiểm</label>
+        </div>
+        <h3 style="font-weight:700;color:#374151;margin-top:8px;">🎓 Học bổng của trường (tùy chọn)</h3>
+        <div class="form-row">
+          <input id="uni_scholarship_name" placeholder="Tên học bổng">
+          <input id="uni_scholarship_value" placeholder="Giá trị (VD: 50% học phí)">
+        </div>
+        <div class="form-row">
+          <input id="uni_deadline" type="date">
+          <input id="uni_apply_link" placeholder="Link đăng ký">
+        </div>
+        <button class="btn btn-primary" onclick="addUniversity()">+ Thêm trường</button>
+      </div>
+      <h2 class="section-title">Danh sách trường</h2>
+      <div id="universitiesList" class="loading">Đang tải...</div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+  // ===== CẤU HÌNH SUPABASE — THAY 2 DÒNG DƯỚI =====
+  const SUPABASE_URL = 'https://pauciyvyahlnzebaolch.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhdWNpeXZ5YWhsbnplYmFvbGNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNzYyOTQsImV4cCI6MjA5MTg1MjI5NH0.1Q0pxXuH_R5jIqbLSEQX-b41gGsyp7n3BndXj6QT-EA';
+
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  window.sb = sb;
+
+  // ===== AUTH =====
+  async function checkAuth() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) showAdmin();
+    else showLogin();
+  }
+
+  function showLogin() {
+    document.getElementById('loginView').classList.remove('hidden');
+    document.getElementById('adminView').classList.add('hidden');
+  }
+
+  function showAdmin() {
+    document.getElementById('loginView').classList.add('hidden');
+    document.getElementById('adminView').classList.remove('hidden');
+    loadAll();
+  }
+
+  window.doLogin = async () => {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const alertBox = document.getElementById('loginAlert');
+    alertBox.innerHTML = '';
+    if (!email || !password) {
+      alertBox.innerHTML = '<div class="alert alert-error">Vui lòng nhập đầy đủ email và mật khẩu</div>';
+      return;
+    }
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) {
+      alertBox.innerHTML = `<div class="alert alert-error">${error.message}</div>`;
+      return;
+    }
+    showAdmin();
+  };
+
+  window.doLogout = async () => {
+    await sb.auth.signOut();
+    location.reload();
+  };
+
+  // ===== UI =====
+  window.switchTab = (name) => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+    document.getElementById('tab-' + name).classList.remove('hidden');
+  };
+
+  function showAlert(msg, type='success') {
+    const box = document.getElementById('alertBox');
+    box.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+    setTimeout(() => box.innerHTML = '', 3000);
+  }
+
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+
+  // ===== GENERIC CRUD =====
+  async function loadList(table, containerId, renderFn, orderBy='created_at', asc=false) {
+    const c = document.getElementById(containerId);
+    const { data, error } = await sb.from(table).select('*').order(orderBy, { ascending: asc });
+    if (error) { c.innerHTML = `<p style="color:#ef4444">Lỗi: ${error.message}</p>`; return; }
+    if (!data.length) { c.innerHTML = `<p style="color:#9ca3af">Chưa có dữ liệu.</p>`; return; }
+    c.innerHTML = data.map(renderFn).join('');
+  }
+
+  window.deleteItem = async (table, id) => {
+    if (!confirm('Bạn chắc chắn muốn xóa?')) return;
+    const { error } = await sb.from(table).delete().eq('id', id);
+    if (error) { showAlert('Lỗi: ' + error.message, 'error'); return; }
+    showAlert('Đã xóa thành công');
+    loadAll();
+  };
+
+  // ===== SCHOLARSHIPS =====
+  window.addScholarship = async () => {
+    const name = document.getElementById('sch_name').value.trim();
+    if (!name) return showAlert('Vui lòng nhập tên học bổng', 'error');
+    const payload = {
+      name,
+      value: document.getElementById('sch_value').value.trim() || null,
+      deadline: document.getElementById('sch_deadline').value || null,
+      description: document.getElementById('sch_description').value.trim() || null,
+      apply_link: document.getElementById('sch_apply_link').value.trim() || null,
+      image_url: document.getElementById('sch_image_url').value.trim() || null,
+    };
+    const { error } = await sb.from('scholarships').insert(payload);
+    if (error) return showAlert('Lỗi: ' + error.message, 'error');
+    showAlert('Đã thêm học bổng');
+    ['sch_name','sch_value','sch_deadline','sch_description','sch_apply_link','sch_image_url'].forEach(id=>document.getElementById(id).value='');
+    loadList('scholarships', 'scholarshipsList', renderSchItem);
+  };
+
+  const renderSchItem = (s) => `
+    <div class="list-item">
+      <div class="list-item-content">
+        <h4>${esc(s.name)}</h4>
+        <p>${s.value ? '💰 '+esc(s.value)+' • ' : ''}${s.deadline ? '⏰ '+s.deadline : ''}</p>
+        ${s.description ? `<p>${esc(s.description.slice(0,150))}</p>` : ''}
+      </div>
+      <div class="list-item-actions">
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('scholarships','${s.id}')">Xóa</button>
+      </div>
+    </div>`;
+
+  // ===== NEWS =====
+  window.addNews = async () => {
+    const title = document.getElementById('news_title').value.trim();
+    if (!title) return showAlert('Vui lòng nhập tiêu đề', 'error');
+    const payload = {
+      title,
+      content: document.getElementById('news_content').value.trim() || null,
+      image_url: document.getElementById('news_image_url').value.trim() || null,
+      published_at: document.getElementById('news_published_at').value || new Date().toISOString().slice(0,10),
+    };
+    const { error } = await sb.from('news').insert(payload);
+    if (error) return showAlert('Lỗi: ' + error.message, 'error');
+    showAlert('Đã thêm bài viết');
+    ['news_title','news_content','news_image_url','news_published_at'].forEach(id=>document.getElementById(id).value='');
+    loadList('news', 'newsList', renderNewsItem, 'published_at');
+  };
+
+  const renderNewsItem = (n) => `
+    <div class="list-item">
+      <div class="list-item-content">
+        <h4>${esc(n.title)}</h4>
+        <p>📅 ${n.published_at || ''}</p>
+        ${n.content ? `<p>${esc(n.content.slice(0,150))}...</p>` : ''}
+      </div>
+      <div class="list-item-actions">
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('news','${n.id}')">Xóa</button>
+      </div>
+    </div>`;
+
+  // ===== STUDENTS =====
+  window.addStudent = async () => {
+    const name = document.getElementById('stu_name').value.trim();
+    if (!name) return showAlert('Vui lòng nhập tên', 'error');
+    const payload = {
+      name,
+      school: document.getElementById('stu_school').value.trim() || null,
+      scholarship: document.getElementById('stu_scholarship').value.trim() || null,
+      avatar_url: document.getElementById('stu_avatar_url').value.trim() || null,
+      story: document.getElementById('stu_story').value.trim() || null,
+    };
+    const { error } = await sb.from('students').insert(payload);
+    if (error) return showAlert('Lỗi: ' + error.message, 'error');
+    showAlert('Đã thêm câu chuyện');
+    ['stu_name','stu_school','stu_scholarship','stu_avatar_url','stu_story'].forEach(id=>document.getElementById(id).value='');
+    loadList('students', 'studentsList', renderStuItem);
+  };
+
+  const renderStuItem = (s) => `
+    <div class="list-item">
+      <div class="list-item-content">
+        <h4>${esc(s.name)} ${s.school ? '— '+esc(s.school) : ''}</h4>
+        ${s.scholarship ? `<p>🏆 ${esc(s.scholarship)}</p>` : ''}
+        ${s.story ? `<p>"${esc(s.story.slice(0,150))}..."</p>` : ''}
+      </div>
+      <div class="list-item-actions">
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('students','${s.id}')">Xóa</button>
+      </div>
+    </div>`;
+
+  // ===== PARTNERS =====
+  window.addPartner = async () => {
+    const name = document.getElementById('par_name').value.trim();
+    if (!name) return showAlert('Vui lòng nhập tên đối tác', 'error');
+    const payload = {
+      name,
+      logo_url: document.getElementById('par_logo_url').value.trim() || null,
+      website: document.getElementById('par_website').value.trim() || null,
+      description: document.getElementById('par_description').value.trim() || null,
+    };
+    const { error } = await sb.from('partners').insert(payload);
+    if (error) return showAlert('Lỗi: ' + error.message, 'error');
+    showAlert('Đã thêm đối tác');
+    ['par_name','par_logo_url','par_website','par_description'].forEach(id=>document.getElementById(id).value='');
+    loadList('partners', 'partnersList', renderParItem);
+  };
+
+  const renderParItem = (p) => `
+    <div class="list-item">
+      <div class="list-item-content">
+        <h4>${esc(p.name)}</h4>
+        ${p.website ? `<p>🌐 ${esc(p.website)}</p>` : ''}
+        ${p.description ? `<p>${esc(p.description.slice(0,150))}</p>` : ''}
+      </div>
+      <div class="list-item-actions">
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('partners','${p.id}')">Xóa</button>
+      </div>
+    </div>`;
+
+  // ===== FAQS =====
+  window.addFaq = async () => {
+    const question = document.getElementById('faq_question').value.trim();
+    const answer = document.getElementById('faq_answer').value.trim();
+    if (!question || !answer) return showAlert('Vui lòng nhập câu hỏi và trả lời', 'error');
+    const payload = {
+      question,
+      answer,
+      display_order: parseInt(document.getElementById('faq_display_order').value) || 0,
+    };
+    const { error } = await sb.from('faqs').insert(payload);
+    if (error) return showAlert('Lỗi: ' + error.message, 'error');
+    showAlert('Đã thêm câu hỏi');
+    ['faq_question','faq_answer'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('faq_display_order').value = '0';
+    loadList('faqs', 'faqsList', renderFaqItem, 'display_order', true);
+  };
+
+  const renderFaqItem = (f) => `
+    <div class="list-item">
+      <div class="list-item-content">
+        <h4>#${f.display_order} — ${esc(f.question)}</h4>
+        <p>${esc(f.answer.slice(0,200))}${f.answer.length > 200 ? '...' : ''}</p>
+      </div>
+      <div class="list-item-actions">
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('faqs','${f.id}')">Xóa</button>
+      </div>
+    </div>`;
+
+  // ===== UNIVERSITIES =====
+  window.addUniversity = async () => {
+    const name = document.getElementById('uni_name').value.trim();
+    const sector = document.getElementById('uni_sector').value;
+    if (!name) return showAlert('Vui lòng nhập tên trường', 'error');
+    if (!sector) return showAlert('Vui lòng chọn ngành', 'error');
+    const numOrNull = (id) => { const v = document.getElementById(id).value; return v === '' ? null : parseFloat(v); };
+    const payload = {
+      code: document.getElementById('uni_code').value.trim() || null,
+      name,
+      sector,
+      region: document.getElementById('uni_region').value || null,
+      description: document.getElementById('uni_description').value.trim() || null,
+      logo_url: document.getElementById('uni_logo_url').value.trim() || null,
+      website: document.getElementById('uni_website').value.trim() || null,
+      min_gpa: numOrNull('uni_min_gpa'),
+      min_thpt: numOrNull('uni_min_thpt'),
+      min_dgnl: numOrNull('uni_min_dgnl'),
+      min_ielts: numOrNull('uni_min_ielts'),
+      req_award: document.getElementById('uni_req_award').checked,
+      req_english: document.getElementById('uni_req_english').checked,
+      req_activities: document.getElementById('uni_req_activities').checked,
+      req_portfolio: document.getElementById('uni_req_portfolio').checked,
+      req_essay: document.getElementById('uni_req_essay').checked,
+      req_conduct: document.getElementById('uni_req_conduct').checked,
+      scholarship_name: document.getElementById('uni_scholarship_name').value.trim() || null,
+      scholarship_value: document.getElementById('uni_scholarship_value').value.trim() || null,
+      deadline: document.getElementById('uni_deadline').value || null,
+      apply_link: document.getElementById('uni_apply_link').value.trim() || null,
+    };
+    const { error } = await sb.from('universities').insert(payload);
+    if (error) return showAlert('Lỗi: ' + error.message, 'error');
+    showAlert('Đã thêm trường');
+    // Reset form
+    ['uni_code','uni_name','uni_description','uni_logo_url','uni_website','uni_min_gpa','uni_min_thpt','uni_min_dgnl','uni_min_ielts','uni_scholarship_name','uni_scholarship_value','uni_deadline','uni_apply_link'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('uni_sector').value = '';
+    document.getElementById('uni_region').value = '';
+    ['uni_req_award','uni_req_english','uni_req_activities','uni_req_portfolio','uni_req_essay','uni_req_conduct'].forEach(id=>document.getElementById(id).checked = false);
+    loadList('universities', 'universitiesList', renderUniItem, 'code', true);
+  };
+
+  const SECTOR_LABELS = {cntt:'CNTT',yte:'Y tế',tt:'Truyền thông',tc:'Tài chính',sp:'Sư phạm',env:'Môi trường',ai:'AI',bio:'Biotech'};
+  const renderUniItem = (u) => `
+    <div class="list-item">
+      <div class="list-item-content">
+        <h4>${u.code ? esc(u.code)+' — ' : ''}${esc(u.name)} <span style="background:#eef2ff;color:#6366f1;padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:600;">${esc(SECTOR_LABELS[u.sector]||u.sector)}</span></h4>
+        ${u.description ? `<p>${esc(u.description.slice(0,100))}</p>` : ''}
+        <p style="font-size:.78rem;color:#94a3b8;margin-top:4px;">
+          ${u.min_gpa ? `GPA≥${u.min_gpa}` : ''} ${u.min_thpt ? `• THPT≥${u.min_thpt}` : ''} ${u.min_ielts ? `• IELTS≥${u.min_ielts}` : ''}
+        </p>
+      </div>
+      <div class="list-item-actions">
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('universities','${u.id}')">Xóa</button>
+      </div>
+    </div>`;
+
+  function loadAll() {
+    loadList('scholarships', 'scholarshipsList', renderSchItem);
+    loadList('news', 'newsList', renderNewsItem, 'published_at');
+    loadList('students', 'studentsList', renderStuItem);
+    loadList('partners', 'partnersList', renderParItem);
+    loadList('faqs', 'faqsList', renderFaqItem, 'display_order', true);
+    loadList('universities', 'universitiesList', renderUniItem, 'code', true);
+  }
+
+  // Init
+  checkAuth();
+
+  // Enter to login
+  document.getElementById('loginPassword').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+</script>
+</body>
+</html>
