@@ -5022,6 +5022,13 @@ function openMultiPicker(key) {
   _mpCurrentKey = key;
   if (!Array.isArray(student[key])) student[key] = [];
 
+  // FIX: Teleport overlay ra <body> để thoát khỏi containing block
+  // do `.tool-section { contain: layout style }` tạo ra (làm hỏng position:fixed).
+  const _mpOv = document.getElementById("mpOverlay");
+  if (_mpOv && _mpOv.parentElement !== document.body) {
+    document.body.appendChild(_mpOv);
+  }
+
   document.getElementById("mpTitle").textContent = cfg.title;
   document.getElementById("mpSub").textContent = cfg.sub;
 
@@ -5267,6 +5274,12 @@ function computeHollandScores() {
 }
 
 function openHollandQuiz() {
+  // FIX: Teleport overlay ra <body> để thoát khỏi containing block
+  // do `.tool-section { contain: layout style }` tạo ra (làm hỏng position:fixed).
+  const _hOv = document.getElementById("hollandOverlay");
+  if (_hOv && _hOv.parentElement !== document.body) {
+    document.body.appendChild(_hOv);
+  }
   renderHollandQuiz();
   document.getElementById("hollandOverlay").classList.add("open");
   document.body.style.overflow = "hidden";
