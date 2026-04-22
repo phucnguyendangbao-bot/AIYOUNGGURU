@@ -9,11 +9,63 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
-  if (window.pdfjsLib) {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+// Robust PDF.js loader: thử nhiều CDN, trả về Promise để code khác chờ.
+// Fix cho trường hợp CDN chính bị chặn / timeout trên mạng một số người dùng.
+(function () {
+  const PDFJS_VERSION = '3.11.174';
+  const CDN_SOURCES = [
+    {
+      lib: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VERSION + '/pdf.min.js',
+      worker: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VERSION + '/pdf.worker.min.js'
+    },
+    {
+      lib: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@' + PDFJS_VERSION + '/build/pdf.min.js',
+      worker: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@' + PDFJS_VERSION + '/build/pdf.worker.min.js'
+    },
+    {
+      lib: 'https://unpkg.com/pdfjs-dist@' + PDFJS_VERSION + '/build/pdf.min.js',
+      worker: 'https://unpkg.com/pdfjs-dist@' + PDFJS_VERSION + '/build/pdf.worker.min.js'
+    }
+  ];
+
+  function loadScript(url) {
+    return new Promise(function (resolve, reject) {
+      const s = document.createElement('script');
+      s.src = url;
+      s.async = true;
+      s.onload = function () { resolve(url); };
+      s.onerror = function () { reject(new Error('Không tải được: ' + url)); };
+      document.head.appendChild(s);
+    });
   }
+
+  async function loadPdfJs() {
+    if (window.pdfjsLib) return window.pdfjsLib;
+    let lastErr;
+    for (const src of CDN_SOURCES) {
+      try {
+        await loadScript(src.lib);
+        if (window.pdfjsLib) {
+          window.pdfjsLib.GlobalWorkerOptions.workerSrc = src.worker;
+          console.log('[pdf.js] loaded from', src.lib);
+          return window.pdfjsLib;
+        }
+      } catch (e) {
+        lastErr = e;
+        console.warn('[pdf.js] fallback from', src.lib, e.message);
+      }
+    }
+    throw lastErr || new Error('Tất cả CDN PDF.js đều không tải được');
+  }
+
+  // Expose Promise để handlePdfFile chờ
+  window.pdfjsReady = loadPdfJs();
+  // Bắt unhandled để console sạch hơn
+  window.pdfjsReady.catch(function (e) {
+    console.error('[pdf.js] load failed:', e);
+  });
+})();
 </script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -1104,15 +1156,28 @@ async function handlePdfFile(file) {
     alert('File quá lớn (tối đa 10MB). Vui lòng chọn file nhỏ hơn.');
     return;
   }
-  if (!window.pdfjsLib) {
-    alert('Thư viện đọc PDF chưa tải xong. Vui lòng đợi vài giây rồi thử lại.');
-    return;
-  }
 
-  // UI: hiện trạng thái đang đọc
+  // UI: hiện trạng thái đang đọc (show sớm để user biết đang xử lý, kể cả khi
+  // đang đợi pdf.js load)
   document.getElementById('pdfDropzone').style.display = 'none';
   document.getElementById('pdfFileInfo').classList.remove('active');
   document.getElementById('pdfExtracting').classList.add('active');
+
+  // Chờ pdf.js load (nhiều CDN fallback). Nếu tất cả fail mới báo lỗi.
+  try {
+    if (!window.pdfjsLib) {
+      if (!window.pdfjsReady) {
+        throw new Error('PDF loader chưa được khởi tạo. Vui lòng refresh trang.');
+      }
+      await window.pdfjsReady;
+    }
+  } catch (e) {
+    document.getElementById('pdfExtracting').classList.remove('active');
+    document.getElementById('pdfDropzone').style.display = 'flex';
+    alert('⚠️ Không tải được thư viện đọc PDF.\n\nNguyên nhân có thể: mạng chặn CDN, adblock, hoặc tường lửa. Hãy thử tắt extension chặn quảng cáo, đổi mạng, hoặc refresh trang.');
+    console.error('pdf.js load failed:', e);
+    return;
+  }
 
   try {
     const { text, pageCount } = await extractTextFromPdf(file);
