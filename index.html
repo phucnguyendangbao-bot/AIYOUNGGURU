@@ -4692,25 +4692,129 @@ function buildCard(uni, meta) {
   const uniRegion = detectRegion(uni.city);
   const regionMatch = student.region && (uniRegion === student.region || uniRegion === "all");
   const regionBadge = student.region ? `<span class="sn-badge-out" style="${regionMatch ? 'background:rgba(16,185,129,.12);color:#047857;border-color:rgba(16,185,129,.18);' : ''}">📍 ${regionLabel(uniRegion)}</span>` : "";
-  const fallbackBanner = uni._dataSourceNote
-    ? `<div class="sn-fallback-banner" style="background:rgba(99,102,241,0.08);border-color:rgba(99,102,241,0.2);color:#3730a3;flex-direction:column;gap:4px;align-items:flex-start;">
-        <div style="display:flex;align-items:center;gap:7px;font-weight:700;">
-          <span class="fb-icon">📊</span>
-          <span>${uni._dataSourceNote}</span>
+  // ─── Build visual scale panel ───
+  function buildScalePanel(u) {
+    // Collect all numeric requirements from history + current
+    const allHistory = u._mergedHistory || [];
+    const thptReq = u.requirements && u.requirements.find(r => r.id === "thpt");
+    const gpaReq  = u.requirements && u.requirements.find(r => r.id === "gpa");
+
+    // Build per-year points for THPT & GPA
+    function histPoints(id) {
+      const pts = [];
+      allHistory.forEach(function(h) {
+        if (!h.data.requirements) return;
+        const r = h.data.requirements.find(function(x){ return x.id === id; });
+        if (r && r.min) pts.push({ year: h.year, val: r.min });
+      });
+      return pts;
+    }
+    const thptPts = histPoints("thpt");
+    const gpaPts  = histPoints("gpa");
+
+    // Prediction for a series
+    function predictNext(pts) {
+      if (pts.length < 2) return null;
+      const vals = pts.map(p => p.val);
+      const avg = (vals[vals.length-1] - vals[0]) / (vals.length - 1);
+      return +(vals[vals.length-1] + avg).toFixed(1);
+    }
+    const thptPred = predictNext(thptPts);
+    const gpaPred  = predictNext(gpaPts);
+
+    // Trend arrow
+    function trendArrow(pts) {
+      if (pts.length < 2) return "";
+      const d = pts[pts.length-1].val - pts[0].val;
+      if (d > 0.05)  return `<span style="color:#ef4444;font-size:.75rem;font-weight:800;">▲ +${d.toFixed(1)}</span>`;
+      if (d < -0.05) return `<span style="color:#10b981;font-size:.75rem;font-weight:800;">▼ ${d.toFixed(1)}</span>`;
+      return `<span style="color:#64748b;font-size:.75rem;font-weight:700;">→ Ổn định</span>`;
+    }
+
+    // Bar for a scale
+    function scaleBar(current, predicted, max, color) {
+      const curPct  = Math.min(100, Math.round((current / max) * 100));
+      const predPct = predicted ? Math.min(100, Math.round((predicted / max) * 100)) : null;
+      const studentVal = student && student[current === thptReq?.min ? "thpt" : "gpa"];
+      const stuPct = studentVal ? Math.min(100, Math.round((+studentVal / max) * 100)) : null;
+      const stuOk  = studentVal ? +studentVal >= current : null;
+
+      return `
+        <div style="position:relative;height:10px;background:#e8eaf6;border-radius:999px;overflow:visible;margin:4px 0 12px;">
+          <!-- base fill -->
+          <div style="position:absolute;left:0;top:0;height:100%;width:${curPct}%;background:${color};border-radius:999px;opacity:.35;"></div>
+          <!-- current mốc marker -->
+          <div title="Mốc hiện tại: ${current}" style="position:absolute;top:-3px;left:calc(${curPct}% - 7px);width:16px;height:16px;border-radius:50%;background:${color};border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.18);z-index:2;cursor:default;display:flex;align-items:center;justify-content:center;">
+          </div>
+          ${predPct !== null ? `<div title="Dự đoán 2026: ~${predicted}" style="position:absolute;top:-2px;left:calc(${predPct}% - 5px);width:10px;height:10px;border-radius:50%;background:#a78bfa;border:2px solid #fff;z-index:3;cursor:default;"></div>` : ""}
+          ${stuPct !== null ? `<div title="Của bạn: ${studentVal}" style="position:absolute;top:-4px;left:calc(${stuPct}% - 8px);width:16px;height:16px;border-radius:50%;background:${stuOk ? "#10b981" : "#ef4444"};border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.22);z-index:4;"></div>` : ""}
         </div>
-        ${uni._trendLines && uni._trendLines.length ? `<div style="font-size:.7rem;color:#4f46e5;padding-left:24px;">📈 Xu hướng: ${uni._trendLines.join(' · ')}</div>` : ''}
-        ${uni._predictions && uni._predictions.length ? `<div style="font-size:.7rem;color:#7c3aed;padding-left:24px;">🔮 Dự đoán: ${uni._predictions.join(' · ')}</div>` : ''}
-        ${uni._historyNote ? `<div style="font-size:.7rem;color:#1d4ed8;padding-left:24px;">📜 Lịch sử: ${uni._historyNote}</div>` : ''}
-      </div>`
-    : uni._historyNote
-    ? `<div class="sn-fallback-banner" style="background:rgba(99,102,241,0.08);border-color:rgba(99,102,241,0.2);color:#3730a3;">
-        <span class="fb-icon">📜</span>
-        <span>${uni._historyNote}</span>
-      </div>`
-    : `<div class="sn-fallback-banner" style="background:rgba(99,102,241,0.08);border-color:rgba(99,102,241,0.2);color:#3730a3;">
-        <span class="fb-icon">📋</span>
-        <span>Dữ liệu năm <strong>${uni._dataYear || "gần nhất"}</strong></span>
+        <div style="display:flex;justify-content:space-between;font-size:.62rem;color:#94a3b8;margin-top:-8px;">
+          <span>0</span><span style="font-weight:600;color:#475569">${current} <em style="font-style:normal;color:#a78bfa">${predicted ? `→ ~${predicted}` : ""}</em></span><span>${max}</span>
+        </div>`;
+    }
+
+    // Year-dots mini timeline
+    function yearDots(pts) {
+      if (!pts.length) return "";
+      return `<div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:5px;">` +
+        pts.map(function(p, i) {
+          const isLast = i === pts.length - 1;
+          return `<span style="display:inline-flex;align-items:center;gap:3px;">
+            <span style="font-size:.62rem;color:${isLast ? "#4f46e5" : "#94a3b8"};font-weight:${isLast ? "700" : "500"};">${p.year}: <b style="color:${isLast ? "#1e1b4b" : "#64748b"}">${p.val}</b></span>
+            ${i < pts.length - 1 ? '<span style="color:#c7d2fe;font-size:.6rem;">›</span>' : ""}
+          </span>`;
+        }).join("") +
+      `</div>`;
+    }
+
+    const dataYears = u._yearsWithData || (u._dataYear || "");
+    let rows = `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:.82rem;">📊</span>
+        <span style="font-size:.72rem;font-weight:800;color:#3730a3;text-transform:uppercase;letter-spacing:.05em;">Thang đo điểm chuẩn</span>
+      </div>
+      <span style="font-size:.64rem;color:#6366f1;font-weight:700;background:rgba(99,102,241,0.1);padding:2px 8px;border-radius:999px;">Dữ liệu ${dataYears || u._dataYear || "tổng hợp"}</span>
+    </div>`;
+
+    if (thptReq) {
+      rows += `<div style="margin-bottom:4px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:.72rem;font-weight:700;color:#334155;">📝 Điểm THPT <span style="color:#94a3b8;font-weight:500;">(thang 30)</span></span>
+          <span style="display:flex;align-items:center;gap:5px;">${trendArrow(thptPts)}${thptPred !== null ? `<span style="font-size:.68rem;color:#7c3aed;font-weight:700;">🔮 ~${thptPred}</span>` : ""}</span>
+        </div>
+        ${scaleBar(thptReq.min, thptPred, 30, "#6366f1")}
+        ${yearDots(thptPts)}
       </div>`;
+    }
+
+    if (gpaReq) {
+      rows += `<div style="margin-bottom:2px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:.72rem;font-weight:700;color:#334155;">📚 GPA học bạ <span style="color:#94a3b8;font-weight:500;">(thang 10)</span></span>
+          <span style="display:flex;align-items:center;gap:5px;">${trendArrow(gpaPts)}${gpaPred !== null ? `<span style="font-size:.68rem;color:#7c3aed;font-weight:700;">🔮 ~${gpaPred}</span>` : ""}</span>
+        </div>
+        ${scaleBar(gpaReq.min, gpaPred, 10, "#0ea5e9")}
+        ${yearDots(gpaPts)}
+      </div>`;
+    }
+
+    if (!thptReq && !gpaReq) {
+      rows += `<div style="font-size:.72rem;color:#64748b;padding:4px 0;">Không có dữ liệu điểm số cụ thể cho trường này.</div>`;
+    }
+
+    // Legend
+    rows += `<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;padding-top:8px;border-top:1px solid rgba(99,102,241,0.1);">
+      <span style="display:flex;align-items:center;gap:4px;font-size:.62rem;color:#64748b;"><span style="width:10px;height:10px;border-radius:50%;background:#6366f1;display:inline-block;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2);"></span>Mốc hiện tại</span>
+      <span style="display:flex;align-items:center;gap:4px;font-size:.62rem;color:#64748b;"><span style="width:10px;height:10px;border-radius:50%;background:#a78bfa;display:inline-block;border:2px solid #fff;"></span>Dự đoán 2026</span>
+      <span style="display:flex;align-items:center;gap:4px;font-size:.62rem;color:#64748b;"><span style="width:10px;height:10px;border-radius:50%;background:#10b981;display:inline-block;border:2px solid #fff;"></span>Điểm của bạn (đạt)</span>
+      <span style="display:flex;align-items:center;gap:4px;font-size:.62rem;color:#64748b;"><span style="width:10px;height:10px;border-radius:50%;background:#ef4444;display:inline-block;border:2px solid #fff;"></span>Điểm của bạn (chưa đạt)</span>
+    </div>`;
+
+    return `<div style="background:rgba(99,102,241,0.06);border:1.5px solid rgba(99,102,241,0.18);border-radius:14px;padding:12px 14px;margin-bottom:10px;font-family:inherit;">${rows}</div>`;
+  }
+
+  const fallbackBanner = buildScalePanel(uni);
   const fallbackCardClass = "";
 
   // ═ Huy hiệu Khuyến nghị & chip giá trị / Holland-fit ═
