@@ -1065,6 +1065,12 @@ body::after{
 </div>
 
 <script>
+// Guard: tránh chạy lại script 2 lần (Vercel/Cloudflare đôi khi re-execute
+// inline scripts bằng replaceChild, gây SyntaxError "has already been declared"
+// khiến các hàm như handlePdfSelect không được gán lên window).
+if (!window.__CV_REVIEW_INITIALIZED__) {
+window.__CV_REVIEW_INITIALIZED__ = true;
+(function () {
 // ── PDF Handling ──
 const MAX_PDF_SIZE = 10 * 1024 * 1024; // 10MB
 
@@ -1558,6 +1564,18 @@ function drawLineChart(history) {
 // Render section ngay khi load page (để hiện lịch sử cũ nếu có)
 document.addEventListener('DOMContentLoaded', renderProgressSection);
 
+// Expose các hàm dùng trong inline onclick/onchange của HTML lên window,
+// vì khi bọc trong IIFE chúng không còn ở global scope.
+window.handlePdfSelect      = handlePdfSelect;
+window.removePdfFile        = removePdfFile;
+window.submitCV             = submitCV;
+window.resetForm            = resetForm;
+window.copyResult           = copyResult;
+window.clearProgressHistory = clearProgressHistory;
+window.toggleBlock          = toggleBlock;
+window.toggleOpt            = toggleOpt;
+})();
+}
 </script>
 </body>
 </html>
