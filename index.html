@@ -81,6 +81,42 @@ body::after-disabled{
 }
 @keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(3%,-3%) scale(1.04)}}
 
+
+/* ── YEAR SELECTOR ── */
+.year-selector-wrap{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  margin-top:14px;
+}
+.year-selector-label{
+  font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;
+  color:rgba(255,255,255,0.7);white-space:nowrap;
+}
+.year-btn{
+  padding:6px 18px;border-radius:999px;font-size:.8rem;font-weight:700;
+  cursor:pointer;font-family:inherit;transition:all .18s;
+}
+
+/* ── FALLBACK DATA BADGE ── */
+.sn-fallback-banner{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(245,158,11,0.13);
+  border:1px solid rgba(245,158,11,0.35);
+  border-radius:10px;
+  padding:7px 12px;
+  margin-bottom:10px;
+  font-size:.74rem;font-weight:700;
+  color:#92400e;
+  line-height:1.5;
+}
+.sn-fallback-banner .fb-icon{ font-size:.9rem;flex-shrink:0; }
+.sn-fallback-banner strong{ color:#b45309; }
+.sn-card.is-fallback{
+  border:1.5px solid rgba(245,158,11,0.4) !important;
+}
+.sn-card.is-fallback .sn-card-header{
+  background:linear-gradient(135deg,rgba(245,158,11,0.06),transparent);
+}
+
 /* ── TIPS TICKER ── */
 #tipsTicker{
   position:relative;z-index:10;
@@ -2244,6 +2280,11 @@ body.spa-active #spa-topbar { display: flex; }
   <div class="tool-section-hd">
     <h2>🔍 Công cụ tra cứu học bổng</h2>
     <p>Nhập thông tin hồ sơ của bạn để hệ thống tự đối chiếu điều kiện với từng trường trong 8 nhóm ngành lớn.</p>
+    <div class="year-selector-wrap">
+      <span class="year-selector-label">📅 Năm học:</span>
+      <div id="yearSelectorWrap" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+      <span style="font-size:.7rem;color:rgba(255,255,255,0.55);margin-left:4px;">⚡ Tự động dùng dữ liệu năm gần nhất nếu chưa có</span>
+    </div>
   </div>
 
   <!-- HERO + PROFILE -->
@@ -2723,7 +2764,403 @@ Object.assign(UNI_LOGOS, {
   "VNUA": "images/img-1362be04b459.png"
 });
 
-const scholarshipData = {
+/* ═══════════════════════════════════════════════════════
+   DỮ LIỆU HỌC BỔNG ĐA NĂM
+   - scholarshipByYear: lưu theo từng năm
+   - scholarshipData: trỏ tới năm đang chọn (activeYear)
+   - Logic fallback: nếu năm hiện tại thiếu trường →
+     tự động dùng dữ liệu năm gần nhất + badge cảnh báo
+═══════════════════════════════════════════════════════ */
+
+/* ── Năm đang hiển thị (có thể thay đổi qua UI) ── */
+let activeYear = "2025";
+
+/* ── scholarshipData: biến chính dùng xuyên suốt (được populate bởi switchYear) ── */
+let scholarshipData = { cntt:[], yte:[], tt:[], tc:[], sp:[], env:[], ai:[], bio:[] };
+
+/* ════════════════════════════════════════════════
+   DỮ LIỆU NĂM 2022
+   Nguồn: Tổng hợp xu hướng 2022-2024 (BrightWay)
+   Đặc điểm: chủ yếu dựa GPA + điểm rèn luyện,
+   ít yêu cầu ngoại khóa, giá trị 25-100% học phí.
+════════════════════════════════════════════════ */
+const scholarshipData_2022 = {
+  cntt: [
+    {
+      name:"Đại học Bách khoa - ĐHQG TP.HCM", short:"HCMUT", city:"TP.HCM",
+      applyStart:"01/03/2022", applyEnd:"30/04/2022",
+      scholarshipMethods:["Học bổng khuyến khích học tập theo GPA","Học bổng tân sinh viên thành tích cao (25–100% học phí)","Một số học bổng doanh nghiệp (FPT, VNPT)"],
+      admissionMethods:["THPT","ĐGNL","Xét tuyển thẳng"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ lớp 12",type:"number",min:8.3,note:"Mốc 2022"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:23.5,note:"Mốc 2022"},
+        {id:"dgnl",label:"Điểm ĐGNL",type:"number",min:780,note:"Mốc 2022"},
+        {id:"award",label:"Có giải HSG / thành tích",type:"boolean"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2022: học bổng chủ yếu xét GPA và điểm thi, ít yêu cầu hoạt động ngoại khóa. Giá trị 25–100% học phí."
+    },
+    {
+      name:"Đại học Công nghệ Thông tin - ĐHQG TP.HCM", short:"UIT", city:"TP.HCM",
+      applyStart:"01/03/2022", applyEnd:"15/05/2022",
+      scholarshipMethods:["Học bổng khuyến khích học tập","Học bổng tân sinh viên theo điểm đầu vào","Học bổng doanh nghiệp tài trợ"],
+      admissionMethods:["THPT","ĐGNL","Xét tuyển theo đề án"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ lớp 12",type:"number",min:8.0,note:"Mốc 2022"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:23,note:"Mốc 2022"},
+        {id:"dgnl",label:"Điểm ĐGNL",type:"number",min:760,note:"Mốc 2022"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2022: tiêu chí đơn giản hơn, chủ yếu học lực và điểm thi."
+    },
+    {
+      name:"Đại học FPT", short:"FPTU", city:"TP.HCM/Cần Thơ/...",
+      applyStart:"15/01/2022", applyEnd:"30/06/2022",
+      scholarshipMethods:["Học bổng tài năng 50–100% học phí","Học bổng theo kết quả thi đầu vào","Học bổng theo thành tích học bạ"],
+      admissionMethods:["Xét học bạ","THPT","Thi học bổng riêng"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.5,note:"Mốc 2022"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:22,note:"Mốc 2022"},
+        {id:"english",label:"IELTS / tiếng Anh tốt",type:"boolean"}
+      ],
+      tuitionRange:"Theo campus/chương trình",
+      note:"Năm 2022: FPT chủ yếu xét học bạ và điểm thi, portfolio chưa bắt buộc."
+    }
+  ],
+  yte: [
+    {
+      name:"Đại học Y Dược TP.HCM", short:"UMP", city:"TP.HCM",
+      applyStart:"01/03/2022", applyEnd:"10/05/2022",
+      scholarshipMethods:["Học bổng khuyến khích học tập theo học kỳ","Học bổng hỗ trợ sinh viên khó khăn","Ưu tiên học lực và hoàn cảnh"],
+      admissionMethods:["THPT","Theo đề án năm"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT (B00)",type:"number",min:24.5,note:"Mốc 2022"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.6,note:"Mốc 2022"},
+        {id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}
+      ],
+      tuitionRange:"Theo ngành/chương trình",
+      note:"Năm 2022: xét chủ yếu học lực + hoàn cảnh, chưa yêu cầu phỏng vấn rộng rãi."
+    },
+    {
+      name:"Đại học Y Dược Cần Thơ", short:"CTUMP", city:"Cần Thơ",
+      applyStart:"15/02/2022", applyEnd:"15/05/2022",
+      scholarshipMethods:["Học bổng theo thành tích học tập","Hỗ trợ theo hoàn cảnh","Học bổng khuyến khích học kỳ"],
+      admissionMethods:["THPT","Theo đề án tuyển sinh"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT (B00)",type:"number",min:23,note:"Mốc 2022"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:7.8,note:"Mốc 2022"},
+        {id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}
+      ],
+      tuitionRange:"Theo ngành/chương trình",
+      note:"Năm 2022: tiêu chí nhẹ hơn 2025, phù hợp nhóm học lực khá-giỏi."
+    }
+  ],
+  tt: [
+    {
+      name:"Đại học KHXH & NV - ĐHQG TP.HCM", short:"USSH", city:"TP.HCM",
+      applyStart:"01/03/2022", applyEnd:"20/05/2022",
+      scholarshipMethods:["Học bổng khuyến khích học tập","Học bổng tài trợ doanh nghiệp"],
+      admissionMethods:["THPT","ĐGNL","Xét tuyển đặc biệt"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT",type:"number",min:21,note:"Mốc 2022"},
+        {id:"dgnl",label:"Điểm ĐGNL",type:"number",min:680,note:"Mốc 2022"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:7.8,note:"Mốc 2022"}
+      ],
+      tuitionRange:"Theo chương trình chuẩn",
+      note:"Năm 2022: portfolio truyền thông chưa bắt buộc, chủ yếu xét học lực."
+    },
+    {
+      name:"RMIT University Vietnam", short:"RMIT", city:"TP.HCM / Hà Nội",
+      applyStart:"01/11/2021", applyEnd:"31/03/2022",
+      scholarshipMethods:["Opportunity Scholarship","Academic Merit Scholarship"],
+      admissionMethods:["Xét hồ sơ học lực + tiếng Anh"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.3,note:"Mốc 2022"},
+        {id:"ielts",label:"IELTS",type:"number",min:6.5,note:"Mốc 2022"}
+      ],
+      tuitionRange:"Học phí cao, học bổng cạnh tranh",
+      note:"Năm 2022: bài luận và hoạt động ngoại khóa chưa bắt buộc như 2024–2025."
+    }
+  ],
+  tc: [
+    {
+      name:"Đại học Kinh tế TP.HCM", short:"UEH", city:"TP.HCM",
+      applyStart:"01/03/2022", applyEnd:"25/04/2022",
+      scholarshipMethods:["Học bổng tân sinh viên theo thành tích","Học bổng khuyến khích học tập","Học bổng doanh nghiệp"],
+      admissionMethods:["THPT","ĐGNL","Phương thức riêng"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT",type:"number",min:23.5,note:"Mốc 2022"},
+        {id:"dgnl",label:"Điểm ĐGNL",type:"number",min:830,note:"Mốc 2022"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.0,note:"Mốc 2022"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2022: UEH có nhiều loại học bổng đa dạng, điểm chuẩn nhẹ hơn 2025."
+    }
+  ],
+  sp: [
+    {
+      name:"Đại học Sư phạm TP.HCM", short:"HCMUE", city:"TP.HCM",
+      applyStart:"01/03/2022", applyEnd:"10/05/2022",
+      scholarshipMethods:["Miễn/giảm học phí theo chính sách sư phạm","Học bổng khuyến khích học tập"],
+      admissionMethods:["THPT","Theo đề án năm"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT",type:"number",min:19.5,note:"Mốc 2022"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:7.3,note:"Mốc 2022"},
+        {id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}
+      ],
+      tuitionRange:"Chính sách hỗ trợ học phí sư phạm",
+      note:"Năm 2022: điểm chuẩn thấp hơn, ưu tiên học lực và hạnh kiểm."
+    }
+  ],
+  env: [
+    {
+      name:"Đại học Khoa học Tự nhiên - ĐHQG TP.HCM", short:"HCMUS", city:"TP.HCM",
+      applyStart:"01/03/2022", applyEnd:"30/04/2022",
+      scholarshipMethods:["Học bổng khuyến khích học tập","Học bổng nghiên cứu khoa học"],
+      admissionMethods:["THPT","ĐGNL","Xét tuyển thẳng"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.0,note:"Mốc 2022"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:23,note:"Mốc 2022"}
+      ],
+      tuitionRange:"Theo ngành",
+      note:"Năm 2022: chủ yếu học lực, chưa yêu cầu dự án môi trường."
+    }
+  ],
+  ai: [
+    {
+      name:"Đại học Bách khoa Hà Nội", short:"HUST", city:"Hà Nội",
+      applyStart:"01/03/2022", applyEnd:"20/04/2022",
+      scholarshipMethods:["Học bổng Trần Đại Nghĩa toàn phần","Học bổng HBKK theo GPA","Học bổng doanh nghiệp công nghệ"],
+      admissionMethods:["THPT","Xét tuyển thẳng","Thi đánh giá tư duy"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT",type:"number",min:25,note:"Mốc 2022 - ngành AI/CS cạnh tranh cao"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.5,note:"Mốc 2022"},
+        {id:"award",label:"Có giải HSG quốc gia/tỉnh",type:"boolean"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2022: AI/CS bắt đầu cạnh tranh cao, điểm chuẩn tăng. Học bổng HBKK chiếm ~20% sv."
+    }
+  ],
+  bio: [
+    {
+      name:"Đại học Khoa học Tự nhiên - ĐHQG TP.HCM", short:"HCMUS", city:"TP.HCM",
+      applyStart:"01/03/2022", applyEnd:"30/04/2022",
+      scholarshipMethods:["Học bổng NCKH sinh học","Học bổng khuyến khích học tập"],
+      admissionMethods:["THPT","ĐGNL"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.0,note:"Mốc 2022"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:22,note:"Mốc 2022"}
+      ],
+      tuitionRange:"Theo ngành",
+      note:"Năm 2022: sinh học/biotech ít cạnh tranh, học bổng tương đối dễ đạt nếu GPA tốt."
+    }
+  ]
+};
+
+/* ════════════════════════════════════════════════
+   DỮ LIỆU NĂM 2023
+   Đặc điểm: bắt đầu xét thêm năng lực cá nhân,
+   xuất hiện học bổng toàn phần, yêu cầu:
+   GPA + IELTS + hoạt động ngoại khóa.
+════════════════════════════════════════════════ */
+const scholarshipData_2023 = {
+  cntt: [
+    {
+      name:"Đại học Bách khoa - ĐHQG TP.HCM", short:"HCMUT", city:"TP.HCM",
+      applyStart:"01/03/2023", applyEnd:"30/04/2023",
+      scholarshipMethods:["Học bổng thu hút nhân tài / thành tích cao","Học bổng khuyến khích học tập (HBKK)","Học bổng doanh nghiệp (tăng thêm doanh nghiệp tài trợ)","Xuất hiện học bổng toàn phần cho thủ khoa"],
+      admissionMethods:["THPT","ĐGNL","Xét tuyển thẳng"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ lớp 12",type:"number",min:8.4,note:"Mốc 2023"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:24,note:"Mốc 2023"},
+        {id:"dgnl",label:"Điểm ĐGNL",type:"number",min:790,note:"Mốc 2023"},
+        {id:"award",label:"Có giải HSG / thành tích nổi bật",type:"boolean"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2023: bắt đầu xét thêm năng lực cá nhân, xuất hiện học bổng toàn phần. Điểm chuẩn tăng nhẹ so với 2022."
+    },
+    {
+      name:"Đại học Công nghệ Thông tin - ĐHQG TP.HCM", short:"UIT", city:"TP.HCM",
+      applyStart:"01/03/2023", applyEnd:"15/05/2023",
+      scholarshipMethods:["Học bổng khuyến khích học tập","Học bổng tài năng – thêm tiêu chí AI/Data","Học bổng doanh nghiệp công nghệ (mở rộng)"],
+      admissionMethods:["THPT","ĐGNL","Xét tuyển theo đề án"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ lớp 12",type:"number",min:8.1,note:"Mốc 2023"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:23.3,note:"Mốc 2023"},
+        {id:"dgnl",label:"Điểm ĐGNL",type:"number",min:770,note:"Mốc 2023"},
+        {id:"award",label:"Có giải HSG / dự án AI-Data",type:"boolean"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2023: UIT thêm tiêu chí AI/Data và ngoại ngữ. Học bổng ngành công nghệ tăng mạnh từ doanh nghiệp."
+    },
+    {
+      name:"Đại học FPT", short:"FPTU", city:"TP.HCM/Cần Thơ/...",
+      applyStart:"15/01/2023", applyEnd:"30/06/2023",
+      scholarshipMethods:["Học bổng toàn phần / bán phần (mở rộng 2023)","Học bổng tài năng Global Expert","Học bổng theo kỳ thi học bổng riêng"],
+      admissionMethods:["Xét học bạ","THPT","ĐGNL","Thi học bổng / phỏng vấn"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.5,note:"Mốc 2023"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:22,note:"Mốc 2023"},
+        {id:"english",label:"IELTS / tiếng Anh tốt",type:"boolean"},
+        {id:"award",label:"Có giải cấp tỉnh/quốc gia",type:"boolean"}
+      ],
+      tuitionRange:"Theo campus/chương trình",
+      note:"Năm 2023: FPT mở rộng học bổng toàn phần, thêm tiêu chí phỏng vấn và tiếng Anh. Cạnh tranh tăng."
+    }
+  ],
+  yte: [
+    {
+      name:"Đại học Y Dược TP.HCM", short:"UMP", city:"TP.HCM",
+      applyStart:"01/03/2023", applyEnd:"10/05/2023",
+      scholarshipMethods:["Học bổng khuyến khích học tập","Học bổng thành tích cao","Xuất hiện phỏng vấn cho một số học bổng"],
+      admissionMethods:["THPT","Theo đề án năm"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT (B00)",type:"number",min:25,note:"Mốc 2023 – cạnh tranh cao"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.7,note:"Mốc 2023"},
+        {id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}
+      ],
+      tuitionRange:"Theo ngành/chương trình",
+      note:"Năm 2023: một số học bổng UMP bắt đầu có phỏng vấn. Điểm chuẩn Y tăng mạnh."
+    },
+    {
+      name:"Đại học Y khoa Phạm Ngọc Thạch", short:"PNTU", city:"TP.HCM",
+      applyStart:"01/03/2023", applyEnd:"30/04/2023",
+      scholarshipMethods:["Học bổng khuyến khích học tập","Học bổng tân sinh viên","Quỹ hỗ trợ sinh viên"],
+      admissionMethods:["THPT","Theo đề án tuyển sinh"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT (B00)",type:"number",min:24.3,note:"Mốc 2023"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.4,note:"Mốc 2023"},
+        {id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}
+      ],
+      tuitionRange:"Theo chính sách từng năm",
+      note:"Năm 2023: điểm tăng nhẹ. Theo dõi thông báo đầu năm học."
+    }
+  ],
+  tt: [
+    {
+      name:"Đại học KHXH & NV - ĐHQG TP.HCM", short:"USSH", city:"TP.HCM",
+      applyStart:"01/03/2023", applyEnd:"20/05/2023",
+      scholarshipMethods:["Học bổng khuyến khích học tập","Học bổng tài trợ doanh nghiệp","Học bổng theo thành tích đầu vào (bắt đầu thêm tiêu chí portfolio)"],
+      admissionMethods:["THPT","ĐGNL","Xét tuyển theo đề án"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT",type:"number",min:21.5,note:"Mốc 2023"},
+        {id:"dgnl",label:"Điểm ĐGNL",type:"number",min:690,note:"Mốc 2023"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:7.9,note:"Mốc 2023"},
+        {id:"portfolio",label:"Có portfolio / hoạt động truyền thông",type:"boolean"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2023: bắt đầu xuất hiện tiêu chí portfolio cho ngành truyền thông."
+    },
+    {
+      name:"RMIT University Vietnam", short:"RMIT", city:"TP.HCM / Hà Nội",
+      applyStart:"01/11/2022", applyEnd:"31/03/2023",
+      scholarshipMethods:["Opportunity Scholarship","Academic Merit / Achievement Scholarships","Học bổng có hồ sơ riêng với deadline cụ thể"],
+      admissionMethods:["Xét hồ sơ + tiếng Anh","Phỏng vấn / bài luận"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.4,note:"Mốc 2023"},
+        {id:"ielts",label:"IELTS",type:"number",min:6.5,note:"Mốc 2023"},
+        {id:"essay",label:"Có bài luận cá nhân",type:"boolean"},
+        {id:"activities",label:"Hoạt động ngoại khóa nổi bật",type:"boolean"}
+      ],
+      tuitionRange:"Học phí cao, học bổng cạnh tranh",
+      note:"Năm 2023: RMIT thêm yêu cầu bài luận và hoạt động ngoại khóa. Hồ sơ ngày càng giống CV tuyển dụng."
+    }
+  ],
+  tc: [
+    {
+      name:"Đại học Kinh tế TP.HCM", short:"UEH", city:"TP.HCM",
+      applyStart:"01/03/2023", applyEnd:"25/04/2023",
+      scholarshipMethods:["Học bổng tân sinh viên theo thành tích","Học bổng khuyến khích học tập","Học bổng doanh nghiệp (tăng số lượng)"],
+      admissionMethods:["THPT","ĐGNL","Phương thức riêng"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT",type:"number",min:23.8,note:"Mốc 2023"},
+        {id:"dgnl",label:"Điểm ĐGNL",type:"number",min:840,note:"Mốc 2023"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.1,note:"Mốc 2023"},
+        {id:"english",label:"Có chứng chỉ tiếng Anh",type:"boolean"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2023: UEH bắt đầu yêu cầu thêm tiếng Anh. Học bổng toàn phần xuất hiện cho nhóm điểm 27+."
+    },
+    {
+      name:"Đại học Ngoại thương - Cơ sở II TP.HCM", short:"FTU2", city:"TP.HCM",
+      applyStart:"01/03/2023", applyEnd:"30/04/2023",
+      scholarshipMethods:["Học bổng đầu vào thành tích cao","Học bổng chương trình GENIE","Học bổng nghiên cứu"],
+      admissionMethods:["THPT","ĐGNL","Xét chứng chỉ quốc tế"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT",type:"number",min:24.8,note:"Mốc 2023"},
+        {id:"dgnl",label:"Điểm ĐGNL",type:"number",min:880,note:"Mốc 2023"},
+        {id:"ielts",label:"IELTS",type:"number",min:6.5,note:"Lợi thế 2023"},
+        {id:"activities",label:"Hoạt động ngoại khóa/leadership",type:"boolean"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2023: FTU2 bắt đầu cạnh tranh hơn, thêm yêu cầu IELTS và leadership."
+    }
+  ],
+  sp: [
+    {
+      name:"Đại học Sư phạm TP.HCM", short:"HCMUE", city:"TP.HCM",
+      applyStart:"01/03/2023", applyEnd:"10/05/2023",
+      scholarshipMethods:["Miễn/giảm học phí theo chính sách sư phạm","Học bổng khuyến khích học tập","Học bổng hỗ trợ sinh viên sư phạm"],
+      admissionMethods:["THPT","Theo đề án năm"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT",type:"number",min:19.8,note:"Mốc 2023"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:7.4,note:"Mốc 2023"},
+        {id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"},
+        {id:"commitment",label:"Sẵn sàng cam kết sư phạm",type:"boolean"}
+      ],
+      tuitionRange:"Chính sách hỗ trợ học phí sư phạm",
+      note:"Năm 2023: điểm tăng nhẹ, bắt đầu yêu cầu cam kết nghề nghiệp sau tốt nghiệp."
+    }
+  ],
+  env: [
+    {
+      name:"Đại học Khoa học Tự nhiên - ĐHQG TP.HCM", short:"HCMUS", city:"TP.HCM",
+      applyStart:"01/03/2023", applyEnd:"30/04/2023",
+      scholarshipMethods:["Học bổng khuyến khích học tập","Học bổng NCKH","Học bổng xanh (mới 2023)"],
+      admissionMethods:["THPT","ĐGNL","Xét tuyển thẳng"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.1,note:"Mốc 2023"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:23.2,note:"Mốc 2023"},
+        {id:"activities",label:"Có hoạt động môi trường / NCKH",type:"boolean"}
+      ],
+      tuitionRange:"Theo ngành",
+      note:"Năm 2023: bắt đầu có học bổng xanh cho ngành môi trường – bền vững."
+    }
+  ],
+  ai: [
+    {
+      name:"Đại học Bách khoa Hà Nội", short:"HUST", city:"Hà Nội",
+      applyStart:"01/03/2023", applyEnd:"20/04/2023",
+      scholarshipMethods:["Học bổng Trần Đại Nghĩa","Học bổng HBKK","Học bổng AI/Tech từ doanh nghiệp (tăng mạnh)"],
+      admissionMethods:["THPT","Thi đánh giá tư duy","Xét tuyển thẳng"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT",type:"number",min:25.5,note:"Mốc 2023 – AI rất hot"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.6,note:"Mốc 2023"},
+        {id:"award",label:"Có giải HSG quốc gia / dự án AI",type:"boolean"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2023: ngành AI cực kỳ cạnh tranh. Doanh nghiệp tham gia mạnh vào tài trợ học bổng."
+    }
+  ],
+  bio: [
+    {
+      name:"Đại học Khoa học Tự nhiên - ĐHQG TP.HCM", short:"HCMUS", city:"TP.HCM",
+      applyStart:"01/03/2023", applyEnd:"30/04/2023",
+      scholarshipMethods:["Học bổng NCKH sinh học","Học bổng khuyến khích học tập","Học bổng biotech doanh nghiệp (xuất hiện 2023)"],
+      admissionMethods:["THPT","ĐGNL"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.1,note:"Mốc 2023"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:22.5,note:"Mốc 2023"},
+        {id:"activities",label:"Có định hướng NCKH / dự án biotech",type:"boolean"}
+      ],
+      tuitionRange:"Theo ngành",
+      note:"Năm 2023: biotech gắn doanh nghiệp, bắt đầu yêu cầu định hướng nghiên cứu."
+    }
+  ]
+};
+
+
+const scholarshipData_2025_raw = {
   cntt: [
     {
       name:"Đại học Bách khoa - ĐHQG TP.HCM", short:"HCMUT", city:"TP.HCM",
@@ -2960,43 +3397,43 @@ const scholarshipData = {
 
 
 /* ─────────── Added schools from uploaded ngành list ─────────── */
-scholarshipData.yte.push(
+scholarshipData_2025_raw.yte.push(
   {name:"Đại học Y Hà Nội",short:"HMU",city:"Hà Nội",applyStart:"Theo kỳ",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng khuyến khích học tập (theo kỳ)","Học bổng Bộ Y tế & doanh nghiệp","Có thể đạt 100% học phí học kỳ (rất cạnh tranh)"],admissionMethods:["THPT","Theo đề án tuyển sinh"],requirements:[{id:"thpt",label:"Điểm THPT (B00)",type:"number",min:27,note:"Mốc tham khảo rất cao"},{id:"award",label:"Có thành tích nổi bật",type:"boolean"},{id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm đầu ngành, mức cạnh tranh rất cao."},
   {name:"Đại học Y Dược – ĐHQG Hà Nội",short:"UMP-VNU",city:"Hà Nội",applyStart:"Theo đợt tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng ĐHQG","Học bổng nghiên cứu y sinh","Có mức cao 50%–100%"],admissionMethods:["THPT","Theo đề án tuyển sinh"],requirements:[{id:"thpt",label:"Điểm THPT",type:"number",min:25,note:"Mốc tham khảo"},{id:"gpa",label:"GPA học bạ",type:"number",min:8.5,note:"Mốc tham khảo"},{id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Phù hợp nếu quan tâm định hướng nghiên cứu y sinh."},
   {name:"Đại học Kinh doanh và Công nghệ Hà Nội",short:"HUBT",city:"Hà Nội",applyStart:"Theo mùa tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng đầu vào + khuyến học","Có hỗ trợ đến 100% học phí năm đầu"],admissionMethods:["THPT","Học bạ","Theo đề án tuyển sinh"],requirements:[{id:"gpa",label:"GPA học bạ",type:"number",min:7.0,note:"Mốc tham khảo"},{id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm dễ tiếp cận hơn trong danh sách mới."}
 );
 
-scholarshipData.tc.push(
+scholarshipData_2025_raw.tc.push(
   {name:"Đại học Kinh tế Quốc dân",short:"NEU",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Quỹ học bổng lớn >50 tỷ/năm","Học bổng tài năng, doanh nghiệp","Có suất 100% học phí"],admissionMethods:["THPT","ĐGNL","Theo đề án tuyển sinh"],requirements:[{id:"thpt",label:"Điểm THPT",type:"number",min:26,note:"Mốc tham khảo"},{id:"gpa",label:"GPA học bạ",type:"number",min:8.8,note:"Mốc tham khảo"},{id:"award",label:"Có thành tích nổi bật",type:"boolean"}],tuitionRange:"Theo chương trình",note:"Một trong các trường kinh tế cạnh tranh nhất."},
   {name:"Đại học Thương mại",short:"TMU",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng theo GPA","Học bổng doanh nghiệp","Có thể đạt 100% theo kỳ"],admissionMethods:["THPT","Học bạ","Theo đề án tuyển sinh"],requirements:[{id:"gpa",label:"GPA học bạ",type:"number",min:8.0,note:"Mốc tham khảo"},{id:"thpt",label:"Điểm THPT",type:"number",min:24,note:"Mốc tham khảo"}],tuitionRange:"Theo ngành/chương trình",note:"Phù hợp nhóm kinh tế - thương mại tầm trung."},
   {name:"Đại học Đại Nam",short:"DNU",city:"Hà Nội",applyStart:"Theo mùa tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng tuyển sinh 100% học phí","Học bổng duy trì theo GPA"],admissionMethods:["THPT","Học bạ"],requirements:[{id:"gpa",label:"GPA học bạ",type:"number",min:7.0,note:"Mốc tham khảo"},{id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm dễ vào hơn trong khối kinh tế."}
 );
 
-scholarshipData.cntt.push(
+scholarshipData_2025_raw.cntt.push(
   {name:"Đại học Bách khoa Hà Nội",short:"HUST",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng khuyến khích học tập + Trần Đại Nghĩa","Có mức 100% học phí"],admissionMethods:["THPT","ĐGNL","Theo đề án tuyển sinh"],requirements:[{id:"thpt",label:"Điểm THPT",type:"number",min:26,note:"Mốc tham khảo"},{id:"dgnl",label:"Điểm ĐGNL",type:"number",min:850,note:"Mốc tham khảo"},{id:"award",label:"Có thành tích học thuật/dự án",type:"boolean"}],tuitionRange:"Theo chương trình",note:"Mạnh về chip, bán dẫn, AI nền tảng."},
   {name:"Học viện Công nghệ Bưu chính Viễn thông",short:"PTIT",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng CNTT, viễn thông","Học bổng doanh nghiệp (VNPT, Viettel)"],admissionMethods:["THPT","ĐGNL","Theo đề án tuyển sinh"],requirements:[{id:"thpt",label:"Điểm THPT",type:"number",min:24.5,note:"Mốc tham khảo"},{id:"gpa",label:"GPA học bạ",type:"number",min:8.0,note:"Mốc tham khảo"}],tuitionRange:"Theo chương trình",note:"Phù hợp định hướng CNTT - viễn thông ứng dụng."},
   {name:"Đại học Phenikaa",short:"PKA",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng tài năng 100% toàn khóa","Mạnh về bán dẫn, AI"],admissionMethods:["THPT","Học bạ","ĐGNL"],requirements:[{id:"gpa",label:"GPA học bạ",type:"number",min:7.8,note:"Mốc tham khảo"},{id:"award",label:"Có dự án / thành tích",type:"boolean"}],tuitionRange:"Theo chương trình",note:"Có nhiều gói học bổng lớn cho thí sinh khá giỏi."}
 );
 
-scholarshipData.tt.push(
+scholarshipData_2025_raw.tt.push(
   {name:"Học viện Báo chí và Tuyên truyền",short:"AJC",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng theo thành tích","Học bổng báo chí – truyền thông"],admissionMethods:["THPT","Theo đề án tuyển sinh"],requirements:[{id:"thpt",label:"Điểm THPT",type:"number",min:24,note:"Mốc tham khảo"},{id:"activities",label:"Hoạt động ngoại khóa mạnh",type:"boolean"},{id:"essay",label:"Có bài luận / hồ sơ nổi bật",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Rất phù hợp với nhóm báo chí, truyền thông chính trị - xã hội."},
   {name:"ĐH Khoa học Xã hội và Nhân văn – ĐHQGHN",short:"USSH-VNU",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng ĐHQG","Có mức cao theo GPA"],admissionMethods:["THPT","Theo đề án tuyển sinh"],requirements:[{id:"gpa",label:"GPA học bạ",type:"number",min:8.0,note:"Mốc tham khảo"},{id:"activities",label:"Ngoại khóa / CLB",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm tầm trung tốt cho truyền thông - xã hội."},
   {name:"Đại học Văn hóa Hà Nội",short:"HUC",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng khuyến học","Hỗ trợ học phí tốt"],admissionMethods:["THPT","Học bạ"],requirements:[{id:"gpa",label:"GPA học bạ",type:"number",min:7.0,note:"Mốc tham khảo"},{id:"activities",label:"Có hoạt động ngoại khóa",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm dễ tiếp cận hơn cho khối truyền thông - văn hóa."}
 );
 
-scholarshipData.env.push(
+scholarshipData_2025_raw.env.push(
   {name:"Đại học Tài nguyên và Môi trường Hà Nội",short:"HUNRE",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng môi trường","Có hỗ trợ toàn phần theo dự án"],admissionMethods:["THPT","Học bạ"],requirements:[{id:"gpa",label:"GPA học bạ",type:"number",min:7.5,note:"Mốc tham khảo"},{id:"essay",label:"Có định hướng phát triển bền vững",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Trường chuyên sâu nổi bật ở lĩnh vực môi trường."},
   {name:"Đại học Thủy lợi",short:"TLU",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng kỹ thuật môi trường","Có thể đạt 100%"],admissionMethods:["THPT","ĐGNL","Theo đề án tuyển sinh"],requirements:[{id:"gpa",label:"GPA",type:"number",min:7.8,note:"Mốc tham khảo"},{id:"thpt",label:"Điểm THPT",type:"number",min:22.5,note:"Mốc tham khảo"}],tuitionRange:"Theo ngành/chương trình",note:"Phù hợp hướng kỹ thuật môi trường."},
   {name:"Đại học Lâm nghiệp",short:"VNUF",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng phát triển bền vững","Hỗ trợ học phí cao"],admissionMethods:["THPT","Học bạ"],requirements:[{id:"gpa",label:"GPA",type:"number",min:7.0,note:"Mốc tham khảo"},{id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm dễ tiếp cận hơn cho khối môi trường."}
 );
 
-scholarshipData.ai.push(
+scholarshipData_2025_raw.ai.push(
   {name:"Đại học Công nghệ – ĐHQGHN",short:"UET",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng AI, Data Science","Có suất 100% học phí"],admissionMethods:["THPT","ĐGNL","Theo đề án tuyển sinh"],requirements:[{id:"thpt",label:"Điểm THPT",type:"number",min:25.5,note:"Mốc tham khảo"},{id:"dgnl",label:"ĐGNL",type:"number",min:800,note:"Mốc tham khảo"},{id:"award",label:"Có thành tích học thuật/dự án",type:"boolean"}],tuitionRange:"Theo chương trình",note:"Nhóm đầu ngành AI tại miền Bắc."},
   {name:"Đại học FPT",short:"FPT-AI",city:"Hà Nội / TP.HCM / Đà Nẵng / Cần Thơ",applyStart:"Theo mùa tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng AI/Robotics","100% toàn khóa (cạnh tranh)"],admissionMethods:["THPT","Học bạ","ĐGNL","Thi học bổng / phỏng vấn"],requirements:[{id:"gpa",label:"GPA",type:"number",min:8.0,note:"Mốc tham khảo"},{id:"award",label:"Có giải/portfolio/dự án",type:"boolean"}],tuitionRange:"Theo campus/chương trình",note:"Mạnh ở nhóm định hướng ứng dụng và dự án."},
   {name:"Đại học Mở Hà Nội",short:"HOU",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng CNTT – AI","Xét theo GPA"],admissionMethods:["THPT","Học bạ"],requirements:[{id:"gpa",label:"GPA",type:"number",min:7.2,note:"Mốc tham khảo"},{id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm dễ tiếp cận hơn cho AI/CNTT."}
 );
 
-scholarshipData.bio.push(
+scholarshipData_2025_raw.bio.push(
   {name:"ĐH Khoa học Tự nhiên – ĐHQGHN",short:"HUS",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng nghiên cứu sinh học","Có suất 100% học phí"],admissionMethods:["THPT","Theo đề án tuyển sinh"],requirements:[{id:"gpa",label:"GPA",type:"number",min:8.3,note:"Mốc tham khảo"},{id:"award",label:"Có thành tích học thuật / nghiên cứu",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm đầu ngành biotech / sinh học cơ bản."},
   {name:"Học viện Nông nghiệp Việt Nam",short:"VNUA",city:"Hà Nội",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng biotech, nông nghiệp công nghệ cao"],admissionMethods:["THPT","Học bạ"],requirements:[{id:"gpa",label:"GPA",type:"number",min:7.5,note:"Mốc tham khảo"},{id:"research",label:"Quan tâm nghiên cứu / dự án",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Thế mạnh về công nghệ sinh học ứng dụng nông nghiệp."},
   {name:"Đại học Thành Đô",short:"TDD",city:"Hà Nội",applyStart:"Theo mùa tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng tuyển sinh","Có mức cao 50%–100%"],admissionMethods:["THPT","Học bạ"],requirements:[{id:"gpa",label:"GPA",type:"number",min:6.8,note:"Mốc tham khảo"},{id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm dễ vào hơn trong biotech."}
@@ -3067,9 +3504,9 @@ const SCHOLARSHIP_COUNT_DATA = {
   "TDD":      "~300 suất/năm (ước lượng)"
 };
 
-/* Gán trường `scholarshipCount` vào từng object trong scholarshipData */
-Object.keys(scholarshipData).forEach(function(tab) {
-  scholarshipData[tab].forEach(function(uni) {
+/* Gán trường `scholarshipCount` vào từng object trong scholarshipData_2025_raw */
+Object.keys(scholarshipData_2025_raw).forEach(function(tab) {
+  scholarshipData_2025_raw[tab].forEach(function(uni) {
     if (!uni.scholarshipCount) {
       uni.scholarshipCount = SCHOLARSHIP_COUNT_DATA[uni.short] || "Theo thông báo của trường";
     }
@@ -3084,8 +3521,8 @@ let student = {
 };
 
 /* ─────────── Tab logic ─────────── */
-let currentTab = "cntt";
-let currentSearch = "";
+var currentTab = "cntt";
+var currentSearch = "";
 
 function switchTab(tab) {
   currentTab = tab;
@@ -3217,47 +3654,150 @@ function niceDate(value) {
 
 
 /* ─────────── Added schools from uploaded ngành list (miền Trung) ─────────── */
-scholarshipData.yte.push(
+scholarshipData_2025_raw.yte.push(
   {name:"Đại học Y Dược – Đại học Huế",short:"HueUMP",city:"Huế",applyStart:"Theo kỳ",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng khuyến khích học tập (theo kỳ)","Học bổng nghiên cứu y sinh & quốc tế","Có thể đạt 100% học phí học kỳ (cạnh tranh cao)"],admissionMethods:["THPT","Theo đề án tuyển sinh"],requirements:[{id:"thpt",label:"Điểm THPT",type:"number",min:24.5,note:"Mốc tham khảo"},{id:"gpa",label:"GPA học bạ",type:"number",min:8.0,note:"Mốc tham khảo"},{id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm y mạnh của miền Trung."},
   {name:"Khoa Y Dược – Đại học Đà Nẵng",short:"SMP-UDN",city:"Đà Nẵng",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng ĐH Đà Nẵng","Học bổng hỗ trợ sinh viên ngành y"],admissionMethods:["THPT","Theo đề án tuyển sinh"],requirements:[{id:"thpt",label:"Điểm THPT",type:"number",min:23.5,note:"Mốc tham khảo"},{id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Phù hợp nhóm tầm trung ngành y tại miền Trung."},
   {name:"Đại học Duy Tân",short:"DTU",city:"Đà Nẵng",applyStart:"Theo mùa tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng tuyển sinh + học bổng y khoa","Có suất cao 50%–100%"],admissionMethods:["THPT","Học bạ","Theo đề án tuyển sinh"],requirements:[{id:"gpa",label:"GPA học bạ",type:"number",min:7.0,note:"Mốc tham khảo"},{id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm dễ tiếp cận hơn, học bổng khá rộng."}
 );
 
-scholarshipData.tc.push(
+scholarshipData_2025_raw.tc.push(
   {name:"Đại học Kinh tế – Đại học Đà Nẵng",short:"DUE",city:"Đà Nẵng",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng doanh nghiệp, khuyến học","Có mức cao theo GPA"],admissionMethods:["THPT","ĐGNL","Theo đề án tuyển sinh"],requirements:[{id:"thpt",label:"Điểm THPT",type:"number",min:23.5,note:"Mốc tham khảo"},{id:"gpa",label:"GPA học bạ",type:"number",min:7.8,note:"Mốc tham khảo"}],tuitionRange:"Theo chương trình",note:"Một trong các lựa chọn mạnh về kinh tế ở miền Trung."},
   {name:"Đại học Nha Trang",short:"NTU",city:"Nha Trang, Khánh Hòa",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng kinh tế biển, quản trị","Có thể đạt 100% theo kỳ"],admissionMethods:["THPT","Học bạ","Theo đề án tuyển sinh"],requirements:[{id:"gpa",label:"GPA học bạ",type:"number",min:7.2,note:"Mốc tham khảo"},{id:"thpt",label:"Điểm THPT",type:"number",min:21,note:"Mốc tham khảo"}],tuitionRange:"Theo ngành/chương trình",note:"Phù hợp nếu quan tâm kinh tế biển, logistics, quản trị."},
   {name:"Đại học Đông Á",short:"DAU",city:"Đà Nẵng",applyStart:"Theo đợt tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng nhập học","Có hỗ trợ học phí lớn"],admissionMethods:["THPT","Học bạ"],requirements:[{id:"gpa",label:"GPA học bạ",type:"number",min:6.8,note:"Mốc tham khảo"},{id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm dễ vào hơn trong khối kinh tế miền Trung."}
 );
 
-scholarshipData.cntt.push(
+scholarshipData_2025_raw.cntt.push(
   {name:"Đại học Bách khoa – Đại học Đà Nẵng",short:"DUT",city:"Đà Nẵng",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng kỹ thuật, CNTT","Có thể đạt 100% học phí học kỳ"],admissionMethods:["THPT","ĐGNL","Theo đề án tuyển sinh"],requirements:[{id:"thpt",label:"Điểm THPT",type:"number",min:24.5,note:"Mốc tham khảo"},{id:"gpa",label:"GPA học bạ",type:"number",min:8.0,note:"Mốc tham khảo"},{id:"award",label:"Có thành tích học thuật/dự án",type:"boolean"}],tuitionRange:"Theo chương trình",note:"Lựa chọn mạnh cho CNTT - kỹ thuật ở miền Trung."},
   {name:"Đại học Quy Nhơn",short:"QNU",city:"Quy Nhơn, Bình Định",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng CNTT","Học bổng nghiên cứu"],admissionMethods:["THPT","Học bạ","Theo đề án tuyển sinh"],requirements:[{id:"gpa",label:"GPA học bạ",type:"number",min:7.0,note:"Mốc tham khảo"},{id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Phù hợp nhóm tầm trung và nghiên cứu ứng dụng."},
   {name:"Đại học Duy Tân",short:"DTU",city:"Đà Nẵng",applyStart:"Theo mùa tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng CNTT mạnh","Có học bổng toàn phần"],admissionMethods:["THPT","Học bạ","Theo đề án tuyển sinh"],requirements:[{id:"gpa",label:"GPA học bạ",type:"number",min:7.0,note:"Mốc tham khảo"},{id:"award",label:"Có dự án / thành tích",type:"boolean"}],tuitionRange:"Theo chương trình",note:"Có nhiều gói lớn cho CNTT, AI, kỹ thuật."}
 );
 
-scholarshipData.tt.push(
+scholarshipData_2025_raw.tt.push(
   {name:"ĐH Khoa học Xã hội và Nhân văn – Đại học Huế",short:"HUSC-HUE",city:"Huế",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng ngành báo chí – truyền thông","Học bổng ĐH Huế"],admissionMethods:["THPT","Theo đề án tuyển sinh"],requirements:[{id:"gpa",label:"GPA học bạ",type:"number",min:7.5,note:"Mốc tham khảo"},{id:"activities",label:"Ngoại khóa / CLB",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Mạnh ở nhóm KHXH, báo chí, truyền thông."},
   {name:"Đại học Đà Nẵng – Khoa Báo chí",short:"UDN-Journalism",city:"Đà Nẵng",applyStart:"Theo năm tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng ngành truyền thông"],admissionMethods:["THPT","Theo đề án tuyển sinh"],requirements:[{id:"thpt",label:"Điểm THPT",type:"number",min:22,note:"Mốc tham khảo"},{id:"activities",label:"Hoạt động truyền thông / ngoại khóa",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm tầm trung ngành truyền thông tại miền Trung."},
   {name:"Đại học Phú Xuân",short:"PXU",city:"Huế",applyStart:"Theo mùa tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng sáng tạo – truyền thông","Hỗ trợ học phí cao"],admissionMethods:["THPT","Học bạ"],requirements:[{id:"gpa",label:"GPA học bạ",type:"number",min:6.5,note:"Mốc tham khảo"},{id:"activities",label:"Có hoạt động ngoại khóa / sản phẩm sáng tạo",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm dễ vào hơn, thiên về thực hành và sáng tạo."}
 );
 
-scholarshipData.bio.push(
+scholarshipData_2025_raw.bio.push(
   {name:"Đại học Khoa học – Đại học Huế",short:"HUSC",city:"Huế",applyStart:"Theo năm học",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng nghiên cứu sinh học","Có suất cao theo GPA"],admissionMethods:["THPT","Học bạ","Theo đề án tuyển sinh"],requirements:[{id:"gpa",label:"GPA",type:"number",min:7.8,note:"Mốc tham khảo"},{id:"research",label:"Có định hướng NCKH",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Phù hợp nhóm biotech và nghiên cứu sinh học."},
   {name:"Đại học Nha Trang",short:"NTU",city:"Nha Trang, Khánh Hòa",applyStart:"Theo năm học",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng công nghệ sinh học biển"],admissionMethods:["THPT","Học bạ"],requirements:[{id:"gpa",label:"GPA",type:"number",min:7.0,note:"Mốc tham khảo"}],tuitionRange:"Theo ngành/chương trình",note:"Có lợi thế ở hướng công nghệ sinh học biển."},
   {name:"Đại học Duy Tân",short:"DTU",city:"Đà Nẵng",applyStart:"Theo mùa tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng biotech","Có hỗ trợ học phí cao"],admissionMethods:["THPT","Học bạ"],requirements:[{id:"gpa",label:"GPA",type:"number",min:7.0,note:"Mốc tham khảo"},{id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm dễ tiếp cận hơn trong biotech."}
 );
 
-scholarshipData.env.push(
+scholarshipData_2025_raw.env.push(
   {name:"Đại học Khoa học – Đại học Huế",short:"HUSC",city:"Huế",applyStart:"Theo năm học",applyEnd:"Theo thông báo",scholarshipMethods:["Mạnh về môi trường & biến đổi khí hậu","Học bổng nghiên cứu"],admissionMethods:["THPT","Học bạ","Theo đề án tuyển sinh"],requirements:[{id:"gpa",label:"GPA",type:"number",min:7.8,note:"Mốc tham khảo"},{id:"activities",label:"Có dự án/hoạt động liên quan môi trường",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nổi bật ở môi trường, khí hậu và tài nguyên."},
   {name:"Đại học Bách khoa – Đại học Đà Nẵng",short:"DUT",city:"Đà Nẵng",applyStart:"Theo năm học",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng kỹ thuật môi trường"],admissionMethods:["THPT","ĐGNL","Theo đề án tuyển sinh"],requirements:[{id:"thpt",label:"Điểm THPT",type:"number",min:22.5,note:"Mốc tham khảo"},{id:"gpa",label:"GPA",type:"number",min:7.5,note:"Mốc tham khảo"}],tuitionRange:"Theo ngành/chương trình",note:"Phù hợp nhóm kỹ thuật môi trường."},
   {name:"Đại học Nông Lâm – Đại học Huế",short:"HUAF",city:"Huế",applyStart:"Theo năm học",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng nông nghiệp – bền vững","Hỗ trợ học phí tốt"],admissionMethods:["THPT","Học bạ"],requirements:[{id:"gpa",label:"GPA",type:"number",min:6.8,note:"Mốc tham khảo"},{id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Nhóm dễ vào hơn, thiên về nông nghiệp và phát triển bền vững."}
 );
 
-scholarshipData.ai.push(
+scholarshipData_2025_raw.ai.push(
   {name:"Đại học Bách khoa – Đại học Đà Nẵng",short:"DUT",city:"Đà Nẵng",applyStart:"Theo năm học",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng AI, Robotics","Có mức cao theo thành tích"],admissionMethods:["THPT","ĐGNL","Theo đề án tuyển sinh"],requirements:[{id:"gpa",label:"GPA",type:"number",min:8.0,note:"Mốc tham khảo"},{id:"award",label:"Có dự án / giải thưởng",type:"boolean"}],tuitionRange:"Theo chương trình",note:"Một trong các điểm mạnh AI/Robotics ở miền Trung."},
   {name:"Đại học Công nghệ Thông tin và Truyền thông Việt – Hàn",short:"VKU",city:"Đà Nẵng",applyStart:"Theo năm học",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng CNTT, AI","Hợp tác doanh nghiệp"],admissionMethods:["THPT","Học bạ","Theo đề án tuyển sinh"],requirements:[{id:"gpa",label:"GPA",type:"number",min:7.5,note:"Mốc tham khảo"},{id:"english",label:"Tiếng Anh tốt",type:"boolean"}],tuitionRange:"Theo chương trình",note:"Mạnh ở CNTT ứng dụng, AI và liên kết doanh nghiệp."},
   {name:"Đại học Duy Tân",short:"DTU",city:"Đà Nẵng",applyStart:"Theo mùa tuyển sinh",applyEnd:"Theo thông báo",scholarshipMethods:["Học bổng AI","Có thể đạt toàn phần"],admissionMethods:["THPT","Học bạ"],requirements:[{id:"gpa",label:"GPA",type:"number",min:7.0,note:"Mốc tham khảo"},{id:"award",label:"Có dự án / thành tích",type:"boolean"}],tuitionRange:"Theo ngành/chương trình",note:"Có nhiều lựa chọn học bổng, dễ tiếp cận hơn nhóm top."}
 );
+
+
+
+/* ════════════════════════════════════════════════
+   DỮ LIỆU NĂM 2025 — giữ nguyên từ codebase gốc
+   (được gán bên dưới sau khi parse scholarshipData_2025)
+════════════════════════════════════════════════ */
+
+/* ── Tổ chức dữ liệu theo năm ── */
+const scholarshipByYear = {
+  "2022": scholarshipData_2022,
+  "2023": scholarshipData_2023,
+  "2025": scholarshipData_2025_raw  /* được gán ngay sau khi parse xong */
+};
+
+/* ── Logic fallback: lấy dữ liệu trường từ năm gần nhất ── */
+function getScholarshipDataForYear(year) {
+  const years = Object.keys(scholarshipByYear).map(Number).sort((a,b) => b-a);
+  const targetYear = parseInt(year);
+  const result = {};
+  const tabs = ["cntt","yte","tt","tc","sp","env","ai","bio"];
+
+  tabs.forEach(function(tab) {
+    // Gom tất cả short codes từ mọi năm trong tab này
+    const allShorts = new Set();
+    years.forEach(function(y) {
+      const d = scholarshipByYear[String(y)];
+      if (d && d[tab]) d[tab].forEach(function(u){ allShorts.add(u.short); });
+    });
+
+    result[tab] = [];
+    allShorts.forEach(function(short) {
+      // Tìm bản ghi năm target
+      const targetData = scholarshipByYear[String(targetYear)];
+      const found = targetData && targetData[tab]
+        ? targetData[tab].find(function(u){ return u.short === short; })
+        : null;
+
+      if (found) {
+        result[tab].push(Object.assign({}, found, {
+          _dataYear: String(targetYear),
+          _isFallback: false
+        }));
+      } else {
+        // Fallback: tìm năm gần nhất trước targetYear có dữ liệu
+        for (var i = 0; i < years.length; i++) {
+          var y = years[i];
+          if (y >= targetYear) continue;
+          var d = scholarshipByYear[String(y)];
+          if (!d || !d[tab]) continue;
+          var fb = d[tab].find(function(u){ return u.short === short; });
+          if (fb) {
+            result[tab].push(Object.assign({}, fb, {
+              _dataYear: String(y),
+              _isFallback: true,
+              applyStart: "Chưa công bố " + targetYear,
+              applyEnd:   "Chưa công bố " + targetYear
+            }));
+            break;
+          }
+        }
+      }
+    });
+  });
+
+  return result;
+}
+
+/* ── Năm selector UI ── */
+function buildYearSelector() {
+  const years = Object.keys(scholarshipByYear).sort((a,b) => b-a);
+  const wrap = document.getElementById("yearSelectorWrap");
+  if (!wrap) return;
+  wrap.innerHTML = years.map(function(y) {
+    const isCurrent = y === activeYear;
+    return '<button class="year-btn' + (isCurrent ? ' active' : '') + '" onclick="switchYear(\'' + y + '\')" style="' +
+      (isCurrent
+        ? 'background:linear-gradient(135deg,#5b7cfa,#7c5bf5);color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(99,102,241,0.35);'
+        : 'background:rgba(255,255,255,0.7);color:#3a3a6e;border:1.5px solid rgba(99,102,241,0.2);') +
+      'padding:6px 18px;border-radius:999px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;">' +
+      y + (y === String(new Date().getFullYear()) ? ' <span style="font-size:.65rem;opacity:.75;">(hiện tại)</span>' : '') +
+    '</button>';
+  }).join('');
+}
+
+function switchYear(year) {
+  activeYear = year;
+  // Cập nhật scholarshipData để toàn bộ logic cũ vẫn hoạt động
+  const data = getScholarshipDataForYear(year);
+  Object.keys(data).forEach(function(tab) {
+    scholarshipData[tab] = data[tab];
+    // Gán lại scholarshipCount
+    scholarshipData[tab].forEach(function(uni) {
+      if (!uni.scholarshipCount) {
+        uni.scholarshipCount = SCHOLARSHIP_COUNT_DATA[uni.short] || "Theo thông báo của trường";
+      }
+    });
+  });
+  buildYearSelector();
+  // Re-render tất cả tab
+  Object.keys(scholarshipData).forEach(function(tab) { renderGrid(tab); });
+}
+
 
 function detectRegion(city) {
   const c = (city || "").toLowerCase();
@@ -3424,7 +3964,18 @@ function buildCard(uni) {
   const uniRegion = detectRegion(uni.city);
   const regionMatch = student.region && (uniRegion === student.region || uniRegion === "all");
   const regionBadge = student.region ? `<span class="sn-badge-out" style="${regionMatch ? 'background:rgba(16,185,129,.12);color:#047857;border-color:rgba(16,185,129,.18);' : ''}">📍 ${regionLabel(uniRegion)}</span>` : "";
-  return `<div class="sn-card">
+  const fallbackBanner = uni._isFallback
+    ? `<div class="sn-fallback-banner">
+        <span class="fb-icon">⚠️</span>
+        <span>Chưa có dữ liệu năm <strong>${activeYear}</strong> — đang hiển thị thông tin từ năm <strong>${uni._dataYear}</strong> để tham khảo. Tiêu chí có thể thay đổi.</span>
+      </div>`
+    : (uni._dataYear && uni._dataYear !== activeYear ? `<div class="sn-fallback-banner" style="background:rgba(99,102,241,0.08);border-color:rgba(99,102,241,0.2);color:#3730a3;">
+        <span class="fb-icon">📋</span>
+        <span>Dữ liệu năm <strong>${uni._dataYear}</strong></span>
+      </div>` : "");
+  const fallbackCardClass = uni._isFallback ? " is-fallback" : "";
+  return `<div class="sn-card${fallbackCardClass}">
+    ${fallbackBanner}
     <div class="sn-card-header">
       <div class="sn-card-header-row">
         <div class="sn-card-header-row-top">
@@ -3567,7 +4118,31 @@ function resetStudent() {
 }
 
 /* ─────────── Init ─────────── */
-Object.keys(scholarshipData).forEach(tab => renderGrid(tab));
+// Bootstrap multi-year system: áp dụng năm mặc định (2025) và build year selector
+(function() {
+  // Gán scholarshipData_2025_raw vào scholarshipByYear (circular ref đã hoàn tất)
+  scholarshipByYear["2025"] = scholarshipData_2025_raw;
+  // Gán scholarshipCount cho tất cả năm
+  ["2022","2023","2025"].forEach(function(y) {
+    var d = scholarshipByYear[y];
+    if (!d) return;
+    Object.keys(d).forEach(function(tab) {
+      d[tab].forEach(function(uni) {
+        if (!uni.scholarshipCount)
+          uni.scholarshipCount = SCHOLARSHIP_COUNT_DATA[uni.short] || "Theo thông báo của trường";
+      });
+    });
+  });
+  // Áp dụng năm hiện tại và build selector
+  switchYear(activeYear);
+  buildYearSelector();
+  // Đảm bảo gọi sau DOM ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", buildYearSelector);
+  } else {
+    setTimeout(buildYearSelector, 0);
+  }
+})();
 
 /* ─────────── Tips Ticker ─────────── */
 const TIPS = [
