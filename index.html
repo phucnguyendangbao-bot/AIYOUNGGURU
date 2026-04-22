@@ -540,6 +540,25 @@ body::after-disabled{
 .sn-upgrade li{font-size:.875rem;color:var(--text-soft);}
 
 .sn-empty{border:1.5px dashed rgba(99,102,241,0.25);border-radius:22px;padding:48px 32px;text-align:center;color:var(--text-soft);background:rgba(255,255,255,0.5);}
+
+/* Group labels khi đã nhập tiêu chí */
+.sn-group-label{
+  font-size:.88rem;font-weight:700;
+  padding:10px 16px;border-radius:12px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  margin-top:4px;
+}
+.sn-group-label:first-child{margin-top:0;}
+.sn-group-ok{
+  background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(16,185,129,0.04));
+  color:#047857;border:1px solid rgba(16,185,129,0.22);
+}
+.sn-group-warn{
+  background:linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.04));
+  color:#b45309;border:1px solid rgba(245,158,11,0.22);
+}
+.sn-card-dim{opacity:.62;filter:grayscale(.15);transition:all .25s;}
+.sn-card-dim:hover{opacity:1;filter:none;}
 .sn-tab-panel{display:none;flex-direction:column;gap:16px;}
 .sn-tab-panel.active{display:flex;}
 
@@ -3252,26 +3271,73 @@ function regionLabel(region) {
 }
 
 /* ─────────── Render a grid ─────────── */
+/* ─────────── Detect xem student đã nhập tiêu chí gì chưa ─────────── */
+function hasStudentInput() {
+  if (student.gpa || student.thpt || student.dgnl || student.ielts) return true;
+  const bools = ["award","english","conduct","activities","essay","portfolio","commitment"];
+  return bools.some(k => student[k]);
+}
+
 function renderGrid(tab) {
   const grid = document.getElementById("grid-" + tab);
   const selectedRegion = student.region || "";
-  const unis = scholarshipData[tab]
-    .filter(u => (u.name + " " + u.short).toLowerCase().includes(currentSearch))
-    .sort((a, b) => {
-      if (!selectedRegion) return 0;
-      const score = (u) => {
-        const region = detectRegion(u.city);
-        if (region === selectedRegion) return 2;
-        if (region === "all") return 1;
-        return 0;
-      };
-      return score(b) - score(a);
-    });
+  const hasInput = hasStudentInput();
+
+  let unis = scholarshipData[tab]
+    .filter(u => (u.name + " " + u.short).toLowerCase().includes(currentSearch));
+
   if (unis.length === 0) {
     grid.innerHTML = `<div class="sn-empty" style="grid-column:1/-1">Không tìm thấy trường phù hợp với từ khóa hiện tại.</div>`;
     return;
   }
-  grid.innerHTML = unis.map(u => buildCard(u)).join("");
+
+  // Gắn điểm đánh giá cho từng trường
+  unis = unis.map(u => {
+    const ev = evaluate(u.requirements);
+    const regionOfUni = detectRegion(u.city);
+    const regionScore = !selectedRegion ? 0
+      : regionOfUni === selectedRegion ? 2
+      : regionOfUni === "all" ? 1
+      : 0;
+    return { uni: u, percent: ev.percent, met: ev.met, total: ev.total, regionScore };
+  });
+
+  if (hasInput) {
+    // Sort giảm dần theo: (1) percent khớp tiêu chí, (2) region, (3) met count
+    unis.sort((a, b) => {
+      if (b.percent !== a.percent) return b.percent - a.percent;
+      if (b.regionScore !== a.regionScore) return b.regionScore - a.regionScore;
+      return b.met - a.met;
+    });
+
+    // Chia làm 2 nhóm: phù hợp (≥ 50%) và chưa đủ (< 50%)
+    const matched   = unis.filter(x => x.percent >= 50);
+    const unmatched = unis.filter(x => x.percent < 50);
+
+    let html = "";
+    if (matched.length > 0) {
+      html += `<div class="sn-group-label sn-group-ok" style="grid-column:1/-1">
+        ✅ Phù hợp với hồ sơ của bạn · <strong>${matched.length} trường</strong>
+      </div>`;
+      html += matched.map(x => buildCard(x.uni)).join("");
+    }
+    if (unmatched.length > 0) {
+      html += `<div class="sn-group-label sn-group-warn" style="grid-column:1/-1">
+        ⚠️ Chưa đạt đủ tiêu chí · <strong>${unmatched.length} trường</strong>
+        <span style="font-weight:500;opacity:.85;">— cần cải thiện hồ sơ để có cơ hội</span>
+      </div>`;
+      html += unmatched.map(x => `<div class="sn-card-dim">${buildCard(x.uni)}</div>`).join("");
+    }
+    if (matched.length === 0 && unmatched.length === 0) {
+      grid.innerHTML = `<div class="sn-empty" style="grid-column:1/-1">Không có trường nào để hiển thị.</div>`;
+      return;
+    }
+    grid.innerHTML = html;
+  } else {
+    // Chưa nhập gì → sort theo region như cũ
+    unis.sort((a, b) => b.regionScore - a.regionScore);
+    grid.innerHTML = unis.map(x => buildCard(x.uni)).join("");
+  }
 }
 
 function buildCard(uni) {
