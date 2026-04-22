@@ -7485,5 +7485,329 @@ window.addEventListener('load', function(){
   });
 })();
 </script>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CHATBOT WIDGET — BrightWay AI Assistant (Claude-powered)
+     Endpoint: Vercel serverless function
+═══════════════════════════════════════════════════════════ -->
+<style id="bw-chatbot-styles">
+#bwChatLauncher{
+  position:fixed;right:20px;bottom:20px;z-index:9998;
+  width:60px;height:60px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#6366f1,#a78bfa);
+  box-shadow:0 10px 28px rgba(99,102,241,.45);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s;
+  color:#fff;
+}
+#bwChatLauncher:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 14px 34px rgba(99,102,241,.55);}
+#bwChatLauncher svg{width:28px;height:28px;}
+#bwChatLauncher .bw-pulse{
+  position:absolute;inset:-4px;border-radius:50%;
+  border:2px solid rgba(99,102,241,.6);animation:bwPulse 2s infinite;pointer-events:none;
+}
+@keyframes bwPulse{0%{transform:scale(1);opacity:.7}70%{transform:scale(1.3);opacity:0}100%{opacity:0}}
+#bwChatLauncher.open .bw-pulse{display:none;}
+
+#bwChatPanel{
+  position:fixed;right:20px;bottom:92px;z-index:9999;
+  width:380px;max-width:calc(100vw - 32px);height:560px;max-height:calc(100vh - 120px);
+  background:#fff;border-radius:20px;overflow:hidden;
+  box-shadow:0 24px 60px rgba(15,23,42,.28),0 4px 12px rgba(15,23,42,.08);
+  display:none;flex-direction:column;
+  transform:translateY(12px) scale(.96);opacity:0;
+  transition:transform .26s cubic-bezier(.22,1,.36,1),opacity .22s;
+}
+#bwChatPanel.open{display:flex;transform:translateY(0) scale(1);opacity:1;}
+
+.bw-chat-header{
+  background:linear-gradient(135deg,#6366f1,#a78bfa);color:#fff;
+  padding:14px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0;
+}
+.bw-chat-avatar{
+  width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.22);
+  display:grid;place-items:center;font-size:20px;flex-shrink:0;
+}
+.bw-chat-title{font-weight:800;font-size:.95rem;line-height:1.2;}
+.bw-chat-sub{font-size:.72rem;opacity:.88;margin-top:2px;display:flex;align-items:center;gap:5px;}
+.bw-chat-sub::before{content:"";width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;}
+.bw-chat-close{
+  margin-left:auto;background:rgba(255,255,255,.18);border:none;color:#fff;
+  width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:18px;
+  display:grid;place-items:center;transition:background .18s;
+}
+.bw-chat-close:hover{background:rgba(255,255,255,.32);}
+
+.bw-chat-body{
+  flex:1;overflow-y:auto;padding:16px 14px;
+  background:linear-gradient(180deg,#f8fafc,#f1f5f9);
+  display:flex;flex-direction:column;gap:10px;
+  scroll-behavior:smooth;
+}
+.bw-chat-body::-webkit-scrollbar{width:6px;}
+.bw-chat-body::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px;}
+
+.bw-msg{max-width:84%;padding:10px 13px;border-radius:16px;font-size:.875rem;line-height:1.55;word-wrap:break-word;white-space:pre-wrap;}
+.bw-msg.user{align-self:flex-end;background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff;border-bottom-right-radius:5px;}
+.bw-msg.bot{align-self:flex-start;background:#fff;color:#1e293b;border:1px solid #e2e8f0;border-bottom-left-radius:5px;box-shadow:0 1px 2px rgba(15,23,42,.04);}
+.bw-msg.bot a{color:#6366f1;font-weight:600;}
+.bw-msg.bot strong{color:#4338ca;}
+.bw-msg.error{align-self:flex-start;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;font-size:.82rem;}
+
+.bw-typing{align-self:flex-start;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:12px 14px;display:flex;gap:4px;}
+.bw-typing span{width:7px;height:7px;border-radius:50%;background:#94a3b8;animation:bwDot 1.2s infinite;}
+.bw-typing span:nth-child(2){animation-delay:.2s;}
+.bw-typing span:nth-child(3){animation-delay:.4s;}
+@keyframes bwDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+
+.bw-suggestions{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 10px;}
+.bw-suggestions.hidden{display:none;}
+.bw-chip{
+  font-size:.76rem;padding:6px 12px;border-radius:999px;border:1px solid #c7d2fe;
+  background:#eef2ff;color:#4338ca;cursor:pointer;font-weight:600;
+  transition:all .15s;font-family:inherit;
+}
+.bw-chip:hover{background:#e0e7ff;transform:translateY(-1px);}
+
+.bw-chat-input-wrap{
+  padding:10px 12px 12px;background:#fff;border-top:1px solid #e2e8f0;
+  display:flex;gap:8px;align-items:flex-end;flex-shrink:0;
+}
+.bw-chat-input{
+  flex:1;border:1.5px solid #e2e8f0;border-radius:14px;padding:9px 12px;
+  font-family:inherit;font-size:.88rem;color:#1e293b;outline:none;resize:none;
+  max-height:100px;min-height:38px;line-height:1.45;
+  transition:border-color .15s,box-shadow .15s;
+}
+.bw-chat-input:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.12);}
+.bw-chat-send{
+  background:linear-gradient(135deg,#6366f1,#a78bfa);color:#fff;border:none;
+  width:38px;height:38px;border-radius:12px;cursor:pointer;
+  display:grid;place-items:center;flex-shrink:0;
+  transition:transform .15s,opacity .15s;
+}
+.bw-chat-send:hover:not(:disabled){transform:translateY(-1px);}
+.bw-chat-send:disabled{opacity:.5;cursor:not-allowed;}
+.bw-chat-send svg{width:18px;height:18px;}
+
+@media(max-width:480px){
+  #bwChatPanel{right:8px;left:8px;bottom:82px;width:auto;max-width:none;height:calc(100vh - 110px);}
+  #bwChatLauncher{right:14px;bottom:14px;width:54px;height:54px;}
+}
+</style>
+
+<button id="bwChatLauncher" aria-label="Mở trợ lý AI" title="Trợ lý AI BrightWay">
+  <span class="bw-pulse"></span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    <circle cx="9" cy="11" r="1" fill="currentColor"/>
+    <circle cx="13" cy="11" r="1" fill="currentColor"/>
+    <circle cx="17" cy="11" r="1" fill="currentColor"/>
+  </svg>
+</button>
+
+<div id="bwChatPanel" role="dialog" aria-label="Trợ lý AI BrightWay">
+  <div class="bw-chat-header">
+    <div class="bw-chat-avatar">🎓</div>
+    <div>
+      <div class="bw-chat-title">BrightWay AI</div>
+      <div class="bw-chat-sub">Trợ lý tư vấn học bổng</div>
+    </div>
+    <button class="bw-chat-close" id="bwChatClose" aria-label="Đóng">✕</button>
+  </div>
+  <div class="bw-chat-body" id="bwChatBody">
+    <div class="bw-msg bot">👋 Chào bạn! Mình là trợ lý AI của BrightWay. Mình có thể giúp bạn tìm hiểu về:
+• Danh sách 44 trường & 8 nhóm ngành
+• Điểm chuẩn, học bổng, deadline nộp hồ sơ
+• Cách viết luận, ngoại khoá, IELTS
+• Hướng dẫn dùng công cụ trên web
+
+Bạn cần hỏi gì nào?</div>
+  </div>
+  <div class="bw-suggestions" id="bwChatSuggestions">
+    <button class="bw-chip" data-q="Trường nào có học bổng toàn phần ngành CNTT?">🎯 HB toàn phần CNTT</button>
+    <button class="bw-chip" data-q="Cách viết bài luận xin học bổng ấn tượng?">✍️ Viết luận</button>
+    <button class="bw-chip" data-q="GPA 8.5 IELTS 6.5 thì nên nộp trường nào?">📋 Gợi ý theo hồ sơ</button>
+    <button class="bw-chip" data-q="Công cụ tra cứu trên web dùng thế nào?">🛠️ Hướng dẫn dùng web</button>
+  </div>
+  <div class="bw-chat-input-wrap">
+    <textarea id="bwChatInput" class="bw-chat-input" rows="1" placeholder="Hỏi về học bổng, trường, ngành..." maxlength="1000"></textarea>
+    <button class="bw-chat-send" id="bwChatSend" aria-label="Gửi">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"/>
+        <polygon points="22 2 15 22 11 13 2 9 22 2" fill="currentColor" stroke="none"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  // ══ CẤU HÌNH ══
+  // URL Vercel serverless function của bạn
+  const CHAT_ENDPOINT = 'https://aiyoungguru.vercel.app/api/chat';
+  const MAX_HISTORY = 12;
+
+  const launcher   = document.getElementById('bwChatLauncher');
+  const panel      = document.getElementById('bwChatPanel');
+  const closeBtn   = document.getElementById('bwChatClose');
+  const body       = document.getElementById('bwChatBody');
+  const input      = document.getElementById('bwChatInput');
+  const sendBtn    = document.getElementById('bwChatSend');
+  const suggestions= document.getElementById('bwChatSuggestions');
+
+  const history = [];
+  let busy = false;
+
+  function openPanel(){
+    panel.classList.add('open');
+    launcher.classList.add('open');
+    setTimeout(() => input.focus(), 280);
+  }
+  function closePanel(){
+    panel.classList.remove('open');
+    launcher.classList.remove('open');
+  }
+  launcher.addEventListener('click', () => {
+    panel.classList.contains('open') ? closePanel() : openPanel();
+  });
+  closeBtn.addEventListener('click', closePanel);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && panel.classList.contains('open')) closePanel();
+  });
+
+  suggestions.addEventListener('click', e => {
+    const chip = e.target.closest('.bw-chip');
+    if (!chip) return;
+    input.value = chip.dataset.q;
+    sendMessage();
+  });
+
+  input.addEventListener('input', () => {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+  });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+  sendBtn.addEventListener('click', sendMessage);
+
+  function escapeHTML(s){
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+  function renderMarkdown(s){
+    let h = escapeHTML(s);
+    h = h.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    h = h.replace(/\*(?!\s)(.+?)\*/g, '<em>$1</em>');
+    h = h.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+    return h;
+  }
+  function addMessage(role, text, isError){
+    const div = document.createElement('div');
+    div.className = 'bw-msg ' + (isError ? 'error' : role);
+    div.innerHTML = role === 'bot' ? renderMarkdown(text) : escapeHTML(text);
+    body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+    return div;
+  }
+  function showTyping(){
+    const t = document.createElement('div');
+    t.className = 'bw-typing';
+    t.id = 'bwTyping';
+    t.innerHTML = '<span></span><span></span><span></span>';
+    body.appendChild(t);
+    body.scrollTop = body.scrollHeight;
+  }
+  function hideTyping(){
+    const t = document.getElementById('bwTyping');
+    if (t) t.remove();
+  }
+
+  function buildContextSummary(){
+    if (typeof scholarshipData === 'undefined') return '';
+    const sectorNames = {
+      cntt:'Công nghệ thông tin', yte:'Y tế', tt:'Truyền thông', tc:'Tài chính',
+      sp:'Sư phạm', env:'Môi trường & Bền vững', ai:'AI & Robotics', bio:'Biotech'
+    };
+    const lines = ['=== DỮ LIỆU TRƯỜNG & HỌC BỔNG (BrightWay) ==='];
+    Object.keys(scholarshipData).forEach(tab => {
+      const list = scholarshipData[tab] || [];
+      if (!list.length) return;
+      lines.push('\n### ' + (sectorNames[tab] || tab).toUpperCase() + ' (' + list.length + ' trường):');
+      list.forEach(u => {
+        const methods = (u.scholarshipMethods || []).slice(0,3).join('; ');
+        const reqs = (u.requirements || []).map(r => {
+          if (r.type === 'number') return r.label + ' ≥ ' + r.min;
+          return r.label;
+        }).slice(0,4).join(', ');
+        lines.push('- ' + u.name + ' (' + u.short + ', ' + u.city + '): HB: ' + methods + '. Yêu cầu: ' + reqs + '. Deadline: ' + (u.applyStart||'?') + ' - ' + (u.applyEnd||'?'));
+      });
+    });
+    return lines.join('\n');
+  }
+
+  async function sendMessage(){
+    const text = input.value.trim();
+    if (!text || busy) return;
+
+    busy = true;
+    sendBtn.disabled = true;
+    suggestions.classList.add('hidden');
+
+    addMessage('user', text);
+    history.push({ role: 'user', content: text });
+    input.value = '';
+    input.style.height = 'auto';
+    showTyping();
+
+    try {
+      const payload = {
+        messages: history.slice(-MAX_HISTORY),
+        context: buildContextSummary(),
+        currentTab: (typeof currentTab !== 'undefined' ? currentTab : null)
+      };
+
+      const res = await fetch(CHAT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      hideTyping();
+
+      if (!res.ok) {
+        const errText = await res.text().catch(()=>'');
+        throw new Error('Server ' + res.status + ': ' + (errText || res.statusText));
+      }
+      const data = await res.json();
+      const reply = data.reply || data.message || data.content || '';
+      if (!reply) throw new Error('Server trả về rỗng');
+
+      addMessage('bot', reply);
+      history.push({ role: 'assistant', content: reply });
+    } catch (err) {
+      hideTyping();
+      console.error('[BW chatbot]', err);
+      addMessage('bot',
+        '⚠️ Xin lỗi, mình không kết nối được server. ' +
+        'Vui lòng thử lại sau ít phút.\n\n(Chi tiết: ' + (err.message || err) + ')',
+        true
+      );
+    } finally {
+      busy = false;
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+})();
+</script>
+<!-- ═══════════════════════════ END CHATBOT WIDGET ═══════════════════════════ -->
+
 </body>
 </html>
