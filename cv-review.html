@@ -9,64 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
-<script>
-// Robust PDF.js loader: thử nhiều CDN, trả về Promise để code khác chờ.
-// Fix cho trường hợp CDN chính bị chặn / timeout trên mạng một số người dùng.
-(function () {
-  const PDFJS_VERSION = '3.11.174';
-  const CDN_SOURCES = [
-    {
-      lib: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VERSION + '/pdf.min.js',
-      worker: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VERSION + '/pdf.worker.min.js'
-    },
-    {
-      lib: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@' + PDFJS_VERSION + '/build/pdf.min.js',
-      worker: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@' + PDFJS_VERSION + '/build/pdf.worker.min.js'
-    },
-    {
-      lib: 'https://unpkg.com/pdfjs-dist@' + PDFJS_VERSION + '/build/pdf.min.js',
-      worker: 'https://unpkg.com/pdfjs-dist@' + PDFJS_VERSION + '/build/pdf.worker.min.js'
-    }
-  ];
-
-  function loadScript(url) {
-    return new Promise(function (resolve, reject) {
-      const s = document.createElement('script');
-      s.src = url;
-      s.async = true;
-      s.onload = function () { resolve(url); };
-      s.onerror = function () { reject(new Error('Không tải được: ' + url)); };
-      document.head.appendChild(s);
-    });
-  }
-
-  async function loadPdfJs() {
-    if (window.pdfjsLib) return window.pdfjsLib;
-    let lastErr;
-    for (const src of CDN_SOURCES) {
-      try {
-        await loadScript(src.lib);
-        if (window.pdfjsLib) {
-          window.pdfjsLib.GlobalWorkerOptions.workerSrc = src.worker;
-          console.log('[pdf.js] loaded from', src.lib);
-          return window.pdfjsLib;
-        }
-      } catch (e) {
-        lastErr = e;
-        console.warn('[pdf.js] fallback from', src.lib, e.message);
-      }
-    }
-    throw lastErr || new Error('Tất cả CDN PDF.js đều không tải được');
-  }
-
-  // Expose Promise để handlePdfFile chờ
-  window.pdfjsReady = loadPdfJs();
-  // Bắt unhandled để console sạch hơn
-  window.pdfjsReady.catch(function (e) {
-    console.error('[pdf.js] load failed:', e);
-  });
-})();
-</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -203,94 +145,36 @@ body::after{
   display:flex;align-items:center;gap:6px;
 }
 .input-wrap{position:relative;margin-bottom:20px;}
-
-/* PDF Drop zone */
-.pdf-dropzone{
-  width:100%;min-height:200px;
-  border:2px dashed rgba(99,102,241,0.35);
-  border-radius:14px;padding:28px 20px;
-  background:rgba(255,255,255,0.5);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;cursor:pointer;
-  transition:all .2s;
+.cv-textarea{
+  width:100%;
+  min-height:260px;
+  padding:16px 18px;
+  font-family:inherit;
+  font-size:.95rem;
+  line-height:1.55;
+  color:var(--text,#1f2937);
+  background:var(--surface,#fff);
+  border:1.5px solid var(--border,#d1d5db);
+  border-radius:12px;
+  resize:vertical;
+  transition:border-color .15s ease,box-shadow .15s ease;
+  outline:none;
 }
-.pdf-dropzone:hover{
-  border-color:var(--accent);
-  background:rgba(99,102,241,0.05);
+.cv-textarea:focus{
+  border-color:#6366f1;
+  box-shadow:0 0 0 3px rgba(99,102,241,0.18);
 }
-.pdf-dropzone.dragover{
-  border-color:var(--accent);
-  background:rgba(99,102,241,0.1);
-  transform:scale(1.01);
-  box-shadow:0 0 0 4px rgba(99,102,241,0.12);
-}
-.pdf-dropzone-icon{
-  font-size:2.4rem;margin-bottom:10px;opacity:.85;
-}
-.pdf-dropzone-title{
-  font-family:var(--font-display);font-weight:800;font-size:1rem;
-  color:var(--text-dark);margin-bottom:4px;
-}
-.pdf-dropzone-desc{
-  font-size:.82rem;color:var(--text-soft);line-height:1.5;margin-bottom:10px;
-}
-.pdf-dropzone-btn{
-  display:inline-flex;align-items:center;gap:6px;
-  background:var(--grad);color:#fff;
-  font-weight:700;font-size:.82rem;
-  padding:9px 18px;border-radius:999px;
-  border:none;cursor:pointer;
-  box-shadow:0 3px 10px rgba(99,102,241,0.25);
-  transition:transform .2s,box-shadow .2s;
-}
-.pdf-dropzone-btn:hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(99,102,241,0.35);}
-.pdf-dropzone-hint{
-  font-size:.72rem;color:var(--text-soft);margin-top:10px;
-}
-
-/* File info card (sau khi upload xong) */
-.pdf-file-info{
-  display:none;
-  background:rgba(255,255,255,0.8);
-  border:1.5px solid rgba(16,185,129,0.3);
-  border-radius:14px;padding:14px 16px;
-  align-items:center;gap:12px;
-}
-.pdf-file-info.active{display:flex;}
-.pdf-file-icon{
-  width:42px;height:42px;flex-shrink:0;border-radius:10px;
-  background:linear-gradient(135deg,#fca5a5,#ef4444);
-  color:#fff;font-weight:800;font-size:.7rem;
-  display:flex;align-items:center;justify-content:center;
-}
-.pdf-file-meta{flex:1;min-width:0;}
-.pdf-file-name{
-  font-weight:700;font-size:.88rem;color:var(--text-dark);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.pdf-file-stats{font-size:.74rem;color:var(--text-soft);margin-top:2px;}
-.pdf-file-remove{
-  background:rgba(239,68,68,0.1);color:#dc2626;
-  border:1px solid rgba(239,68,68,0.2);
-  border-radius:8px;padding:6px 10px;cursor:pointer;
-  font-size:.75rem;font-weight:700;
-  transition:all .2s;
-}
-.pdf-file-remove:hover{background:rgba(239,68,68,0.2);}
-
-/* Trạng thái extracting */
-.pdf-extracting{
-  display:none;align-items:center;gap:10px;
-  background:rgba(99,102,241,0.06);
-  border:1px solid rgba(99,102,241,0.18);
-  border-radius:12px;padding:12px 16px;
-  font-size:.84rem;color:var(--accent);font-weight:600;
-}
-.pdf-extracting.active{display:flex;}
-.pdf-extracting .spinner-sm{
-  width:16px;height:16px;border:2px solid rgba(99,102,241,0.25);
-  border-top-color:var(--accent);border-radius:50%;
-  animation:spin .7s linear infinite;flex-shrink:0;
+.cv-textarea::placeholder{color:var(--text-soft,#9ca3af);white-space:pre-line;}
+.cv-counter{
+  position:absolute;
+  right:12px;
+  bottom:10px;
+  font-size:.75rem;
+  color:var(--text-soft,#6b7280);
+  background:rgba(255,255,255,0.85);
+  padding:2px 8px;
+  border-radius:999px;
+  pointer-events:none;
 }
 
 /* Options */
@@ -780,7 +664,7 @@ body::after{
     <div class="steps">
       <div class="step-item">
         <div class="step-num active" id="step1Num">1</div>
-        <div class="step-label active" id="step1Label">Tải lên PDF</div>
+        <div class="step-label active" id="step1Label">Nhập nội dung</div>
       </div>
       <div class="step-line" id="line1"></div>
       <div class="step-item">
@@ -797,38 +681,13 @@ body::after{
     <!-- FORM -->
     <div class="form-area" id="formArea">
 
-      <div class="section-label">📄 Tải lên Portfolio / Bài luận (PDF)</div>
+      <div class="section-label">📝 Dán nội dung Portfolio / Bài luận của bạn</div>
       <div class="input-wrap">
-        <!-- Drop zone: hiện khi chưa có file -->
-        <div class="pdf-dropzone" id="pdfDropzone" onclick="document.getElementById('pdfFileInput').click()">
-          <div class="pdf-dropzone-icon">📄</div>
-          <div class="pdf-dropzone-title">Kéo thả file PDF vào đây</div>
-          <div class="pdf-dropzone-desc">hoặc bấm để chọn file từ máy của bạn</div>
-          <button type="button" class="pdf-dropzone-btn" onclick="event.stopPropagation();document.getElementById('pdfFileInput').click()">
-            📎 Chọn file PDF
-          </button>
-          <div class="pdf-dropzone-hint">Chỉ hỗ trợ định dạng .pdf · Tối đa 10MB</div>
-        </div>
-        <input type="file" id="pdfFileInput" accept="application/pdf,.pdf" style="display:none;" onchange="handlePdfSelect(event)">
-
-        <!-- Trạng thái đang trích xuất text -->
-        <div class="pdf-extracting" id="pdfExtracting">
-          <div class="spinner-sm"></div>
-          <span>Đang đọc nội dung PDF...</span>
-        </div>
-
-        <!-- File info: hiện sau khi upload thành công -->
-        <div class="pdf-file-info" id="pdfFileInfo">
-          <div class="pdf-file-icon">PDF</div>
-          <div class="pdf-file-meta">
-            <div class="pdf-file-name" id="pdfFileName">—</div>
-            <div class="pdf-file-stats" id="pdfFileStats">—</div>
-          </div>
-          <button class="pdf-file-remove" onclick="removePdfFile()">✕ Xóa</button>
-        </div>
-
-        <!-- Lưu trữ text đã extract (hidden) -->
-        <textarea id="cvInput" style="display:none;"></textarea>
+        <textarea id="cvInput" class="cv-textarea"
+          placeholder="Dán toàn bộ nội dung Portfolio, Bài luận, hoặc CV của bạn vào đây...&#10;&#10;Mẹo: mở file PDF/Word → Ctrl+A → Ctrl+C → Ctrl+V vào ô này."
+          rows="12"
+          oninput="updateCvCounter()"></textarea>
+        <div class="cv-counter" id="cvCounter">0 ký tự</div>
       </div>
 
       <div class="section-label">🔍 Chọn tiêu chí đánh giá</div>
@@ -1096,8 +955,8 @@ body::after{
   <div class="tips-grid">
     <div class="tip-mini">
       <div class="tip-mini-icon">📌</div>
-      <div class="tip-mini-title">Tải lên PDF đầy đủ</div>
-      <div class="tip-mini-desc">File PDF càng đầy đủ nội dung, AI càng phân tích chính xác. Bao gồm thông tin cá nhân, thành tích, mục tiêu.</div>
+      <div class="tip-mini-title">Nhập nội dung đầy đủ</div>
+      <div class="tip-mini-desc">Nội dung càng đầy đủ, AI càng phân tích chính xác. Bao gồm thông tin cá nhân, thành tích, mục tiêu.</div>
     </div>
     <div class="tip-mini">
       <div class="tip-mini-icon">🎯</div>
@@ -1107,7 +966,7 @@ body::after{
     <div class="tip-mini">
       <div class="tip-mini-icon">🔁</div>
       <div class="tip-mini-title">Thử nhiều lần</div>
-      <div class="tip-mini-desc">Sau khi chỉnh sửa, tải lại PDF để xem điểm số có cải thiện chưa.</div>
+      <div class="tip-mini-desc">Sau khi chỉnh sửa, dán lại nội dung để xem điểm số có cải thiện chưa.</div>
     </div>
   </div>
 </div>
@@ -1119,123 +978,18 @@ body::after{
 <script>
 // Guard: tránh chạy lại script 2 lần (Vercel/Cloudflare đôi khi re-execute
 // inline scripts bằng replaceChild, gây SyntaxError "has already been declared"
-// khiến các hàm như handlePdfSelect không được gán lên window).
+// khiến các handler không được gán lên window).
 if (!window.__CV_REVIEW_INITIALIZED__) {
 window.__CV_REVIEW_INITIALIZED__ = true;
 (function () {
-// ── PDF Handling ──
-const MAX_PDF_SIZE = 10 * 1024 * 1024; // 10MB
-
-function formatFileSize(bytes) {
-  if (bytes < 1024) return bytes + ' B';
-  if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
-  return (bytes/(1024*1024)).toFixed(2) + ' MB';
+// ── CV Input (textarea) ──
+function updateCvCounter() {
+  const ta = document.getElementById('cvInput');
+  const counter = document.getElementById('cvCounter');
+  if (!ta || !counter) return;
+  const len = ta.value.length;
+  counter.textContent = len.toLocaleString('vi-VN') + ' ký tự';
 }
-
-async function extractTextFromPdf(file) {
-  const arrayBuffer = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-  let fullText = '';
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    const pageText = content.items.map(item => item.str).join(' ');
-    fullText += pageText + '\n\n';
-  }
-  return { text: fullText.trim(), pageCount: pdf.numPages };
-}
-
-async function handlePdfFile(file) {
-  // Validate
-  if (!file) return;
-  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-    alert('Vui lòng chọn file định dạng PDF.');
-    return;
-  }
-  if (file.size > MAX_PDF_SIZE) {
-    alert('File quá lớn (tối đa 10MB). Vui lòng chọn file nhỏ hơn.');
-    return;
-  }
-
-  // UI: hiện trạng thái đang đọc (show sớm để user biết đang xử lý, kể cả khi
-  // đang đợi pdf.js load)
-  document.getElementById('pdfDropzone').style.display = 'none';
-  document.getElementById('pdfFileInfo').classList.remove('active');
-  document.getElementById('pdfExtracting').classList.add('active');
-
-  // Chờ pdf.js load (nhiều CDN fallback). Nếu tất cả fail mới báo lỗi.
-  try {
-    if (!window.pdfjsLib) {
-      if (!window.pdfjsReady) {
-        throw new Error('PDF loader chưa được khởi tạo. Vui lòng refresh trang.');
-      }
-      await window.pdfjsReady;
-    }
-  } catch (e) {
-    document.getElementById('pdfExtracting').classList.remove('active');
-    document.getElementById('pdfDropzone').style.display = 'flex';
-    alert('⚠️ Không tải được thư viện đọc PDF.\n\nNguyên nhân có thể: mạng chặn CDN, adblock, hoặc tường lửa. Hãy thử tắt extension chặn quảng cáo, đổi mạng, hoặc refresh trang.');
-    console.error('pdf.js load failed:', e);
-    return;
-  }
-
-  try {
-    const { text, pageCount } = await extractTextFromPdf(file);
-
-    if (!text || text.length < 50) {
-      throw new Error('Không đọc được văn bản từ PDF. File có thể là ảnh scan (cần OCR) hoặc bị mã hoá.');
-    }
-
-    // Lưu text vào input ẩn
-    document.getElementById('cvInput').value = text;
-
-    // Hiện thông tin file
-    document.getElementById('pdfFileName').textContent = file.name;
-    document.getElementById('pdfFileStats').textContent =
-      `${pageCount} trang · ${text.length.toLocaleString('vi-VN')} ký tự · ${formatFileSize(file.size)}`;
-    document.getElementById('pdfExtracting').classList.remove('active');
-    document.getElementById('pdfFileInfo').classList.add('active');
-  } catch (err) {
-    console.error('PDF extract error:', err);
-    alert('⚠️ ' + (err.message || 'Không đọc được file PDF này. Vui lòng thử file khác.'));
-    removePdfFile();
-  }
-}
-
-function handlePdfSelect(event) {
-  const file = event.target.files[0];
-  handlePdfFile(file);
-  event.target.value = ''; // reset để có thể chọn lại cùng 1 file
-}
-
-function removePdfFile() {
-  document.getElementById('cvInput').value = '';
-  document.getElementById('pdfFileInfo').classList.remove('active');
-  document.getElementById('pdfExtracting').classList.remove('active');
-  document.getElementById('pdfDropzone').style.display = 'flex';
-}
-
-// Drag & drop
-document.addEventListener('DOMContentLoaded', () => {
-  const dz = document.getElementById('pdfDropzone');
-  if (!dz) return;
-  ['dragenter','dragover'].forEach(ev => {
-    dz.addEventListener(ev, e => {
-      e.preventDefault(); e.stopPropagation();
-      dz.classList.add('dragover');
-    });
-  });
-  ['dragleave','drop'].forEach(ev => {
-    dz.addEventListener(ev, e => {
-      e.preventDefault(); e.stopPropagation();
-      dz.classList.remove('dragover');
-    });
-  });
-  dz.addEventListener('drop', e => {
-    const file = e.dataTransfer.files?.[0];
-    if (file) handlePdfFile(file);
-  });
-});
 
 function toggleOpt(label) {
   label.classList.toggle('selected');
@@ -1263,7 +1017,7 @@ function setStepActive(step) {
 async function submitCV() {
   const cv = document.getElementById('cvInput').value.trim();
   if (cv.length < 100) {
-    alert('Vui lòng tải lên file PDF có ít nhất 100 ký tự nội dung để AI có thể phân tích chính xác.');
+    alert('Vui lòng dán nội dung Portfolio/Bài luận dài ít nhất 100 ký tự để AI có thể phân tích chính xác.');
     return;
   }
   const opts = getSelectedOpts();
@@ -1403,6 +1157,10 @@ function toggleBlock(i) {
 function resetForm() {
   document.getElementById('formArea').style.display = 'block';
   document.getElementById('resultArea').style.display = 'none';
+  // Clear CV input + counter
+  const ta = document.getElementById('cvInput');
+  if (ta) { ta.value = ''; }
+  updateCvCounter();
   // Reset steps
   document.getElementById('step1Num').className = 'step-num active';
   document.getElementById('step1Label').className = 'step-label active';
@@ -1631,8 +1389,7 @@ document.addEventListener('DOMContentLoaded', renderProgressSection);
 
 // Expose các hàm dùng trong inline onclick/onchange của HTML lên window,
 // vì khi bọc trong IIFE chúng không còn ở global scope.
-window.handlePdfSelect      = handlePdfSelect;
-window.removePdfFile        = removePdfFile;
+window.updateCvCounter      = updateCvCounter;
 window.submitCV             = submitCV;
 window.resetForm            = resetForm;
 window.copyResult           = copyResult;
