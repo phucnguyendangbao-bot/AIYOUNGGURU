@@ -1509,27 +1509,6 @@ body{
 .page1-logo-pill{height:38px;border-radius:12px;background:rgba(255,255,255,.9);display:grid;place-items:center;color:#3b82f6;font-size:.8rem;font-weight:800;box-shadow:inset 0 0 0 1px rgba(255,255,255,.38);}
 .page1-school-card.mid .page1-logo-pill{color:#6d5ce7;}
 .page1-school-card.easy .page1-logo-pill{color:#268a63; background:rgba(255,255,255,.74);}
-.vnur-table-wrap{overflow-x:auto;border-radius:18px;box-shadow:0 8px 32px rgba(99,130,200,.13);background:#fff;}
-.vnur-table{width:100%;border-collapse:collapse;font-size:.95rem;}
-.vnur-table thead tr{background:linear-gradient(90deg,#2563eb,#4f46e5);color:#fff;}
-.vnur-table thead th{padding:12px 14px;font-weight:700;text-align:left;font-size:.88rem;letter-spacing:.03em;}
-.vnur-table thead th:first-child{border-radius:18px 0 0 0;text-align:center;width:52px;}
-.vnur-table thead th:last-child{border-radius:0 18px 0 0;}
-.vnur-table tbody tr{border-bottom:1px solid #f0f4f8;transition:background .18s;}
-.vnur-table tbody tr:hover{background:#eef4ff;}
-.vnur-table tbody tr:last-child{border-bottom:none;}
-.vnur-table td{padding:11px 14px;color:#1e293b;vertical-align:middle;}
-.vnur-table td:first-child{text-align:center;}
-.vnur-top3 td{font-weight:700;}
-.vnur-rank{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-weight:800;font-size:.9rem;background:#e2e8f0;color:#475569;}
-.vnur-rank.gold{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#fff;box-shadow:0 2px 8px rgba(245,158,11,.35);}
-.vnur-rank.silver{background:linear-gradient(135deg,#94a3b8,#64748b);color:#fff;box-shadow:0 2px 8px rgba(100,116,139,.3);}
-.vnur-rank.bronze{background:linear-gradient(135deg,#fb923c,#ea580c);color:#fff;box-shadow:0 2px 8px rgba(234,88,12,.3);}
-.vnur-public{color:#1d4ed8;font-weight:600;font-size:.82rem;}
-.vnur-private{color:#7c3aed;font-weight:600;font-size:.82rem;}
-.vnur-source{text-align:right;padding:10px 16px 12px;font-size:.82rem;color:#94a3b8;}
-.vnur-source a{color:#2563eb;text-decoration:none;font-weight:600;}
-.vnur-source a:hover{text-decoration:underline;}
 
 .page1-guide-card{display:block;text-decoration:none;color:inherit;background:linear-gradient(180deg,#ffffff,#eef6ff);border:1px solid #dbe7f5;border-radius:22px;padding:18px 16px;box-shadow:0 8px 22px rgba(134,161,196,.11);transition:.18s ease;min-height:156px;}
 .page1-guide-icon{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;font-size:24px;background:linear-gradient(180deg,#e7f1ff,#d6e9ff);color:#2563eb;margin-bottom:14px;}
@@ -2459,12 +2438,12 @@ body.spa-active #spa-topbar { display: flex; }
           <h3>Truyền thông</h3>
           <p>Sáng tạo nội dung, hình ảnh và thương hiệu số.</p>
         </div>
-        <div class="page1-major-card" onclick="goToTool('bio')">
+        <div class="page1-major-card" onclick="goToTool('tt')">
           <div class="page1-major-icon"><img src="images/img-8130fd8cb0be.png" alt="Icon ngành Nghệ thuật" loading="lazy" decoding="async"></div>
           <h3>Nghệ thuật</h3>
           <p>Nuôi dưỡng tài năng thiết kế và mỹ thuật.</p>
         </div>
-        <div class="page1-major-card" onclick="goToTool('bio')">
+        <div class="page1-major-card" onclick="goToTool('ai')">
           <div class="page1-major-icon"><img src="images/img-b8f659ac7b18.png" alt="Icon ngành Sáng tạo số" loading="lazy" decoding="async"></div>
           <h3>Sáng tạo số</h3>
           <p>Phù hợp với thiết kế nội dung, minh hoạ và digital art.</p>
@@ -2472,46 +2451,6 @@ body.spa-active #spa-topbar { display: flex; }
       </div>
       <div style="display:flex;justify-content:flex-end;">
         <a href="#tool" class="page1-more-link">More ›</a>
-      </div>
-    </section>
-
-    <section>
-      <h2>🏆 Bảng xếp hạng Đại học Việt Nam <span style="font-size:.7em;font-weight:600;color:#6b7280;">Nguồn: VNUR 2025</span></h2>
-      <div class="vnur-table-wrap">
-        <table class="vnur-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Tên trường</th>
-              <th>Ký hiệu</th>
-              <th>Loại</th>
-              <th>Vùng</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="vnur-top3"><td><span class="vnur-rank gold">1</span></td><td>Đại học Quốc gia Hà Nội</td><td>VNU-HN</td><td class="vnur-public">Công lập</td><td>Miền Bắc</td></tr>
-            <tr class="vnur-top3"><td><span class="vnur-rank gold">2</span></td><td>Đại học Quốc gia TP. Hồ Chí Minh</td><td>VNU-HCM</td><td class="vnur-public">Công lập</td><td>Miền Nam</td></tr>
-            <tr class="vnur-top3"><td><span class="vnur-rank silver">3</span></td><td>Đại học Bách khoa Hà Nội</td><td>HUST</td><td class="vnur-public">Công lập</td><td>Miền Bắc</td></tr>
-            <tr><td><span class="vnur-rank bronze">4</span></td><td>Đại học Kinh tế TP. Hồ Chí Minh</td><td>UEH</td><td class="vnur-public">Công lập</td><td>Miền Nam</td></tr>
-            <tr><td><span class="vnur-rank">5</span></td><td>Đại học Tôn Đức Thắng</td><td>TDTU</td><td class="vnur-private">Tư thục</td><td>Miền Nam</td></tr>
-            <tr><td><span class="vnur-rank">6</span></td><td>Đại học Duy Tân</td><td>DTU</td><td class="vnur-private">Tư thục</td><td>Miền Trung</td></tr>
-            <tr><td><span class="vnur-rank">7</span></td><td>ĐH Khoa học &amp; Công nghệ Hà Nội</td><td>USTH</td><td class="vnur-public">Công lập</td><td>Miền Bắc</td></tr>
-            <tr><td><span class="vnur-rank">8</span></td><td>Đại học Sư phạm Hà Nội</td><td>HNUE</td><td class="vnur-public">Công lập</td><td>Miền Bắc</td></tr>
-            <tr><td><span class="vnur-rank">9</span></td><td>Đại học Đà Nẵng</td><td>UD</td><td class="vnur-public">Công lập</td><td>Miền Trung</td></tr>
-            <tr><td><span class="vnur-rank">10</span></td><td>Đại học Cần Thơ</td><td>CTU</td><td class="vnur-public">Công lập</td><td>Miền Nam</td></tr>
-            <tr><td><span class="vnur-rank">11</span></td><td>Đại học Huế</td><td>HU</td><td class="vnur-public">Công lập</td><td>Miền Trung</td></tr>
-            <tr><td><span class="vnur-rank">12</span></td><td>Đại học Kinh tế Quốc dân</td><td>NEU</td><td class="vnur-public">Công lập</td><td>Miền Bắc</td></tr>
-            <tr><td><span class="vnur-rank">13</span></td><td>Đại học Y Hà Nội</td><td>HMU</td><td class="vnur-public">Công lập</td><td>Miền Bắc</td></tr>
-            <tr><td><span class="vnur-rank">14</span></td><td>Đại học Thương mại</td><td>TMU</td><td class="vnur-public">Công lập</td><td>Miền Bắc</td></tr>
-            <tr><td><span class="vnur-rank">15</span></td><td>Đại học Nông nghiệp Hà Nội</td><td>VNUA</td><td class="vnur-public">Công lập</td><td>Miền Bắc</td></tr>
-            <tr><td><span class="vnur-rank">16</span></td><td>Đại học Sư phạm TP. Hồ Chí Minh</td><td>HCMUE</td><td class="vnur-public">Công lập</td><td>Miền Nam</td></tr>
-            <tr><td><span class="vnur-rank">17</span></td><td>Học viện CN Bưu chính Viễn thông</td><td>PTIT</td><td class="vnur-public">Công lập</td><td>Miền Bắc</td></tr>
-            <tr><td><span class="vnur-rank">18</span></td><td>Đại học Y Dược TP. Hồ Chí Minh</td><td>UMP</td><td class="vnur-public">Công lập</td><td>Miền Nam</td></tr>
-            <tr><td><span class="vnur-rank">19</span></td><td>Đại học Mở TP. Hồ Chí Minh</td><td>OU</td><td class="vnur-public">Công lập</td><td>Miền Nam</td></tr>
-            <tr><td><span class="vnur-rank">20</span></td><td>Đại học Ngoại thương</td><td>FTU</td><td class="vnur-public">Công lập</td><td>Miền Bắc</td></tr>
-          </tbody>
-        </table>
-        <div class="vnur-source">📊 Dữ liệu: <a href="https://vnur.vn" target="_blank" rel="noopener">VNUR.VN</a> · Bảng xếp hạng Đại học Việt Nam 2025</div>
       </div>
     </section>
 
@@ -4183,7 +4122,55 @@ function instantScrollTo(y){
 
 function goToTool(tab){
   nuclearUnlockScroll();
+
+  // Fallback: nếu tab không tồn tại trong hệ thống, map về tab gần nhất
+  var validTabs = ["cntt","yte","tt","tc","sp","env","ai","bio"];
+  if (validTabs.indexOf(tab) === -1) {
+    console.warn('goToTool: tab không hợp lệ "' + tab + '", fallback về cntt');
+    tab = "cntt";
+  }
+
+  // Thử switchTab như cũ
   try { switchTab(tab); } catch(e){ console.warn('switchTab failed', e); }
+
+  // HARDENING: đảm bảo panel đúng đang active (phòng switchTab fail giữa chừng)
+  try {
+    var allPanels = document.querySelectorAll('.sn-tab-panel');
+    allPanels.forEach(function(p){ p.classList.remove('active'); });
+    var targetPanel = document.getElementById('panel-' + tab);
+    if (targetPanel) targetPanel.classList.add('active');
+
+    var allBtns = document.querySelectorAll('.sn-tab-btn');
+    allBtns.forEach(function(b){ b.classList.remove('active'); });
+    var targetBtn = document.querySelector('.sn-tab-btn[data-tab="' + tab + '"]');
+    if (targetBtn) targetBtn.classList.add('active');
+
+    var sel = document.getElementById('sectorSelect');
+    if (sel) sel.value = tab;
+
+    // Update currentTab global để renderGrid dùng đúng
+    if (typeof window.currentTab !== 'undefined' || typeof currentTab !== 'undefined') {
+      try { currentTab = tab; } catch(_){ window.currentTab = tab; }
+    }
+  } catch(e3){ console.warn('panel activation fallback failed', e3); }
+
+  // HARDENING: đảm bảo grid có nội dung — gọi renderGrid lại nếu cần
+  try {
+    var grid = document.getElementById('grid-' + tab);
+    if (grid && (!grid.innerHTML || grid.innerHTML.trim() === '')) {
+      if (typeof renderGrid === 'function') renderGrid(tab);
+    }
+    // Retry render lần nữa sau khi data chắc chắn đã populate
+    setTimeout(function(){
+      try {
+        var g = document.getElementById('grid-' + tab);
+        if (g && (!g.innerHTML || g.innerHTML.trim() === '' ||
+                  g.innerHTML.indexOf('sn-empty') !== -1)) {
+          if (typeof renderGrid === 'function') renderGrid(tab);
+        }
+      } catch(_){}
+    }, 150);
+  } catch(e4){ console.warn('renderGrid retry failed', e4); }
 
   var toolEl = document.getElementById('tool');
   if (toolEl) {
