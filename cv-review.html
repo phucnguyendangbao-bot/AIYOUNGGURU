@@ -3,14 +3,31 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BrightWay Scholars – Sửa & Nhận xét Portfolio Học Bổng</title>
+<title>BrightWay Scholars – Nhận xét Bài luận Học bổng</title>
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+/* Font fallback đảm bảo hiển thị đúng tiếng Việt khi Google Fonts chưa tải */
+:root {
+  --font: 'Be Vietnam Pro', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Nunito', 'Be Vietnam Pro', 'Segoe UI', Arial, sans-serif;
+}
+</style>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+/* Fix emoji rendering toàn trang */
+.type-head, .section-label, .hero-badge, .tip-mini-icon, .opt-icon,
+.result-block-icon, .errors-title, .rubric-icon, .sb-icon,
+.progress-empty-icon, .section-eyebrow, .fw-step {
+  font-family: 'Be Vietnam Pro', 'Segoe UI', Arial, sans-serif;
+}
+/* Đảm bảo emoji không bị override bởi web font */
+@supports (font-variant-emoji: emoji) {
+  * { font-variant-emoji: emoji; }
+}
 :root{
   --bg: linear-gradient(145deg,#e8eeff 0%,#dde8ff 20%,#e5deff 50%,#d6e9ff 80%,#e0f0ff 100%);
   --glass: rgba(255,255,255,0.62);
@@ -24,8 +41,6 @@
   --accent2: #7c3aed;
   --shadow: 0 4px 16px rgba(99,102,241,0.1);
   --shadow-lg: 0 12px 32px rgba(99,102,241,0.18);
-  --font: 'Be Vietnam Pro', sans-serif;
-  --font-display: 'Nunito','Be Vietnam Pro',sans-serif;
 }
 html{scroll-behavior:smooth;}
 body{
@@ -68,6 +83,7 @@ body::after{
   background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
   text-decoration:none;white-space:nowrap;
 }
+.nav-right{display:flex;gap:10px;align-items:center;}
 .nav-back{
   display:inline-flex;align-items:center;gap:6px;
   background:rgba(99,102,241,0.1);color:var(--accent);
@@ -97,7 +113,7 @@ body::after{
 .hero-title span{
   background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
 }
-.hero-sub{font-size:.95rem;color:var(--text-soft);line-height:1.6;max-width:520px;}
+.hero-sub{font-size:.95rem;color:var(--text-soft);line-height:1.6;max-width:560px;}
 
 /* ── MAIN CARD ── */
 .main-card{
@@ -137,8 +153,6 @@ body::after{
 
 /* ── FORM AREA ── */
 .form-area{padding:24px 28px 28px;}
-
-/* Input section */
 .section-label{
   font-weight:800;font-size:.82rem;color:var(--accent);
   text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;
@@ -146,7 +160,7 @@ body::after{
 }
 .input-wrap{position:relative;margin-bottom:20px;}
 .cv-textarea{
-  width:100%;min-height:220px;resize:vertical;
+  width:100%;min-height:260px;resize:vertical;
   border:1.5px solid rgba(99,102,241,0.2);
   border-radius:14px;padding:14px 16px;
   font-size:.88rem;font-family:var(--font);
@@ -162,7 +176,34 @@ body::after{
 .char-count{
   position:absolute;bottom:10px;right:14px;
   font-size:.72rem;color:var(--text-soft);pointer-events:none;
+  background:rgba(255,255,255,0.85);padding:2px 8px;border-radius:8px;
 }
+.char-count.warn{color:#d97706;}
+.char-count.bad{color:#dc2626;}
+.char-count.ok{color:#059669;}
+
+/* Scholarship type selector */
+.type-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
+  margin-bottom:20px;
+}
+@media(max-width:560px){.type-grid{grid-template-columns:1fr;}}
+.type-card{
+  border:1.5px solid rgba(99,102,241,0.15);
+  border-radius:12px;padding:12px 14px;
+  cursor:pointer;transition:all .2s;
+  background:rgba(255,255,255,0.6);
+  text-align:left;
+}
+.type-card:hover{border-color:rgba(99,102,241,0.4);background:rgba(99,102,241,0.04);}
+.type-card.selected{
+  border-color:var(--accent);
+  background:rgba(99,102,241,0.08);
+  box-shadow:0 0 0 3px rgba(99,102,241,0.12);
+}
+.type-head{display:flex;align-items:center;gap:6px;font-weight:800;font-size:.85rem;color:var(--text-dark);margin-bottom:3px;}
+.type-desc{font-size:.72rem;color:var(--text-soft);line-height:1.4;}
+.type-words{font-size:.7rem;color:var(--accent);font-weight:700;margin-top:4px;}
 
 /* Options */
 .options-grid{
@@ -218,8 +259,6 @@ body::after{
 
 /* ── RESULT AREA ── */
 .result-area{display:none;padding:24px 28px 28px;}
-
-/* Score ring */
 .score-section{
   display:flex;align-items:center;gap:24px;
   background:linear-gradient(135deg,rgba(99,102,241,0.06),rgba(124,58,237,0.04));
@@ -240,12 +279,50 @@ body::after{
   color:var(--text-dark);line-height:1;position:relative;z-index:1;text-align:center;
 }
 .score-value span{display:block;font-size:.65rem;font-weight:600;color:var(--text-soft);margin-top:2px;}
-.score-meta{}
 .score-level{
   font-family:var(--font-display);font-weight:800;font-size:1.1rem;
   color:var(--text-dark);margin-bottom:4px;
 }
 .score-verdict{font-size:.84rem;color:var(--text-soft);line-height:1.5;}
+
+/* Rubric 7 axes inline box */
+.rubric-inline{
+  margin-bottom:20px;padding:18px 22px;
+  background:rgba(255,255,255,0.7);
+  border:1.5px solid rgba(99,102,241,0.14);
+  border-radius:16px;
+}
+.rubric-inline-title{
+  font-family:var(--font-display);font-weight:800;font-size:.95rem;color:var(--text-dark);
+  margin-bottom:12px;display:flex;align-items:center;gap:6px;
+}
+.rubric-items{display:flex;flex-direction:column;gap:10px;}
+.rubric-item{display:flex;align-items:center;gap:12px;}
+.rubric-item-label{
+  width:180px;flex-shrink:0;
+  font-weight:700;font-size:.82rem;color:var(--text-dark);
+  display:flex;align-items:center;gap:6px;
+}
+.rubric-item-label .rubric-icon{font-size:.95rem;}
+.rubric-weight{
+  font-size:.68rem;font-weight:600;color:var(--text-soft);
+  margin-left:auto;padding-right:6px;
+}
+.rubric-bar{flex:1;height:9px;border-radius:999px;background:rgba(99,102,241,0.1);overflow:hidden;position:relative;}
+.rubric-bar-fill{
+  height:100%;border-radius:999px;background:var(--grad);
+  transition:width 1s cubic-bezier(.2,.8,.2,1);
+}
+.rubric-bar-fill.green{background:var(--grad-green);}
+.rubric-bar-fill.amber{background:linear-gradient(135deg,#fbbf24,#f59e0b);}
+.rubric-num{
+  width:52px;flex-shrink:0;text-align:right;
+  font-family:var(--font-display);font-weight:800;font-size:.85rem;color:var(--text-dark);
+}
+@media(max-width:560px){
+  .rubric-item-label{width:130px;font-size:.74rem;}
+  .rubric-num{width:40px;font-size:.78rem;}
+}
 
 /* Result blocks */
 .result-blocks{display:flex;flex-direction:column;gap:14px;}
@@ -292,7 +369,27 @@ body::after{
 .result-list li.bad::before{content:'❌';}
 .result-list li.tip::before{content:'💡';}
 
-/* Suggested rewrite box */
+/* Errors section */
+.errors-wrap{
+  margin-top:14px;padding:14px 16px;
+  background:rgba(254,242,242,0.6);
+  border:1.5px solid rgba(239,68,68,0.22);
+  border-radius:14px;
+}
+.errors-title{
+  font-weight:800;font-size:.82rem;color:#b91c1c;margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+}
+.errors-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.errors-list li{
+  padding:6px 10px;background:rgba(255,255,255,0.8);
+  border-radius:8px;font-size:.78rem;color:#7f1d1d;
+  border:1px solid rgba(239,68,68,0.15);
+  display:flex;gap:8px;align-items:flex-start;
+}
+.errors-list li::before{content:'⚠️';flex-shrink:0;}
+
+/* Rewrite box */
 .rewrite-box{
   background:rgba(254,249,195,0.7);border:1.5px solid rgba(251,191,36,0.35);
   border-radius:12px;padding:14px 16px;margin-top:10px;
@@ -322,7 +419,7 @@ body::after{
 }
 .action-btn-secondary:hover{background:rgba(99,102,241,0.18);}
 
-/* ── TIPS SIDEBAR / BOTTOM ── */
+/* ── TIPS ── */
 .tips-strip{
   max-width:900px;margin:0 auto 32px;padding:0 24px;
   position:relative;z-index:1;
@@ -340,7 +437,7 @@ body::after{
 .tip-mini-title{font-weight:800;font-size:.82rem;color:var(--text-dark);margin-bottom:4px;}
 .tip-mini-desc{color:var(--text-soft);line-height:1.5;}
 
-/* ── LOADING SKELETON ── */
+/* Loading skeleton */
 .skeleton{
   background:linear-gradient(90deg,rgba(99,102,241,0.06) 25%,rgba(99,102,241,0.12) 50%,rgba(99,102,241,0.06) 75%);
   background-size:200% 100%;
@@ -349,7 +446,7 @@ body::after{
 }
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* ── FOOTER ── */
+/* Footer */
 .footer{
   text-align:center;padding:20px;
   font-size:.8rem;color:var(--text-soft);
@@ -357,12 +454,9 @@ body::after{
 }
 .footer a{color:var(--accent);text-decoration:none;font-weight:600;}
 
-/* ── HIDDEN ── */
 .hidden{display:none!important;}
 
-/* ══════════════════════════════════════════════
-   SECTIONS MỚI: Score Breakdown / Why-not-GPT / Before-After
-   ══════════════════════════════════════════════ */
+/* Progress section */
 .section-wrap{
   max-width:900px;margin:0 auto 40px;padding:0 24px;
   position:relative;z-index:1;
@@ -385,14 +479,26 @@ body::after{
 }
 .section-sub{font-size:.9rem;color:var(--text-soft);max-width:560px;margin:0 auto;line-height:1.6;}
 
-/* ── SCORE BREAKDOWN ── */
-.score-breakdown{
+.progress-empty{
+  background:rgba(255,255,255,0.55);
+  border:1.5px dashed rgba(99,102,241,0.3);
+  border-radius:20px;
+  padding:48px 24px;text-align:center;
+}
+.progress-empty-icon{font-size:2.4rem;margin-bottom:10px;opacity:.6;}
+.progress-empty-title{
+  font-family:var(--font-display);font-weight:800;font-size:1.05rem;
+  color:var(--text-dark);margin-bottom:6px;
+}
+.progress-empty-desc{font-size:.88rem;color:var(--text-soft);max-width:380px;margin:0 auto;line-height:1.5;}
+
+.progress-wrap{
   background:rgba(255,255,255,0.65);
   border:1.5px solid rgba(255,255,255,0.9);
   border-radius:24px;
   backdrop-filter:blur(14px);
   box-shadow:var(--shadow-lg);
-  padding:28px;
+  padding:24px 26px;
 }
 .sb-top{
   display:flex;align-items:center;gap:20px;
@@ -423,11 +529,25 @@ body::after{
   font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px;
   border:1px solid rgba(16,185,129,0.25);
 }
+.sb-badge-bad{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(220,38,38,0.1);color:#dc2626;
+  font-size:.78rem;font-weight:700;
+  padding:5px 12px;border-radius:999px;
+  border:1px solid rgba(220,38,38,0.2);
+}
+.sb-badge-neutral{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(107,114,128,0.1);color:var(--text-soft);
+  font-size:.78rem;font-weight:700;
+  padding:5px 12px;border-radius:999px;
+  border:1px solid rgba(107,114,128,0.2);
+}
 .sb-items{display:flex;flex-direction:column;gap:14px;}
 .sb-item{display:flex;align-items:center;gap:14px;}
 .sb-item-label{
-  width:160px;flex-shrink:0;
-  font-weight:700;font-size:.85rem;color:var(--text-dark);
+  width:180px;flex-shrink:0;
+  font-weight:700;font-size:.82rem;color:var(--text-dark);
   display:flex;align-items:center;gap:6px;
 }
 .sb-item-label .sb-icon{font-size:1rem;}
@@ -439,73 +559,20 @@ body::after{
 .sb-bar-fill.green{background:var(--grad-green);}
 .sb-bar-fill.amber{background:linear-gradient(135deg,#fbbf24,#f59e0b);}
 .sb-item-num{
-  width:46px;flex-shrink:0;text-align:right;
-  font-family:var(--font-display);font-weight:800;font-size:.95rem;color:var(--text-dark);
+  width:56px;flex-shrink:0;text-align:right;
+  font-family:var(--font-display);font-weight:800;font-size:.9rem;color:var(--text-dark);
 }
+.sb-item-num.up{color:#059669;}
+.sb-item-num.down{color:#dc2626;}
+.sb-delta{font-size:.7rem;font-weight:700;margin-left:4px;}
+.sb-delta.up{color:#059669;}
+.sb-delta.down{color:#dc2626;}
 .sb-note{
   margin-top:20px;padding:12px 14px;
   background:rgba(99,102,241,0.06);border-radius:12px;
   border-left:3px solid var(--accent);
   font-size:.82rem;color:var(--text-mid);line-height:1.55;
 }
-@media(max-width:560px){
-  .sb-top{flex-direction:column;text-align:center;gap:14px;}
-  .sb-item-label{width:130px;font-size:.78rem;}
-}
-
-/* ── PROGRESS SECTION ── */
-.progress-empty{
-  background:rgba(255,255,255,0.55);
-  border:1.5px dashed rgba(99,102,241,0.3);
-  border-radius:20px;
-  padding:48px 24px;text-align:center;
-}
-.progress-empty-icon{font-size:2.4rem;margin-bottom:10px;opacity:.6;}
-.progress-empty-title{
-  font-family:var(--font-display);font-weight:800;font-size:1.05rem;
-  color:var(--text-dark);margin-bottom:6px;
-}
-.progress-empty-desc{font-size:.88rem;color:var(--text-soft);max-width:380px;margin:0 auto;line-height:1.5;}
-
-.progress-wrap{
-  background:rgba(255,255,255,0.65);
-  border:1.5px solid rgba(255,255,255,0.9);
-  border-radius:24px;
-  backdrop-filter:blur(14px);
-  box-shadow:var(--shadow-lg);
-  padding:24px 26px;
-}
-
-.progress-chart-wrap{
-  margin-top:20px;padding:16px;
-  background:rgba(255,255,255,0.55);
-  border-radius:14px;
-  border:1px solid rgba(99,102,241,0.12);
-}
-.progress-chart-head{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:12px;
-}
-.progress-chart-title{
-  font-weight:700;font-size:.85rem;color:var(--text-dark);
-}
-.progress-chart-count{
-  font-size:.75rem;color:var(--text-soft);
-  background:rgba(99,102,241,0.08);
-  padding:3px 10px;border-radius:999px;font-weight:600;
-}
-.progress-chart{width:100%;overflow-x:auto;}
-.progress-chart svg{display:block;width:100%;height:auto;min-width:280px;}
-
-/* So sánh từng trục */
-.sb-item-num.up{color:#059669;}
-.sb-item-num.down{color:#dc2626;}
-.sb-delta{
-  font-size:.7rem;font-weight:700;margin-left:4px;
-}
-.sb-delta.up{color:#059669;}
-.sb-delta.down{color:#dc2626;}
-
 .progress-bottom{
   display:flex;align-items:center;gap:12px;margin-top:18px;
 }
@@ -521,108 +588,266 @@ body::after{
   transition:all .2s;
 }
 .progress-clear-btn:hover{background:rgba(220,38,38,0.15);}
+.progress-chart-wrap{
+  margin-top:20px;padding:16px;
+  background:rgba(255,255,255,0.55);
+  border-radius:14px;
+  border:1px solid rgba(99,102,241,0.12);
+}
+.progress-chart-head{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:12px;
+}
+.progress-chart-title{font-weight:700;font-size:.85rem;color:var(--text-dark);}
+.progress-chart-count{
+  font-size:.75rem;color:var(--text-soft);
+  background:rgba(99,102,241,0.08);
+  padding:3px 10px;border-radius:999px;font-weight:600;
+}
+.progress-chart{width:100%;overflow-x:auto;}
+.progress-chart svg{display:block;width:100%;height:auto;min-width:280px;}
 @media(max-width:560px){
+  .sb-top{flex-direction:column;text-align:center;gap:14px;}
   .progress-bottom{flex-direction:column;align-items:stretch;}
 }
 
-.sb-badge-bad{
-  display:inline-flex;align-items:center;gap:4px;
-  background:rgba(220,38,38,0.1);color:#dc2626;
-  font-size:.78rem;font-weight:700;
-  padding:5px 12px;border-radius:999px;
-  border:1px solid rgba(220,38,38,0.2);
+/* Framework guide section */
+.framework-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:800px){.framework-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:520px){.framework-grid{grid-template-columns:1fr;}}
+.fw-card{
+  background:rgba(255,255,255,0.7);
+  border:1.5px solid rgba(255,255,255,0.9);
+  border-radius:16px;
+  padding:18px;
+  box-shadow:var(--shadow);
 }
-.sb-badge-neutral{
-  display:inline-flex;align-items:center;gap:4px;
-  background:rgba(107,114,128,0.1);color:var(--text-soft);
-  font-size:.78rem;font-weight:700;
-  padding:5px 12px;border-radius:999px;
-  border:1px solid rgba(107,114,128,0.2);
+.fw-step{
+  display:inline-block;
+  font-size:.7rem;font-weight:800;letter-spacing:.06em;
+  padding:3px 10px;border-radius:999px;
+  background:rgba(99,102,241,0.1);color:var(--accent);
+  border:1px solid rgba(99,102,241,0.18);
+  margin-bottom:8px;
+}
+.fw-title{
+  font-family:var(--font-display);font-weight:800;font-size:.98rem;
+  color:var(--text-dark);margin-bottom:6px;
+}
+.fw-desc{font-size:.82rem;color:var(--text-soft);line-height:1.55;}
+.fw-meta{
+  margin-top:10px;font-size:.7rem;color:var(--accent);font-weight:700;
 }
 
-/* ── WHY NOT CHATGPT ── */
-.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-@media(max-width:640px){.why-grid{grid-template-columns:1fr;}}
-.why-card{
+/* ── OUTLINE GENERATOR ── */
+.og-wrap{
   background:rgba(255,255,255,0.65);
   border:1.5px solid rgba(255,255,255,0.9);
-  border-radius:18px;
+  border-radius:24px;
   backdrop-filter:blur(14px);
-  box-shadow:var(--shadow);
-  padding:20px;
-  display:flex;gap:14px;
-  transition:transform .25s,box-shadow .25s;
+  box-shadow:var(--shadow-lg);
+  overflow:hidden;
 }
-.why-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
-.why-icon-wrap{
-  width:44px;height:44px;flex-shrink:0;
-  border-radius:12px;
-  background:var(--grad);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.2rem;color:#fff;
-  box-shadow:0 4px 12px rgba(99,102,241,0.3);
+.og-header{
+  background:linear-gradient(135deg,rgba(99,102,241,0.09),rgba(124,58,237,0.06));
+  border-bottom:1px solid rgba(99,102,241,0.1);
+  padding:22px 28px 18px;
 }
-.why-card-title{
-  font-family:var(--font-display);font-weight:800;font-size:.98rem;
-  color:var(--text-dark);margin-bottom:6px;line-height:1.3;
+.og-header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.og-title{font-family:var(--font-display);font-weight:900;font-size:1.05rem;color:var(--text-dark);}
+.og-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);
+  color:var(--accent);font-size:.72rem;font-weight:700;
+  padding:4px 12px;border-radius:999px;
 }
-.why-card-desc{font-size:.83rem;color:var(--text-soft);line-height:1.55;}
-.why-compare{
-  margin-top:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
-  font-size:.72rem;font-weight:700;
-}
-.why-compare-gpt{color:#9ca3af;text-decoration:line-through;}
-.why-compare-arrow{color:var(--accent);}
-.why-compare-us{color:var(--accent);}
+.og-desc{font-size:.82rem;color:var(--text-soft);line-height:1.55;margin-top:6px;}
+.og-body{padding:22px 28px 28px;}
 
-/* ── BEFORE / AFTER ── */
-.ba-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:stretch;}
-@media(max-width:720px){
-  .ba-grid{grid-template-columns:1fr;gap:12px;}
-  .ba-arrow{transform:rotate(90deg);margin:0 auto;}
+/* Profile input grid */
+.og-profile-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  margin-bottom:20px;
 }
-.ba-card{
-  border-radius:18px;
-  backdrop-filter:blur(14px);
-  box-shadow:var(--shadow);
-  padding:22px;
-  display:flex;flex-direction:column;
+@media(max-width:580px){.og-profile-grid{grid-template-columns:1fr;}}
+.og-field{display:flex;flex-direction:column;gap:5px;}
+.og-field label{
+  font-size:.72rem;font-weight:800;color:var(--accent);
+  text-transform:uppercase;letter-spacing:.05em;
 }
-.ba-card.before{
-  border:1.5px solid rgba(239,68,68,0.25);
-  background:linear-gradient(180deg,rgba(254,226,226,0.55),rgba(255,255,255,0.7));
+.og-input{
+  border:1.5px solid rgba(99,102,241,0.2);border-radius:10px;
+  padding:9px 12px;font-size:.85rem;font-family:var(--font);
+  color:var(--text-dark);background:rgba(255,255,255,0.8);
+  outline:none;transition:border-color .2s,box-shadow .2s;
+  width:100%;
 }
-.ba-card.after{
-  border:1.5px solid rgba(16,185,129,0.3);
-  background:linear-gradient(180deg,rgba(209,250,229,0.55),rgba(255,255,255,0.7));
+.og-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,0.1);}
+.og-input::placeholder{color:rgba(107,114,128,0.55);}
+.og-textarea{
+  min-height:90px;resize:vertical;line-height:1.6;
 }
-.ba-label{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;
-  padding:4px 10px;border-radius:999px;
-  width:fit-content;margin-bottom:14px;
+.og-field-full{grid-column:1/-1;}
+
+/* School selector */
+.og-school-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+  margin-bottom:18px;
 }
-.ba-card.before .ba-label{background:rgba(239,68,68,0.12);color:#dc2626;}
-.ba-card.after  .ba-label{background:rgba(16,185,129,0.12);color:#059669;}
-.ba-text{
-  font-size:.92rem;line-height:1.65;color:var(--text-dark);
-  padding:14px;border-radius:12px;
-  background:rgba(255,255,255,0.7);
-  border:1px dashed rgba(0,0,0,0.06);
-  flex:1;
+@media(max-width:640px){.og-school-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:380px){.og-school-grid{grid-template-columns:1fr;}}
+.og-school-btn{
+  border:1.5px solid rgba(99,102,241,0.15);border-radius:10px;
+  padding:9px 10px;cursor:pointer;transition:all .18s;
+  background:rgba(255,255,255,0.6);text-align:left;
+  font-family:var(--font);
 }
-.ba-text mark{
-  background:rgba(16,185,129,0.18);color:#065f46;
-  padding:1px 4px;border-radius:4px;font-weight:600;
+.og-school-btn:hover{border-color:rgba(99,102,241,0.38);background:rgba(99,102,241,0.04);}
+.og-school-btn.sel{
+  border-color:var(--accent);background:rgba(99,102,241,0.08);
+  box-shadow:0 0 0 2.5px rgba(99,102,241,0.13);
 }
-.ba-meta{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;}
-.ba-tag{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:999px;}
-.ba-card.before .ba-tag{background:rgba(239,68,68,0.1);color:#b91c1c;}
-.ba-card.after  .ba-tag{background:rgba(16,185,129,0.12);color:#047857;}
-.ba-arrow{
+.og-school-name{font-weight:800;font-size:.78rem;color:var(--text-dark);display:block;margin-bottom:2px;}
+.og-school-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px;}
+.og-school-tag{
+  font-size:.62rem;font-weight:700;padding:1px 6px;border-radius:999px;
+  background:rgba(99,102,241,0.1);color:var(--accent);
+}
+.og-school-tag.danger{background:rgba(239,68,68,0.1);color:#dc2626;}
+.og-school-tag.green{background:rgba(16,185,129,0.1);color:#059669;}
+
+/* Custom school input */
+.og-custom-school{
+  padding:14px 16px;
+  background:rgba(99,102,241,0.04);
+  border:1.5px dashed rgba(99,102,241,0.25);
+  border-radius:12px;
+  margin-bottom:18px;
+}
+.og-custom-label{font-size:.75rem;font-weight:700;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+
+/* Submit */
+.og-submit{
+  width:100%;padding:13px;border-radius:13px;border:none;cursor:pointer;
+  background:var(--grad);color:#fff;
+  font-family:var(--font-display);font-weight:800;font-size:.95rem;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .25s;box-shadow:0 4px 16px rgba(99,102,241,0.3);
+}
+.og-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(99,102,241,0.4);}
+.og-submit:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.og-submit .spinner{
+  width:16px;height:16px;border:2.5px solid rgba(255,255,255,0.4);
+  border-top-color:#fff;border-radius:50%;
+  animation:spin .7s linear infinite;display:none;
+}
+.og-submit.loading .og-btn-text{display:none;}
+.og-submit.loading .spinner{display:block;}
+
+/* Result area */
+.og-result{display:none;margin-top:24px;}
+.og-result-header{
+  display:flex;align-items:flex-start;gap:14px;
+  background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(124,58,237,0.05));
+  border:1.5px solid rgba(99,102,241,0.14);
+  border-radius:16px;padding:16px 20px;margin-bottom:16px;
+}
+.og-result-icon{font-size:2rem;flex-shrink:0;margin-top:2px;}
+.og-result-meta{}
+.og-result-school{font-size:.72rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
+.og-result-title{font-family:var(--font-display);font-weight:900;font-size:1rem;color:var(--text-dark);margin-bottom:5px;}
+.og-result-summary{font-size:.82rem;color:var(--text-soft);line-height:1.55;}
+
+/* Outline sections */
+.og-outline{display:flex;flex-direction:column;gap:12px;}
+.og-section{
+  background:rgba(255,255,255,0.75);
+  border:1.5px solid rgba(255,255,255,0.9);
+  border-radius:14px;overflow:hidden;
+  box-shadow:0 2px 10px rgba(99,102,241,0.07);
+  transition:box-shadow .2s;
+}
+.og-section:hover{box-shadow:0 4px 16px rgba(99,102,241,0.12);}
+.og-section-head{
+  display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;
+  border-bottom:1px solid transparent;transition:background .15s;
+}
+.og-section.open .og-section-head{border-bottom-color:rgba(99,102,241,0.08);}
+.og-section-head:hover{background:rgba(99,102,241,0.03);}
+.og-section-num{
+  width:28px;height:28px;border-radius:8px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  width:40px;color:var(--accent);font-size:1.5rem;flex-shrink:0;
+  font-size:.72rem;font-weight:900;
+  background:var(--grad);color:#fff;
 }
+.og-section-title{font-weight:800;font-size:.88rem;color:var(--text-dark);flex:1;}
+.og-section-badge{
+  font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:999px;
+  background:rgba(99,102,241,0.1);color:var(--accent);white-space:nowrap;
+}
+.og-section-arrow{
+  width:16px;height:16px;stroke:rgba(99,102,241,0.5);flex-shrink:0;
+  transition:transform .25s;
+}
+.og-section.open .og-section-arrow{transform:rotate(180deg);}
+.og-section-body{display:none;padding:14px 16px;}
+.og-section.open .og-section-body{display:block;}
+
+.og-purpose{
+  font-size:.78rem;color:var(--text-soft);font-style:italic;
+  margin-bottom:10px;padding-bottom:10px;
+  border-bottom:1px dashed rgba(99,102,241,0.12);
+  line-height:1.55;
+}
+.og-bullets{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.og-bullets li{
+  display:flex;gap:8px;align-items:flex-start;
+  font-size:.82rem;color:var(--text-mid);line-height:1.55;
+  padding:8px 10px;border-radius:9px;
+}
+.og-bullets li.point{background:rgba(99,102,241,0.05);border:1px solid rgba(99,102,241,0.1);}
+.og-bullets li.evidence{background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.1);}
+.og-bullets li.hook{background:rgba(245,158,11,0.05);border:1px solid rgba(245,158,11,0.12);}
+.og-bullets li.warning{background:rgba(239,68,68,0.04);border:1px solid rgba(239,68,68,0.1);}
+.og-bullets li::before{flex-shrink:0;font-size:.9rem;margin-top:1px;}
+.og-bullets li.point::before{content:'📌';}
+.og-bullets li.evidence::before{content:'📊';}
+.og-bullets li.hook::before{content:'💡';}
+.og-bullets li.warning::before{content:'⚠️';}
+
+.og-word-hint{
+  margin-top:10px;
+  display:flex;align-items:center;gap:6px;
+  font-size:.72rem;color:var(--accent);font-weight:700;
+  background:rgba(99,102,241,0.07);padding:5px 10px;border-radius:8px;
+  border:1px solid rgba(99,102,241,0.12);
+}
+.og-school-fit{
+  margin-top:10px;padding:10px 12px;
+  background:rgba(16,185,129,0.06);border:1.5px solid rgba(16,185,129,0.15);
+  border-radius:10px;font-size:.78rem;color:#065f46;line-height:1.55;
+}
+.og-school-fit strong{color:#047857;}
+
+.og-strength-bar{
+  margin-bottom:14px;
+  background:rgba(255,255,255,0.7);
+  border:1px solid rgba(99,102,241,0.1);
+  border-radius:12px;padding:12px 14px;
+}
+.og-strength-bar-label{
+  font-size:.72rem;font-weight:700;color:var(--text-dark);
+  margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;
+}
+.og-strength-row{display:flex;gap:8px;align-items:center;margin-bottom:5px;}
+.og-strength-name{font-size:.72rem;color:var(--text-soft);width:140px;flex-shrink:0;font-weight:600;}
+.og-strength-track{flex:1;height:7px;border-radius:999px;background:rgba(99,102,241,0.1);overflow:hidden;}
+.og-strength-fill{height:100%;border-radius:999px;background:var(--grad);transition:width 1s ease;}
+.og-strength-fill.green{background:var(--grad-green);}
+.og-strength-fill.amber{background:linear-gradient(135deg,#fbbf24,#f59e0b);}
+.og-strength-val{width:36px;text-align:right;font-size:.72rem;font-weight:700;color:var(--text-dark);}
+
+.og-result-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
 </style>
 </head>
 <body>
@@ -631,118 +856,148 @@ body::after{
 <nav class="nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">BrightWay Scholars</a>
-    <a href="page2.html" class="nav-back" style="margin-right:10px;">🎓 Học bổng theo trường</a>
-    <a href="index.html" class="nav-back">← Trang chủ</a>
+    <div class="nav-right">
+      <a href="cv-review.html" class="nav-back">📊 Sửa CV</a>
+      <a href="index.html" class="nav-back">← Trang chủ</a>
+    </div>
   </div>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-badge">🎯 AI chuyên cho portfolio học bổng — không phải chatbot chung chung</div>
-  <h1 class="hero-title">Biết portfolio của bạn <span>yếu ở đâu</span> — và sửa đúng chỗ</h1>
-  <p class="hero-sub">Phân tích portfolio theo đúng tiêu chí hội đồng học bổng quan tâm: Leadership, Impact, Storytelling, Scholarship Fit. Nhận điểm số, điểm yếu cụ thể và gợi ý viết lại có thể dùng ngay — trong chưa đầy 30 giây.</p>
+  <div class="hero-badge">🎓 AI chuyên nhận xét bài luận học bổng — chấm theo chuẩn hội đồng</div>
+  <h1 class="hero-title">Bài luận của bạn <span>thuyết phục tới đâu?</span></h1>
+  <p class="hero-sub">AI phân tích bài luận học bổng theo chuẩn hội đồng: Structure, Clarity, Evidence, Personal Story, Vision, Scholarship Fit, Language. Nhận điểm /100, nhận xét từng phần (Intro → Body → Conclusion), phát hiện lỗi thường gặp và gợi ý viết lại có thể copy-paste ngay.</p>
 </div>
 
 <!-- MAIN -->
 <div class="main-card">
   <div class="card-box">
 
-    <!-- STEPS -->
     <div class="steps">
       <div class="step-item">
         <div class="step-num active" id="step1Num">1</div>
-        <div class="step-label active" id="step1Label">Dán nội dung</div>
+        <div class="step-label active" id="step1Label">Dán bài luận</div>
       </div>
       <div class="step-line" id="line1"></div>
       <div class="step-item">
         <div class="step-num" id="step2Num">2</div>
-        <div class="step-label" id="step2Label">Chọn loại đánh giá</div>
+        <div class="step-label" id="step2Label">Chọn loại HB &amp; tiêu chí</div>
       </div>
       <div class="step-line" id="line2"></div>
       <div class="step-item">
         <div class="step-num" id="step3Num">3</div>
-        <div class="step-label" id="step3Label">Xem kết quả</div>
+        <div class="step-label" id="step3Label">Nhận kết quả</div>
       </div>
     </div>
 
-    <!-- FORM -->
     <div class="form-area" id="formArea">
 
-      <div class="section-label">📄 Nội dung Portfolio / Bài luận</div>
+      <div class="section-label">✍️ Nội dung bài luận học bổng</div>
       <div class="input-wrap">
-        <textarea class="cv-textarea" id="cvInput" placeholder="Dán toàn bộ nội dung portfolio học bổng hoặc bài luận của bạn vào đây...&#10;&#10;Ví dụ: Họ tên, mục tiêu, thành tích học tập, hoạt động ngoại khoá, kế hoạch tương lai..." oninput="updateChar()"></textarea>
-        <span class="char-count" id="charCount">0 ký tự</span>
+        <textarea class="cv-textarea" id="essayInput" placeholder="Dán toàn bộ bài luận học bổng của bạn vào đây...&#10;&#10;Ví dụ cấu trúc tham khảo:&#10;- Mở bài (hook + giới thiệu + mục tiêu)&#10;- Thân bài (bối cảnh + thành tích có số liệu + vision + lý do cần học bổng)&#10;- Kết luận (cam kết + tầm nhìn dài hạn)" oninput="updateChar()"></textarea>
+        <span class="char-count" id="charCount">0 từ / 0 ký tự</span>
       </div>
 
-      <div class="section-label">🔍 Chọn tiêu chí đánh giá</div>
+      <div class="section-label">🎯 Loại học bổng bạn đang ứng tuyển</div>
+      <div class="type-grid" id="typeGrid">
+        <button type="button" class="type-card selected" data-type="domestic" onclick="selectType(this)">
+          <div class="type-head"><span style="font-family:Apple Color Emoji,Segoe UI Emoji,Noto Color Emoji,sans-serif;">🇻🇳</span> Trong nước</div>
+          <div class="type-desc">HB các trường Việt Nam, HBKK, tài năng, doanh nghiệp</div>
+          <div class="type-words">Độ dài: 500–800 từ</div>
+        </button>
+        <button type="button" class="type-card" data-type="fullride" onclick="selectType(this)">
+          <div class="type-head"><span style="font-family:Apple Color Emoji,Segoe UI Emoji,Noto Color Emoji,sans-serif;">🏆</span> Toàn phần</div>
+          <div class="type-desc">HB lớn: Fulbright, VinUni, Vingroup, Obama...</div>
+          <div class="type-words">Độ dài: 1000+ từ</div>
+        </button>
+      </div>
+
+      <div class="section-label">🔍 Tiêu chí đánh giá (chọn nhiều)</div>
       <div class="options-grid" id="optGrid">
         <label class="opt-card selected" onclick="toggleOpt(this)">
           <input type="checkbox" checked>
           <div class="opt-card-head">
+            <span class="opt-icon">📐</span>
+            <span class="opt-name">Cấu trúc &amp; Bố cục</span>
+            <span class="opt-check"><span class="opt-check-icon">✓</span></span>
+          </div>
+          <div class="opt-desc">Intro → Body → Conclusion có rõ ràng, cân đối</div>
+        </label>
+        <label class="opt-card selected" onclick="toggleOpt(this)">
+          <input type="checkbox" checked>
+          <div class="opt-card-head">
             <span class="opt-icon">📊</span>
-            <span class="opt-name">Cấu trúc & Trình bày</span>
+            <span class="opt-name">Bằng chứng &amp; Số liệu</span>
             <span class="opt-check"><span class="opt-check-icon">✓</span></span>
           </div>
-          <div class="opt-desc">Bố cục rõ ràng, thứ tự hợp lý, dễ đọc</div>
+          <div class="opt-desc">Action → Result → Impact, có con số cụ thể</div>
         </label>
         <label class="opt-card selected" onclick="toggleOpt(this)">
           <input type="checkbox" checked>
           <div class="opt-card-head">
-            <span class="opt-icon">🏆</span>
-            <span class="opt-name">Thành tích & Minh chứng</span>
+            <span class="opt-icon">📖</span>
+            <span class="opt-name">Câu chuyện cá nhân</span>
             <span class="opt-check"><span class="opt-check-icon">✓</span></span>
           </div>
-          <div class="opt-desc">Thành tích có số liệu, cụ thể và thuyết phục</div>
+          <div class="opt-desc">Bối cảnh → khó khăn → chuyển biến → bài học</div>
         </label>
         <label class="opt-card selected" onclick="toggleOpt(this)">
           <input type="checkbox" checked>
           <div class="opt-card-head">
-            <span class="opt-icon">🎯</span>
-            <span class="opt-name">Mục tiêu & Định hướng</span>
+            <span class="opt-icon">🔭</span>
+            <span class="opt-name">Vision &amp; Mục tiêu</span>
             <span class="opt-check"><span class="opt-check-icon">✓</span></span>
           </div>
-          <div class="opt-desc">Mục tiêu rõ ràng, phù hợp với học bổng</div>
+          <div class="opt-desc">Ngắn hạn + dài hạn + tác động xã hội rõ ràng</div>
+        </label>
+        <label class="opt-card selected" onclick="toggleOpt(this)">
+          <input type="checkbox" checked>
+          <div class="opt-card-head">
+            <span class="opt-icon">🎓</span>
+            <span class="opt-name">Phù hợp học bổng</span>
+            <span class="opt-check"><span class="opt-check-icon">✓</span></span>
+          </div>
+          <div class="opt-desc">Lý do xứng đáng, không "xin tiền", là đòn bẩy</div>
         </label>
         <label class="opt-card selected" onclick="toggleOpt(this)">
           <input type="checkbox" checked>
           <div class="opt-card-head">
             <span class="opt-icon">✍️</span>
-            <span class="opt-name">Ngôn ngữ & Văn phong</span>
+            <span class="opt-name">Ngôn ngữ &amp; Văn phong</span>
             <span class="opt-check"><span class="opt-check-icon">✓</span></span>
           </div>
-          <div class="opt-desc">Dùng từ chuyên nghiệp, tránh lỗi diễn đạt</div>
+          <div class="opt-desc">Tránh văn phong AI, chung chung, kể lể dài dòng</div>
         </label>
         <label class="opt-card selected" onclick="toggleOpt(this)">
           <input type="checkbox" checked>
           <div class="opt-card-head">
-            <span class="opt-icon">💡</span>
-            <span class="opt-name">Điểm nổi bật cá nhân</span>
+            <span class="opt-icon">⚠️</span>
+            <span class="opt-name">Phát hiện lỗi thường gặp</span>
             <span class="opt-check"><span class="opt-check-icon">✓</span></span>
           </div>
-          <div class="opt-desc">Câu chuyện riêng, tạo ấn tượng với hội đồng</div>
+          <div class="opt-desc">Kể lể, thiếu số liệu, không có insight, lỗi liên kết</div>
         </label>
         <label class="opt-card selected" onclick="toggleOpt(this)">
           <input type="checkbox" checked>
           <div class="opt-card-head">
             <span class="opt-icon">🔧</span>
-            <span class="opt-name">Gợi ý cải thiện cụ thể</span>
+            <span class="opt-name">Gợi ý viết lại cụ thể</span>
             <span class="opt-check"><span class="opt-check-icon">✓</span></span>
           </div>
-          <div class="opt-desc">Đề xuất viết lại hoặc bổ sung những phần yếu</div>
+          <div class="opt-desc">Đoạn viết lại có thể copy-paste trực tiếp</div>
         </label>
       </div>
 
-      <button class="submit-btn" id="submitBtn" onclick="submitCV()">
-        <span class="btn-text">🚀 Phân tích portfolio ngay</span>
+      <button class="submit-btn" id="submitBtn" onclick="submitEssay()">
+        <span class="btn-text">🚀 Phân tích bài luận ngay</span>
         <div class="spinner"></div>
       </button>
     </div>
 
-    <!-- RESULT -->
     <div class="result-area" id="resultArea">
-      <!-- Score -->
-      <div class="score-section" id="scoreSection">
-        <div class="score-ring" id="scoreRing">
+      <div class="score-section">
+        <div class="score-ring">
           <svg viewBox="0 0 84 84" width="84" height="84">
             <circle class="score-ring-bg" cx="42" cy="42" r="35"/>
             <circle class="score-ring-fill" id="scoreCircle" cx="42" cy="42" r="35"
@@ -759,14 +1014,18 @@ body::after{
         </div>
         <div class="score-meta">
           <div class="score-level" id="scoreLevel">Đang phân tích...</div>
-          <div class="score-verdict" id="scoreVerdict">AI đang xem xét nội dung portfolio của bạn.</div>
+          <div class="score-verdict" id="scoreVerdict">AI đang xem xét bài luận của bạn.</div>
         </div>
       </div>
 
-      <!-- Result blocks (dynamic) -->
+      <!-- Rubric 7 axes -->
+      <div class="rubric-inline" id="rubricInline" style="display:none;">
+        <div class="rubric-inline-title">📊 Rubric chấm điểm 7 trục</div>
+        <div class="rubric-items" id="rubricItemsInline"></div>
+      </div>
+
       <div class="result-blocks" id="resultBlocks"></div>
 
-      <!-- Actions -->
       <div class="result-actions">
         <button class="action-btn action-btn-primary" onclick="resetForm()">🔄 Phân tích lại</button>
         <button class="action-btn action-btn-secondary" onclick="copyResult()">📋 Sao chép kết quả</button>
@@ -776,25 +1035,203 @@ body::after{
   </div>
 </div>
 
-<!-- ══════ SECTION: CV PROGRESS HISTORY ══════ -->
-<div class="section-wrap" id="scoreBreakdownSection">
+<!-- ══ OUTLINE GENERATOR ══ -->
+<div class="section-wrap" id="outlineSection">
   <div class="section-head">
-    <div class="section-eyebrow">📈 Tiến triển của bạn</div>
-    <h2 class="section-title">Theo dõi <span>portfolio cải thiện</span> qua từng lần phân tích</h2>
-    <p class="section-sub">Mỗi lần bạn phân tích portfolio, kết quả được lưu lại để bạn thấy chính xác mình đã tiến bộ ở năng lực nào — và còn yếu ở đâu.</p>
+    <div class="section-eyebrow">✨ Gợi ý Dàn ý AI</div>
+    <h2 class="section-title">Dàn ý bài luận <span>cá nhân hóa</span> theo trường</h2>
+    <p class="section-sub">Nhập hồ sơ học tập của bạn và chọn trường muốn apply — AI sẽ phân tích điểm mạnh, tiêu chí của trường và tạo dàn ý bài luận phù hợp nhất với bạn.</p>
   </div>
 
-  <!-- Empty state: chưa có lần nào -->
+  <div class="og-wrap">
+    <div class="og-header">
+      <div class="og-header-top">
+        <div class="og-title">📋 Tạo dàn ý bài luận học bổng</div>
+        <span class="og-badge">✨ AI cá nhân hóa</span>
+      </div>
+      <p class="og-desc">Điền thông tin học tập và chọn trường → AI phân tích điểm mạnh của bạn so với tiêu chí trường, sau đó gợi ý dàn ý 6 phần tối ưu nhất.</p>
+    </div>
+    <div class="og-body">
+
+      <!-- Step 1: Profile -->
+      <div class="section-label" style="margin-bottom:12px;">👤 Hồ sơ học tập của bạn</div>
+      <div class="og-profile-grid">
+        <div class="og-field">
+          <label>Điểm THPT (tổng 3 môn)</label>
+          <input class="og-input" type="number" id="ogThpt" min="0" max="30" step="0.01" placeholder="VD: 24.5">
+        </div>
+        <div class="og-field">
+          <label>GPA học bạ (thang 10)</label>
+          <input class="og-input" type="number" id="ogGpa" min="0" max="10" step="0.01" placeholder="VD: 8.7">
+        </div>
+        <div class="og-field">
+          <label>IELTS / TOEIC (nếu có)</label>
+          <input class="og-input" type="text" id="ogEnglish" placeholder="VD: IELTS 6.5, TOEIC 750">
+        </div>
+        <div class="og-field">
+          <label>Ngành học mục tiêu</label>
+          <input class="og-input" type="text" id="ogMajor" placeholder="VD: Công nghệ thông tin, Y khoa">
+        </div>
+        <div class="og-field og-field-full">
+          <label>Giải thưởng &amp; Thành tích nổi bật</label>
+          <textarea class="og-input og-textarea" id="ogAwards" placeholder="VD: Giải Nhất Olympic Toán cấp tỉnh, Top 10 cuộc thi lập trình quốc gia, Thủ khoa kỳ thi THPT 2024..."></textarea>
+        </div>
+        <div class="og-field og-field-full">
+          <label>Hoạt động ngoại khóa / Dự án cá nhân</label>
+          <textarea class="og-input og-textarea" id="ogActivities" placeholder="VD: CLB Khởi nghiệp trường (Phó chủ nhiệm 2 năm), 200h volunteer dạy học vùng sâu, Xây app quản lý học phí (500+ users)..."></textarea>
+        </div>
+        <div class="og-field og-field-full">
+          <label>Câu chuyện / Khó khăn đã vượt qua (tùy chọn — giúp AI gợi ý mở bài tốt hơn)</label>
+          <textarea class="og-input og-textarea" id="ogStory" placeholder="VD: Gia đình khó khăn, tự học IELTS trong 6 tháng, nhận ra đam mê AI khi làm dự án cộng đồng..."></textarea>
+        </div>
+        <div class="og-field og-field-full">
+          <label>Mục tiêu nghề nghiệp &amp; Vision dài hạn</label>
+          <textarea class="og-input og-textarea" id="ogVision" placeholder="VD: Trở thành kỹ sư AI, xây platform EdTech phục vụ 1 triệu học sinh vùng sâu vùng xa vào năm 2035..."></textarea>
+        </div>
+      </div>
+
+      <!-- Step 2: School picker -->
+      <div class="section-label" style="margin-bottom:10px;">🏫 Trường bạn muốn apply học bổng</div>
+      <div class="og-school-grid" id="ogSchoolGrid">
+        <button type="button" class="og-school-btn sel" data-school="VNU-HCM" data-criteria="THPT ≥22, GPA ≥8.0, Hạnh kiểm tốt" data-focus="thành tích học thuật, nghiên cứu, cam kết cống hiến xã hội" onclick="selectSchool(this)">
+          <span class="og-school-name">ĐHQG TP.HCM</span>
+          <span style="font-size:.65rem;color:var(--text-soft);">THPT ≥22 · GPA ≥8.0</span>
+          <div class="og-school-tags"><span class="og-school-tag danger">Cạnh tranh cao</span><span class="og-school-tag">Học thuật</span></div>
+        </button>
+        <button type="button" class="og-school-btn" data-school="UIT" data-criteria="THPT ≥24, GPA ≥8.2, Ngoại ngữ/Công nghệ" data-focus="công nghệ, lập trình, AI, dự án thực tế, ngoại ngữ" onclick="selectSchool(this)">
+          <span class="og-school-name">UIT – ĐHQG HCM</span>
+          <span style="font-size:.65rem;color:var(--text-soft);">THPT ≥24 · GPA ≥8.2</span>
+          <div class="og-school-tags"><span class="og-school-tag danger">IT chuyên sâu</span><span class="og-school-tag">Ngoại ngữ</span></div>
+        </button>
+        <button type="button" class="og-school-btn" data-school="NEU" data-criteria="THPT ≥26, GPA ≥8.8, Thành tích học thuật nổi bật" data-focus="kinh tế, lãnh đạo, nghiên cứu chính sách, tác động xã hội" onclick="selectSchool(this)">
+          <span class="og-school-name">ĐH Kinh tế QD – NEU</span>
+          <span style="font-size:.65rem;color:var(--text-soft);">THPT ≥26 · GPA ≥8.8</span>
+          <div class="og-school-tags"><span class="og-school-tag danger">Rất cạnh tranh</span><span class="og-school-tag">Kinh tế</span></div>
+        </button>
+        <button type="button" class="og-school-btn" data-school="FPT" data-criteria="GPA ≥8.0, Dự án / Portfolio, Phỏng vấn" data-focus="công nghệ, startup, portfolio dự án, tư duy sáng tạo, tiếng Anh" onclick="selectSchool(this)">
+          <span class="og-school-name">ĐH FPT</span>
+          <span style="font-size:.65rem;color:var(--text-soft);">GPA ≥8.0 · Portfolio</span>
+          <div class="og-school-tags"><span class="og-school-tag green">Startup vibe</span><span class="og-school-tag">Portfolio</span></div>
+        </button>
+        <button type="button" class="og-school-btn" data-school="UMP" data-criteria="THPT ≥26, GPA ≥8.8, Hạnh kiểm tốt, Tình nguyện y tế" data-focus="y khoa, đạo đức nghề nghiệp, trải nghiệm y tế cộng đồng, ơn gọi nghề" onclick="selectSchool(this)">
+          <span class="og-school-name">ĐH Y Dược TP.HCM</span>
+          <span style="font-size:.65rem;color:var(--text-soft);">THPT ≥26 · GPA ≥8.8</span>
+          <div class="og-school-tags"><span class="og-school-tag danger">Y khoa</span><span class="og-school-tag">Volunteer</span></div>
+        </button>
+        <button type="button" class="og-school-btn" data-school="VinUni" data-criteria="GPA ≥8.5, Tiếng Anh, Lãnh đạo, Phỏng vấn" data-focus="lãnh đạo toàn cầu, nghiên cứu quốc tế, tư duy đổi mới, English proficiency" onclick="selectSchool(this)">
+          <span class="og-school-name">VinUni</span>
+          <span style="font-size:.65rem;color:var(--text-soft);">GPA ≥8.5 · Lãnh đạo</span>
+          <div class="og-school-tags"><span class="og-school-tag danger">Toàn phần</span><span class="og-school-tag green">Quốc tế</span></div>
+        </button>
+      </div>
+
+      <!-- Custom school -->
+      <div class="og-custom-school">
+        <div class="og-custom-label">🏫 Trường khác / Nhập tự do</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <input class="og-input" type="text" id="ogCustomSchool" placeholder="Tên trường (VD: ĐH Bách Khoa HN)" oninput="handleCustomSchool()">
+          <input class="og-input" type="text" id="ogCustomCriteria" placeholder="Tiêu chí HB (VD: GPA ≥8.3, THPT ≥23)">
+        </div>
+      </div>
+
+      <button class="og-submit" id="ogSubmitBtn" onclick="generateOutline()">
+        <span class="og-btn-text">✨ Tạo dàn ý bài luận ngay</span>
+        <div class="spinner"></div>
+      </button>
+
+      <!-- Result -->
+      <div class="og-result" id="ogResult">
+        <div class="og-result-header">
+          <div class="og-result-icon">📄</div>
+          <div class="og-result-meta">
+            <div class="og-result-school" id="ogResultSchool">—</div>
+            <div class="og-result-title" id="ogResultTitle">Dàn ý bài luận học bổng cá nhân hóa</div>
+            <div class="og-result-summary" id="ogResultSummary">AI đang phân tích hồ sơ và tiêu chí trường...</div>
+          </div>
+        </div>
+
+        <!-- Profile strength mini bars -->
+        <div class="og-strength-bar" id="ogStrengthBar" style="display:none;">
+          <div class="og-strength-bar-label">
+            <span>💪 Điểm mạnh hồ sơ (đối chiếu tiêu chí trường)</span>
+          </div>
+          <div id="ogStrengthRows"></div>
+        </div>
+
+        <div class="og-outline" id="ogOutline"></div>
+
+        <div class="og-result-actions">
+          <button class="action-btn action-btn-primary" onclick="copyOutline()">📋 Sao chép dàn ý</button>
+          <button class="action-btn action-btn-secondary" onclick="resetOutline()">🔄 Tạo lại</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Framework guide -->
+<div class="section-wrap">
+  <div class="section-head">
+    <div class="section-eyebrow">📘 Framework chuẩn</div>
+    <h2 class="section-title">Cấu trúc một bài luận học bổng <span>thuyết phục</span></h2>
+    <p class="section-sub">Hội đồng học bổng không đọc "chuyện của bạn" — họ đọc bằng chứng bạn có năng lực, có định hướng, xứng đáng được đầu tư. Đây là framework 6 phần chuẩn.</p>
+  </div>
+  <div class="framework-grid">
+    <div class="fw-card">
+      <span class="fw-step">PHẦN 1 · MỞ BÀI</span>
+      <div class="fw-title">Hook + Giới thiệu + Mục tiêu</div>
+      <div class="fw-desc">Gây ấn tượng 5–10 giây đầu bằng câu chuyện/quan điểm, giới thiệu bản thân + ngành học + mục tiêu cụ thể.</div>
+      <div class="fw-meta">80–120 từ</div>
+    </div>
+    <div class="fw-card">
+      <span class="fw-step">PHẦN 2 · BACKGROUND</span>
+      <div class="fw-title">Câu chuyện cá nhân</div>
+      <div class="fw-desc">Bối cảnh → khó khăn → hành động cụ thể → bài học / insight. Phải thể hiện "chuyển biến" thật.</div>
+      <div class="fw-meta">120–180 từ</div>
+    </div>
+    <div class="fw-card">
+      <span class="fw-step">PHẦN 3 · ACHIEVEMENTS</span>
+      <div class="fw-title">Thành tích &amp; minh chứng</div>
+      <div class="fw-desc">Công thức bắt buộc: Action → Result → Impact. Mỗi thành tích phải có con số cụ thể.</div>
+      <div class="fw-meta">150–250 từ</div>
+    </div>
+    <div class="fw-card">
+      <span class="fw-step">PHẦN 4 · VISION</span>
+      <div class="fw-title">Mục tiêu tương lai</div>
+      <div class="fw-desc">Ngắn hạn (sau tốt nghiệp) + dài hạn (5–10 năm) + tác động xã hội cụ thể bạn muốn tạo ra.</div>
+      <div class="fw-meta">120–180 từ</div>
+    </div>
+    <div class="fw-card">
+      <span class="fw-step">PHẦN 5 · WHY SCHOLARSHIP</span>
+      <div class="fw-title">Vì sao HB quan trọng</div>
+      <div class="fw-desc">Không viết "tôi cần tiền". Phải viết: đây là đòn bẩy giúp tôi tạo ra giá trị X, Y, Z.</div>
+      <div class="fw-meta">100–150 từ</div>
+    </div>
+    <div class="fw-card">
+      <span class="fw-step">PHẦN 6 · CONCLUSION</span>
+      <div class="fw-title">Chốt cam kết</div>
+      <div class="fw-desc">Nếu được trao cơ hội, tôi sẽ... + niềm tin dài hạn + đầu tư này có ý nghĩa cho cộng đồng nào.</div>
+      <div class="fw-meta">80–120 từ</div>
+    </div>
+  </div>
+</div>
+
+<!-- Progress section -->
+<div class="section-wrap" id="progressSection">
+  <div class="section-head">
+    <div class="section-eyebrow">📈 Tiến triển của bạn</div>
+    <h2 class="section-title">Theo dõi <span>bài luận cải thiện</span> qua từng lần phân tích</h2>
+    <p class="section-sub">Mỗi lần phân tích được lưu lại trên trình duyệt. Bạn thấy rõ mình tiến bộ ở trục nào (Structure, Evidence, Vision...) — và còn yếu ở đâu cần ưu tiên sửa.</p>
+  </div>
+
   <div class="progress-empty" id="progressEmpty">
     <div class="progress-empty-icon">📊</div>
     <div class="progress-empty-title">Chưa có dữ liệu phân tích</div>
-    <div class="progress-empty-desc">Phân tích portfolio lần đầu ở trên, biểu đồ tiến triển sẽ hiện ngay tại đây.</div>
+    <div class="progress-empty-desc">Phân tích bài luận lần đầu ở trên, biểu đồ tiến triển 7 trục sẽ hiện ngay tại đây.</div>
   </div>
 
-  <!-- Có data: hiện chart + breakdown + so sánh -->
   <div class="progress-wrap" id="progressWrap" style="display:none;">
-
-    <!-- Top: tổng điểm + so sánh lần trước -->
     <div class="sb-top">
       <div class="sb-overall">
         <div class="sb-overall-num" id="progOverallNum">--</div>
@@ -802,13 +1239,11 @@ body::after{
         <div class="sb-overall-label" id="progOverallLabel">Lần mới nhất</div>
       </div>
       <div class="sb-top-text">
-        <div class="sb-top-title" id="progTopTitle">Portfolio của bạn</div>
-        <div class="sb-top-desc" id="progTopDesc">Đây là lần phân tích đầu tiên. Hãy quay lại sau khi chỉnh sửa portfolio để thấy tiến triển.</div>
+        <div class="sb-top-title" id="progTopTitle">Bài luận của bạn</div>
+        <div class="sb-top-desc" id="progTopDesc">Đây là lần phân tích đầu tiên.</div>
         <span class="sb-badge-good" id="progBadge" style="display:none;"></span>
       </div>
     </div>
-
-    <!-- Line chart tiến triển -->
     <div class="progress-chart-wrap" id="progressChartWrap" style="display:none;">
       <div class="progress-chart-head">
         <span class="progress-chart-title">📈 Điểm tổng qua các lần phân tích</span>
@@ -816,121 +1251,13 @@ body::after{
       </div>
       <div class="progress-chart" id="progressChart"></div>
     </div>
-
-    <!-- 5 trục rubric: hiện điểm hiện tại + so sánh với lần trước -->
     <div class="sb-items" id="progRubricItems"></div>
-
-    <!-- Note + nút xóa lịch sử -->
     <div class="progress-bottom">
       <div class="sb-note">
-        💡 Dữ liệu lịch sử được lưu trên trình duyệt của bạn. Nếu xóa cache, lịch sử sẽ mất.
+        💡 Dữ liệu lịch sử được lưu trên trình duyệt. Xóa cache = mất lịch sử.
       </div>
       <button class="progress-clear-btn" onclick="clearProgressHistory()">🗑️ Xóa lịch sử</button>
     </div>
-  </div>
-</div>
-
-<!-- ══════ SECTION: WHY NOT CHATGPT ══════ -->
-<div class="section-wrap" id="whyNotGpt">
-  <div class="section-head">
-    <div class="section-eyebrow">⚡ Khác biệt cốt lõi</div>
-    <h2 class="section-title">Vì sao không chỉ <span>dùng ChatGPT</span>?</h2>
-    <p class="section-sub">ChatGPT là công cụ tổng quát. BrightWay Scholars được thiết kế riêng cho một việc duy nhất: giúp portfolio học bổng của bạn qua vòng hồ sơ.</p>
-  </div>
-
-  <div class="why-grid">
-
-    <div class="why-card">
-      <div class="why-icon-wrap">🧠</div>
-      <div>
-        <div class="why-card-title">Không cần biết cách prompt</div>
-        <div class="why-card-desc">Chỉ dán portfolio, chọn tiêu chí, nhận kết quả. Bạn không phải học cách “hỏi AI cho đúng” — workflow đã được chuẩn hoá sẵn cho portfolio học bổng.</div>
-        <div class="why-compare">
-          <span class="why-compare-gpt">“Bạn hãy xem portfolio này giúp mình”</span>
-          <span class="why-compare-arrow">→</span>
-          <span class="why-compare-us">1 click, có kết quả</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="why-card">
-      <div class="why-icon-wrap">🎯</div>
-      <div>
-        <div class="why-card-title">Chấm theo tiêu chí học bổng</div>
-        <div class="why-card-desc">Rubric 5 trục: Leadership, Impact, Clarity, Storytelling, Scholarship Fit — đúng những gì hội đồng nhìn vào, thay vì nhận xét chung chung kiểu “Portfolio của bạn khá ổn”.</div>
-        <div class="why-compare">
-          <span class="why-compare-gpt">Góp ý chung chung</span>
-          <span class="why-compare-arrow">→</span>
-          <span class="why-compare-us">Rubric rõ ràng</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="why-card">
-      <div class="why-icon-wrap">🔍</div>
-      <div>
-        <div class="why-card-title">Chỉ điểm yếu theo nhóm năng lực</div>
-        <div class="why-card-desc">Biết chính xác bạn đang yếu ở Leadership hay Storytelling, câu nào cần viết lại, phần nào thiếu số liệu — không phải đoán mò.</div>
-        <div class="why-compare">
-          <span class="why-compare-gpt">“Hãy viết hay hơn”</span>
-          <span class="why-compare-arrow">→</span>
-          <span class="why-compare-us">Yếu ở đâu, sửa gì</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="why-card">
-      <div class="why-icon-wrap">✏️</div>
-      <div>
-        <div class="why-card-title">Output dùng được ngay</div>
-        <div class="why-card-desc">Mỗi gợi ý đi kèm một phiên bản viết lại có thể copy-paste thẳng vào portfolio. Bạn biết phải làm gì tiếp theo, không mất thêm một buổi để “diễn giải AI”.</div>
-        <div class="why-compare">
-          <span class="why-compare-gpt">Đoạn văn dài dòng</span>
-          <span class="why-compare-arrow">→</span>
-          <span class="why-compare-us">Câu viết lại sẵn</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ══════ SECTION: BEFORE / AFTER ══════ -->
-<div class="section-wrap" id="beforeAfter">
-  <div class="section-head">
-    <div class="section-eyebrow">✨ Ví dụ thực tế</div>
-    <h2 class="section-title">Một dòng portfolio, <span>hai thế giới khác nhau</span></h2>
-    <p class="section-sub">Cùng một trải nghiệm, nhưng hội đồng học bổng đọc hoàn toàn khác nhau. Đây là cách BrightWay Scholars viết lại theo tinh thần “rõ hành động — rõ tác động — rõ kết quả”.</p>
-  </div>
-
-  <div class="ba-grid">
-
-    <div class="ba-card before">
-      <div class="ba-label">❌ Trước khi tối ưu</div>
-      <div class="ba-text">
-        “Tham gia câu lạc bộ tình nguyện và hỗ trợ nhiều hoạt động cho sinh viên.”
-      </div>
-      <div class="ba-meta">
-        <span class="ba-tag">Không có số liệu</span>
-        <span class="ba-tag">Không rõ vai trò</span>
-        <span class="ba-tag">Không đo được impact</span>
-      </div>
-    </div>
-
-    <div class="ba-arrow">→</div>
-
-    <div class="ba-card after">
-      <div class="ba-label">✅ Sau khi tối ưu</div>
-      <div class="ba-text">
-        “<mark>Điều phối 12 thành viên</mark> trong câu lạc bộ tình nguyện, tổ chức <mark>4 hoạt động</mark> hỗ trợ tân sinh viên, tiếp cận <mark>hơn 300 sinh viên</mark> trong học kỳ đầu.”
-      </div>
-      <div class="ba-meta">
-        <span class="ba-tag">Leadership rõ</span>
-        <span class="ba-tag">Số liệu cụ thể</span>
-        <span class="ba-tag">Impact đo lường được</span>
-      </div>
-    </div>
-
   </div>
 </div>
 
@@ -939,18 +1266,18 @@ body::after{
   <div class="tips-grid">
     <div class="tip-mini">
       <div class="tip-mini-icon">📌</div>
-      <div class="tip-mini-title">Dán toàn bộ nội dung</div>
-      <div class="tip-mini-desc">Càng đầy đủ, AI càng cho nhận xét chính xác. Bao gồm cả thông tin cá nhân, thành tích, mục tiêu.</div>
+      <div class="tip-mini-title">Bài luận hoàn chỉnh</div>
+      <div class="tip-mini-desc">Dán toàn bộ 6 phần (Intro → Body → Conclusion). Bài chưa đủ độ dài = AI khó nhận xét đúng.</div>
     </div>
     <div class="tip-mini">
-      <div class="tip-mini-icon">🎯</div>
-      <div class="tip-mini-title">Chọn đúng tiêu chí</div>
-      <div class="tip-mini-desc">Nếu bạn cần gợi ý viết lại, hãy giữ lại mục "Gợi ý cải thiện cụ thể".</div>
+      <div class="tip-mini-icon">📊</div>
+      <div class="tip-mini-title">Luôn có số liệu</div>
+      <div class="tip-mini-desc">GPA, IELTS, giải thưởng, lượt người dùng, số giờ volunteer... Số liệu = bằng chứng thuyết phục nhất.</div>
     </div>
     <div class="tip-mini">
       <div class="tip-mini-icon">🔁</div>
-      <div class="tip-mini-title">Thử nhiều lần</div>
-      <div class="tip-mini-desc">Sau khi chỉnh sửa, dán lại portfolio để xem điểm số có cải thiện chưa.</div>
+      <div class="tip-mini-title">Sửa → phân tích lại</div>
+      <div class="tip-mini-desc">Sau khi chỉnh theo gợi ý, dán lại để xem điểm có cải thiện. Biểu đồ tiến triển sẽ hiện.</div>
     </div>
   </div>
 </div>
@@ -960,10 +1287,56 @@ body::after{
 </div>
 
 <script>
-// ── Utils ──
+// ══════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════
+const PROGRESS_KEY = 'brightway_essay_history_v1';
+const MAX_HISTORY = 12;
+
+// Rubric 7 trục theo tài liệu hướng dẫn chuẩn hóa (docx)
+// Trọng số thực: Structure 10 / Clarity 10 / Evidence 20 / Personal Story 15 / Vision 15 / Scholarship Fit 20 / Language 10 = 100
+const RUBRIC_AXES = [
+  { key:'structure',      label:'Structure',        icon:'📐', weight:10 },
+  { key:'clarity',        label:'Clarity',          icon:'🧱', weight:10 },
+  { key:'evidence',       label:'Evidence',         icon:'📊', weight:20 },
+  { key:'personalStory',  label:'Personal Story',   icon:'📖', weight:15 },
+  { key:'vision',         label:'Vision',           icon:'🔭', weight:15 },
+  { key:'scholarshipFit', label:'Scholarship Fit',  icon:'🎓', weight:20 },
+  { key:'language',       label:'Language',         icon:'✍️', weight:10 },
+];
+
+let selectedType = 'domestic';
+const TYPE_WORDS = {
+  domestic:      { label:'Trong nước',   min:500,  max:800  },
+  fullride:      { label:'Toàn phần',    min:1000, max:2000 },
+};
+
+// ══════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════
+function countWords(s) {
+  return (s.trim().match(/\S+/g) || []).length;
+}
+
 function updateChar() {
-  const v = document.getElementById('cvInput').value;
-  document.getElementById('charCount').textContent = v.length + ' ký tự';
+  const v = document.getElementById('essayInput').value;
+  const words = countWords(v);
+  const el = document.getElementById('charCount');
+  el.textContent = words + ' từ / ' + v.length + ' ký tự';
+  const t = TYPE_WORDS[selectedType];
+  el.className = 'char-count';
+  if (words === 0) return;
+  if (words < t.min * 0.7) el.classList.add('bad');
+  else if (words < t.min)   el.classList.add('warn');
+  else if (words > t.max * 1.2) el.classList.add('warn');
+  else el.classList.add('ok');
+}
+
+function selectType(btn) {
+  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedType = btn.dataset.type;
+  updateChar();
 }
 
 function toggleOpt(label) {
@@ -988,11 +1361,20 @@ function setStepActive(step) {
   document.getElementById('step' + step + 'Label').className = 'step-label active';
 }
 
-// ── Submit ──
-async function submitCV() {
-  const cv = document.getElementById('cvInput').value.trim();
-  if (cv.length < 100) {
-    alert('Vui lòng dán ít nhất 100 ký tự nội dung portfolio/bài luận để AI có thể phân tích chính xác.');
+function barColor(v) {
+  if (v >= 80) return 'green';
+  if (v >= 65) return '';
+  return 'amber';
+}
+
+// ══════════════════════════════════════════════════
+// SUBMIT
+// ══════════════════════════════════════════════════
+async function submitEssay() {
+  const essay = document.getElementById('essayInput').value.trim();
+  const words = countWords(essay);
+  if (words < 150) {
+    alert('Vui lòng dán bài luận có tối thiểu 150 từ để AI có thể phân tích chính xác theo framework 6 phần.');
     return;
   }
   const opts = getSelectedOpts();
@@ -1007,39 +1389,44 @@ async function submitCV() {
 
   setStepDone(1); setStepDone(2); setStepActive(3);
 
-  // Show result area with loading state
   document.getElementById('formArea').style.display = 'none';
   document.getElementById('resultArea').style.display = 'block';
-  document.getElementById('resultBlocks').innerHTML = '<div class="skeleton" style="height:64px;margin-bottom:10px;"></div><div class="skeleton" style="height:64px;margin-bottom:10px;"></div><div class="skeleton" style="height:64px;"></div>';
+  document.getElementById('resultBlocks').innerHTML = '<div class="skeleton" style="height:64px;margin-bottom:10px;"></div><div class="skeleton" style="height:64px;margin-bottom:10px;"></div><div class="skeleton" style="height:64px;margin-bottom:10px;"></div><div class="skeleton" style="height:64px;"></div>';
 
-  const cvTruncated = cv.slice(0, 1500); // giới hạn để tránh JSON bị cắt
+  const essayTruncated = essay.slice(0, 4500);
+  const t = TYPE_WORDS[selectedType];
 
-  const prompt = `Chuyên gia học bổng. Phân tích portfolio theo tiêu chí: ${opts.join(', ')}.
+  const prompt = `Bạn là chuyên gia hội đồng học bổng quốc tế (Fulbright / Chevening / DAAD). Phân tích bài luận học bổng theo framework 6 phần & rubric 7 trục.
 
-Portfolio:
+LOẠI HỌC BỔNG: ${t.label} (chuẩn ${t.min}–${t.max} từ, bài hiện tại ${words} từ)
+TIÊU CHÍ ĐÁNH GIÁ: ${opts.join(', ')}
+
+BÀI LUẬN:
 """
-${cvTruncated}
+${essayTruncated}
 """
 
 Trả về JSON thuần (KHÔNG markdown, KHÔNG giải thích thêm):
-{"score":75,"level":"Khá","verdict":"Nhận xét ngắn 1 câu.","rubric":{"leadership":70,"impact":75,"clarity":80,"storytelling":65,"scholarshipFit":78},"blocks":[{"icon":"📊","title":"Tên tiêu chí","status":"warn","badge":"Khá","goods":["điểm tốt ngắn"],"bads":["điểm yếu ngắn"],"tips":["gợi ý ngắn"],"rewrite":""}]}
+{"score":75,"level":"Khá","verdict":"Nhận xét tổng 1 câu dưới 20 từ.","rubric":{"structure":72,"clarity":78,"evidence":60,"personalStory":80,"vision":70,"scholarshipFit":75,"language":82},"sections":[{"icon":"📝","title":"Mở bài (Intro)","status":"warn","badge":"Ổn","goods":["điểm tốt ngắn"],"bads":["điểm yếu ngắn"],"tips":["gợi ý ngắn"],"rewrite":""},{"icon":"📖","title":"Background","status":"ok","badge":"Tốt","goods":[],"bads":[],"tips":[],"rewrite":""},{"icon":"📊","title":"Achievements","status":"danger","badge":"Yếu","goods":[],"bads":[],"tips":[],"rewrite":""},{"icon":"🔭","title":"Vision","status":"warn","badge":"Ổn","goods":[],"bads":[],"tips":[],"rewrite":""},{"icon":"🎓","title":"Why Scholarship","status":"ok","badge":"Tốt","goods":[],"bads":[],"tips":[],"rewrite":""},{"icon":"✨","title":"Kết luận","status":"ok","badge":"Tốt","goods":[],"bads":[],"tips":[],"rewrite":""}],"errors":["Lỗi 1 phát hiện được (nếu có)","Lỗi 2"],"wordCheck":"Đạt chuẩn ${t.min}–${t.max} từ"}
 
-Quy tắc NGHIÊM NGẶT:
-- rubric: chấm 5 trục từ 0-100, đánh giá khắt khe theo chuẩn hội đồng học bổng quốc tế
-- Mỗi block: tối đa 1 good, 1 bad, 1 tip. Mỗi cái tối đa 10 từ.
-- verdict tối đa 15 từ
-- rewrite để trống "" trừ khi tiêu chí "Gợi ý cải thiện cụ thể" được chọn (tối đa 20 từ)
-- JSON phải hoàn chỉnh từ { đến }`;
+QUY TẮC NGHIÊM NGẶT:
+- rubric: chấm 7 trục 0-100. Tính score tổng = structure*0.1 + clarity*0.1 + evidence*0.2 + personalStory*0.15 + vision*0.15 + scholarshipFit*0.2 + language*0.1 (làm tròn).
+- level: "Xuất sắc" (85+) / "Khá" (70-84) / "Trung bình" (55-69) / "Yếu" (<55).
+- sections: ĐÚNG 6 phần theo thứ tự: Mở bài, Background, Achievements, Vision, Why Scholarship, Kết luận. Nếu bài không có phần nào → status="danger", bad="Thiếu phần này".
+- Mỗi section: tối đa 2 goods, 2 bads, 2 tips. Mỗi câu ≤ 15 từ.
+- rewrite: chỉ điền nếu tiêu chí "Gợi ý viết lại cụ thể" được chọn; đoạn viết lại ≤ 40 từ, có số liệu cụ thể.
+- errors: phát hiện lỗi từ list: [kể lể dài dòng / thiếu số liệu / viết chung chung / thiếu mục tiêu rõ / không liên kết với học bổng / văn phong AI / không có insight cá nhân / dùng "tôi cần tiền"]. Tối đa 4 lỗi, chỉ list lỗi thực sự có.
+- wordCheck: đánh giá ngắn về độ dài so với chuẩn (1 câu).
+- verdict: ≤ 20 từ, nói thẳng điểm mạnh nhất hoặc yếu nhất.
+- JSON phải hoàn chỉnh từ { đến }.`;
 
   try {
     const response = await fetch('/api/analyze', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 2048,
+        max_tokens: 3072,
         messages: [{ role: 'user', content: prompt }]
       })
     });
@@ -1055,7 +1442,7 @@ Quy tắc NGHIÊM NGẶT:
       <div style="text-align:center;padding:24px;color:#dc2626;font-size:.88rem;line-height:1.8;">
         ⚠️ <strong>Lỗi:</strong> ${e.message}
       </div>`;
-    console.error('CV Review Error:', e);
+    console.error('Essay Review Error:', e);
   }
 
   btn.classList.remove('loading');
@@ -1063,33 +1450,52 @@ Quy tắc NGHIÊM NGẶT:
   setStepDone(3);
 }
 
-// ── Render ──
+// ══════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════
 function renderResult(r) {
-  // Score ring
   const score = Math.min(100, Math.max(0, r.score || 0));
   document.getElementById('scoreValue').innerHTML = score + '<span>/ 100</span>';
   document.getElementById('scoreLevel').textContent = r.level || '';
   document.getElementById('scoreVerdict').textContent = r.verdict || '';
 
-  // Animate ring
-  const circ = 2 * Math.PI * 35; // ~219.9
+  const circ = 2 * Math.PI * 35;
   const offset = circ - (score / 100) * circ;
   setTimeout(() => {
     const el = document.getElementById('scoreCircle');
     el.style.strokeDashoffset = offset;
-    // Color based on score
     const color = score >= 80 ? '#059669' : score >= 60 ? '#d97706' : '#dc2626';
     el.style.stroke = color;
   }, 100);
 
-  // Blocks
+  // Rubric inline 7 trục
+  if (r.rubric) {
+    document.getElementById('rubricInline').style.display = 'block';
+    const box = document.getElementById('rubricItemsInline');
+    box.innerHTML = '';
+    RUBRIC_AXES.forEach(ax => {
+      const v = r.rubric[ax.key];
+      if (typeof v !== 'number') return;
+      const row = document.createElement('div');
+      row.className = 'rubric-item';
+      row.innerHTML = `
+        <div class="rubric-item-label"><span class="rubric-icon">${ax.icon}</span> ${ax.label}</div>
+        <span class="rubric-weight">(${ax.weight}%)</span>
+        <div class="rubric-bar"><div class="rubric-bar-fill ${barColor(v)}" style="width:0%"></div></div>
+        <div class="rubric-num">${v}/100</div>`;
+      box.appendChild(row);
+      setTimeout(() => row.querySelector('.rubric-bar-fill').style.width = v + '%', 150);
+    });
+  }
+
+  // Section blocks
   const container = document.getElementById('resultBlocks');
   container.innerHTML = '';
 
-  (r.blocks || []).forEach((b, i) => {
+  (r.sections || []).forEach((b, i) => {
     const goodsHtml = (b.goods || []).map(g => `<li class="good">${g}</li>`).join('');
-    const badsHtml = (b.bads || []).map(g => `<li class="bad">${g}</li>`).join('');
-    const tipsHtml = (b.tips || []).map(g => `<li class="tip">${g}</li>`).join('');
+    const badsHtml  = (b.bads  || []).map(g => `<li class="bad">${g}</li>`).join('');
+    const tipsHtml  = (b.tips  || []).map(g => `<li class="tip">${g}</li>`).join('');
     const rewriteHtml = b.rewrite ? `<div class="rewrite-box"><span class="rewrite-box-label">✏️ Gợi ý viết lại:</span>${b.rewrite}</div>` : '';
 
     const block = document.createElement('div');
@@ -1110,13 +1516,36 @@ function renderResult(r) {
       </div>`;
     container.appendChild(block);
 
-    // Auto-open first block and danger/warn blocks
     if (i === 0 || b.status === 'danger') {
       setTimeout(() => toggleBlock(i), 200 + i * 100);
     }
   });
 
-  // Lưu vào lịch sử + cập nhật section tiến triển
+  // Errors block (common errors detected)
+  if (r.errors && r.errors.length > 0) {
+    const errBlock = document.createElement('div');
+    errBlock.className = 'result-block';
+    const errItems = r.errors.map(e => `<li>${e}</li>`).join('');
+    const wc = r.wordCheck ? `<div style="margin-top:10px;padding:8px 12px;background:rgba(99,102,241,0.06);border-radius:8px;font-size:.8rem;color:var(--text-mid);">📏 <strong>Độ dài:</strong> ${r.wordCheck}</div>` : '';
+    errBlock.innerHTML = `
+      <div class="result-block-head" onclick="toggleBlock('errors')">
+        <span class="result-block-icon">⚠️</span>
+        <span class="result-block-title">Lỗi thường gặp phát hiện được</span>
+        <span class="result-block-badge badge-danger">${r.errors.length} lỗi</span>
+        <svg class="result-block-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="result-block-body collapsed" id="bodyerrors">
+        <div class="errors-wrap">
+          <div class="errors-title">⚠️ Những điểm cần tránh trong bài luận học bổng</div>
+          <ul class="errors-list">${errItems}</ul>
+        </div>
+        ${wc}
+      </div>`;
+    errBlock.id = 'blockerrors';
+    container.appendChild(errBlock);
+    setTimeout(() => toggleBlock('errors'), 200 + (r.sections || []).length * 100);
+  }
+
   saveProgress(r);
   renderProgressSection();
 }
@@ -1124,6 +1553,7 @@ function renderResult(r) {
 function toggleBlock(i) {
   const block = document.getElementById('block' + i);
   const body = document.getElementById('body' + i);
+  if (!block || !body) return;
   const isOpen = !body.classList.contains('collapsed');
   body.classList.toggle('collapsed', isOpen);
   block.classList.toggle('open', !isOpen);
@@ -1132,7 +1562,6 @@ function toggleBlock(i) {
 function resetForm() {
   document.getElementById('formArea').style.display = 'block';
   document.getElementById('resultArea').style.display = 'none';
-  // Reset steps
   document.getElementById('step1Num').className = 'step-num active';
   document.getElementById('step1Label').className = 'step-label active';
   ['2','3'].forEach(s => {
@@ -1141,20 +1570,31 @@ function resetForm() {
   });
   document.getElementById('line1').classList.remove('done');
   document.getElementById('line2').classList.remove('done');
+  window.scrollTo({top: 0, behavior:'smooth'});
 }
 
 function copyResult() {
-  let text = 'KẾT QUẢ PHÂN TÍCH PORTFOLIO HỌC BỔNG - BrightWay Scholars\n\n';
-  text += 'Điểm: ' + document.getElementById('scoreValue').textContent + '\n';
+  let text = 'KẾT QUẢ PHÂN TÍCH BÀI LUẬN HỌC BỔNG - BrightWay Scholars\n\n';
+  text += 'Điểm tổng: ' + document.getElementById('scoreValue').textContent.replace(/\s+/g,' ') + '\n';
   text += 'Đánh giá: ' + document.getElementById('scoreLevel').textContent + '\n';
   text += 'Nhận xét: ' + document.getElementById('scoreVerdict').textContent + '\n\n';
 
-  document.querySelectorAll('.result-block').forEach(b => {
+  document.querySelectorAll('#rubricItemsInline .rubric-item').forEach(r => {
+    const label = r.querySelector('.rubric-item-label')?.textContent.trim() || '';
+    const num   = r.querySelector('.rubric-num')?.textContent.trim() || '';
+    text += `• ${label}: ${num}\n`;
+  });
+  text += '\n';
+
+  document.querySelectorAll('#resultBlocks .result-block').forEach(b => {
     const title = b.querySelector('.result-block-title')?.textContent || '';
     const badge = b.querySelector('.result-block-badge')?.textContent || '';
     text += `--- ${title} (${badge}) ---\n`;
     b.querySelectorAll('.result-list li').forEach(li => {
       text += '• ' + li.textContent.trim() + '\n';
+    });
+    b.querySelectorAll('.errors-list li').forEach(li => {
+      text += '⚠️ ' + li.textContent.trim() + '\n';
     });
     const rw = b.querySelector('.rewrite-box');
     if (rw) text += '\n' + rw.textContent.trim() + '\n';
@@ -1168,20 +1608,10 @@ function copyResult() {
     setTimeout(() => btn.textContent = orig, 2000);
   });
 }
-// ══════════════════════════════════════════════════
-// ── PROGRESS HISTORY (localStorage) ──
-// ══════════════════════════════════════════════════
-const PROGRESS_KEY = 'brightway_cv_history_v1';
-const MAX_HISTORY = 12; // giữ tối đa 12 lần gần nhất
 
-const RUBRIC_AXES = [
-  { key:'leadership',    label:'Leadership',      icon:'🧭' },
-  { key:'impact',        label:'Impact',          icon:'🎯' },
-  { key:'clarity',       label:'Clarity',         icon:'🧱' },
-  { key:'storytelling',  label:'Storytelling',    icon:'📖' },
-  { key:'scholarshipFit',label:'Scholarship Fit', icon:'🎓' },
-];
-
+// ══════════════════════════════════════════════════
+// PROGRESS HISTORY (localStorage)
+// ══════════════════════════════════════════════════
 function loadHistory() {
   try {
     const raw = localStorage.getItem(PROGRESS_KEY);
@@ -1197,23 +1627,17 @@ function saveProgress(result) {
     score: result.score,
     level: result.level || '',
     verdict: result.verdict || '',
+    type: selectedType,
     rubric: result.rubric || null,
   });
-  // chỉ giữ MAX_HISTORY lần gần nhất
   while (history.length > MAX_HISTORY) history.shift();
   try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(history)); } catch {}
 }
 
 function clearProgressHistory() {
-  if (!confirm('Xóa toàn bộ lịch sử phân tích portfolio? Hành động này không hoàn tác được.')) return;
+  if (!confirm('Xóa toàn bộ lịch sử phân tích bài luận? Hành động này không hoàn tác được.')) return;
   try { localStorage.removeItem(PROGRESS_KEY); } catch {}
   renderProgressSection();
-}
-
-function barColor(v) {
-  if (v >= 80) return 'green';
-  if (v >= 65) return '';
-  return 'amber';
 }
 
 function renderProgressSection() {
@@ -1233,15 +1657,10 @@ function renderProgressSection() {
   const latest = history[history.length - 1];
   const prev   = history.length >= 2 ? history[history.length - 2] : null;
 
-  // ── Top: overall + so sánh ──
   document.getElementById('progOverallNum').textContent = latest.score;
-  document.getElementById('progOverallLabel').textContent =
-    'Lần thứ ' + history.length;
-
-  document.getElementById('progTopTitle').textContent =
-    'Portfolio của bạn ở mức "' + (latest.level || '—') + '"';
-  document.getElementById('progTopDesc').textContent =
-    latest.verdict || '';
+  document.getElementById('progOverallLabel').textContent = 'Lần thứ ' + history.length;
+  document.getElementById('progTopTitle').textContent = 'Bài luận ở mức "' + (latest.level || '—') + '"';
+  document.getElementById('progTopDesc').textContent  = latest.verdict || '';
 
   const badge = document.getElementById('progBadge');
   if (prev) {
@@ -1261,7 +1680,7 @@ function renderProgressSection() {
     badge.style.display = 'none';
   }
 
-  // ── Rubric 5 trục + so sánh ──
+  // Rubric 7 trục + so sánh
   const rubricBox = document.getElementById('progRubricItems');
   rubricBox.innerHTML = '';
   if (latest.rubric) {
@@ -1278,14 +1697,13 @@ function renderProgressSection() {
       const row = document.createElement('div');
       row.className = 'sb-item';
       row.innerHTML = `
-        <div class="sb-item-label"><span class="sb-icon">${ax.icon}</span> ${ax.label}</div>
+        <div class="sb-item-label"><span class="sb-icon">${ax.icon}</span> ${ax.label} <span style="font-size:.68rem;color:var(--text-soft);font-weight:600">(${ax.weight}%)</span></div>
         <div class="sb-bar"><div class="sb-bar-fill ${barColor(v)}" style="width:${v}%"></div></div>
         <div class="sb-item-num">${v}${deltaHtml}</div>`;
       rubricBox.appendChild(row);
     });
   }
 
-  // ── Line chart ──
   const chartWrap = document.getElementById('progressChartWrap');
   if (history.length >= 2) {
     chartWrap.style.display = 'block';
@@ -1302,12 +1720,10 @@ function drawLineChart(history) {
   const innerH = H - PAD_T - PAD_B;
   const n = history.length;
 
-  // Y axis: 0–100
   const yTicks = [0, 25, 50, 75, 100];
   const yToPx = v => PAD_T + innerH - (v / 100) * innerH;
   const xToPx = i => n === 1 ? PAD_L + innerW/2 : PAD_L + (i / (n - 1)) * innerW;
 
-  // Grid + Y labels
   let gridSvg = '';
   yTicks.forEach(t => {
     const y = yToPx(t);
@@ -1315,25 +1731,19 @@ function drawLineChart(history) {
     gridSvg += `<text x="${PAD_L - 6}" y="${y + 3}" text-anchor="end" font-size="9" fill="#9ca3af" font-family="sans-serif">${t}</text>`;
   });
 
-  // Path
   const points = history.map((h, i) => `${xToPx(i)},${yToPx(h.score)}`);
   const linePath = 'M' + points.join(' L');
-  // Area dưới line
   const areaPath = linePath +
     ` L${xToPx(n-1)},${yToPx(0)} L${xToPx(0)},${yToPx(0)} Z`;
 
-  // Dots + score labels + x labels
   let dotsSvg = '';
   history.forEach((h, i) => {
     const cx = xToPx(i), cy = yToPx(h.score);
     const color = h.score >= 80 ? '#059669' : h.score >= 65 ? '#6366f1' : '#d97706';
     dotsSvg += `<circle cx="${cx}" cy="${cy}" r="4.5" fill="${color}" stroke="#fff" stroke-width="2"/>`;
-    // Score label phía trên dot
     dotsSvg += `<text x="${cx}" y="${cy - 10}" text-anchor="middle" font-size="10" font-weight="700" fill="${color}" font-family="sans-serif">${h.score}</text>`;
-    // X label: "Lần N" hoặc ngày
     const lbl = 'L' + (i + 1);
     dotsSvg += `<text x="${cx}" y="${H - 14}" text-anchor="middle" font-size="9" fill="#6b7280" font-family="sans-serif">${lbl}</text>`;
-    // Date nhỏ phía dưới
     const d = new Date(h.ts);
     const dateStr = (d.getMonth()+1) + '/' + d.getDate();
     dotsSvg += `<text x="${cx}" y="${H - 3}" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="sans-serif">${dateStr}</text>`;
@@ -1355,9 +1765,325 @@ function drawLineChart(history) {
   document.getElementById('progressChart').innerHTML = svg;
 }
 
-// Render section ngay khi load page (để hiện lịch sử cũ nếu có)
 document.addEventListener('DOMContentLoaded', renderProgressSection);
 
+// ══════════════════════════════════════════════════
+// OUTLINE GENERATOR
+// ══════════════════════════════════════════════════
+let ogSelectedSchool = {
+  name: 'ĐHQG TP.HCM',
+  criteria: 'THPT ≥22, GPA ≥8.0, Hạnh kiểm tốt',
+  focus: 'thành tích học thuật, nghiên cứu, cam kết cống hiến xã hội'
+};
+
+function selectSchool(btn) {
+  document.querySelectorAll('.og-school-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  ogSelectedSchool = {
+    name: btn.dataset.school,
+    criteria: btn.dataset.criteria,
+    focus: btn.dataset.focus
+  };
+  // Clear custom inputs when picking preset
+  document.getElementById('ogCustomSchool').value = '';
+  document.getElementById('ogCustomCriteria').value = '';
+}
+
+function handleCustomSchool() {
+  const v = document.getElementById('ogCustomSchool').value.trim();
+  if (v) {
+    document.querySelectorAll('.og-school-btn').forEach(b => b.classList.remove('sel'));
+    ogSelectedSchool = {
+      name: v,
+      criteria: document.getElementById('ogCustomCriteria').value.trim() || 'Theo thông báo của trường',
+      focus: 'thành tích học tập, động lực, phù hợp ngành học'
+    };
+  }
+}
+
+async function generateOutline() {
+  // Gather profile
+  const thpt       = document.getElementById('ogThpt').value.trim();
+  const gpa        = document.getElementById('ogGpa').value.trim();
+  const english    = document.getElementById('ogEnglish').value.trim();
+  const major      = document.getElementById('ogMajor').value.trim();
+  const awards     = document.getElementById('ogAwards').value.trim();
+  const activities = document.getElementById('ogActivities').value.trim();
+  const story      = document.getElementById('ogStory').value.trim();
+  const vision     = document.getElementById('ogVision').value.trim();
+
+  // Custom school override
+  const customName = document.getElementById('ogCustomSchool').value.trim();
+  if (customName) {
+    ogSelectedSchool.name     = customName;
+    ogSelectedSchool.criteria = document.getElementById('ogCustomCriteria').value.trim() || ogSelectedSchool.criteria;
+  }
+
+  if (!major && !awards && !activities) {
+    alert('Vui lòng điền ít nhất: Ngành học mục tiêu + Giải thưởng/Thành tích hoặc Hoạt động ngoại khóa để AI có thể cá nhân hóa dàn ý.');
+    return;
+  }
+
+  const btn = document.getElementById('ogSubmitBtn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  const resultEl = document.getElementById('ogResult');
+  resultEl.style.display = 'block';
+  document.getElementById('ogOutline').innerHTML = '<div class="skeleton" style="height:60px;margin-bottom:10px;"></div><div class="skeleton" style="height:60px;margin-bottom:10px;"></div><div class="skeleton" style="height:60px;margin-bottom:10px;"></div>';
+  document.getElementById('ogStrengthBar').style.display = 'none';
+  document.getElementById('ogResultSummary').textContent = 'AI đang phân tích hồ sơ và đối chiếu tiêu chí của ' + ogSelectedSchool.name + '...';
+  document.getElementById('ogResultSchool').textContent = '🏫 ' + ogSelectedSchool.name;
+
+  resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  const prompt = `Bạn là chuyên gia tư vấn học bổng tại Việt Nam. Dựa trên hồ sơ học sinh và tiêu chí của trường, hãy tạo DÀN Ý BÀI LUẬN HỌC BỔNG cá nhân hóa và phân tích điểm mạnh/yếu của hồ sơ.
+
+TRƯỜNG APPLY: ${ogSelectedSchool.name}
+TIÊU CHÍ HỌC BỔNG: ${ogSelectedSchool.criteria}
+TRỌNG TÂM HỘI ĐỒNG: ${ogSelectedSchool.focus}
+
+HỒ SƠ HỌC SINH:
+- Điểm THPT: ${thpt || 'Chưa cung cấp'}
+- GPA học bạ: ${gpa || 'Chưa cung cấp'}
+- Ngoại ngữ: ${english || 'Chưa cung cấp'}
+- Ngành mục tiêu: ${major || 'Chưa cung cấp'}
+- Giải thưởng / Thành tích: ${awards || 'Chưa cung cấp'}
+- Hoạt động ngoại khóa / Dự án: ${activities || 'Chưa cung cấp'}
+- Câu chuyện / Khó khăn: ${story || 'Chưa cung cấp'}
+- Vision / Mục tiêu: ${vision || 'Chưa cung cấp'}
+
+Trả về JSON thuần (KHÔNG markdown, KHÔNG giải thích thêm):
+{
+  "summary": "Nhận xét tổng hồ sơ so với tiêu chí trường — 2 câu, thẳng thắn, nêu rõ điểm mạnh nhất và điểm cần cải thiện.",
+  "strengths": [
+    { "label": "Tên điểm mạnh (≤5 từ)", "score": 82, "note": "Lý do ngắn gọn" },
+    { "label": "...", "score": 70, "note": "..." },
+    { "label": "...", "score": 55, "note": "..." }
+  ],
+  "outline": [
+    {
+      "num": 1,
+      "title": "Mở bài – Hook & Giới thiệu",
+      "badge": "80–120 từ",
+      "purpose": "Mục đích phần này cho HỘI ĐỒNG của trường này (1 câu cụ thể).",
+      "points": [
+        { "type": "hook", "text": "Gợi ý câu mở cụ thể cho học sinh này, dựa trên câu chuyện/thành tích đặc trưng nhất của em (≤20 từ)" },
+        { "type": "point", "text": "Giới thiệu bản thân + ngành mục tiêu gắn với điểm mạnh cụ thể" },
+        { "type": "point", "text": "Nêu mục tiêu rõ: tại sao chọn trường này, kết nối với tiêu chí trường" }
+      ],
+      "schoolFit": "Lý do phần này quan trọng với HĐ của trường (1 câu)"
+    },
+    {
+      "num": 2,
+      "title": "Background – Câu chuyện cá nhân",
+      "badge": "120–180 từ",
+      "purpose": "...",
+      "points": [
+        { "type": "point", "text": "Bối cảnh cụ thể của học sinh (hoàn cảnh, điểm xuất phát)" },
+        { "type": "point", "text": "Khó khăn/thách thức đã vượt qua — phải có chi tiết thật" },
+        { "type": "hook", "text": "Insight / bài học rút ra, kết nối với ngành học / vision" },
+        { "type": "warning", "text": "Tránh: [điều cụ thể cần tránh dựa trên hồ sơ này]" }
+      ],
+      "schoolFit": "..."
+    },
+    {
+      "num": 3,
+      "title": "Achievements – Thành tích & Minh chứng",
+      "badge": "150–250 từ",
+      "purpose": "...",
+      "points": [
+        { "type": "evidence", "text": "Thành tích 1 cụ thể nhất: Action → Result → Impact (có số liệu)" },
+        { "type": "evidence", "text": "Thành tích 2: ..." },
+        { "type": "point", "text": "Liên kết thành tích với tiêu chí cụ thể của trường" },
+        { "type": "warning", "text": "Tránh: [điều cụ thể]" }
+      ],
+      "schoolFit": "..."
+    },
+    {
+      "num": 4,
+      "title": "Vision – Mục tiêu tương lai",
+      "badge": "120–180 từ",
+      "purpose": "...",
+      "points": [
+        { "type": "point", "text": "Mục tiêu ngắn hạn: sau tốt nghiệp sẽ làm gì cụ thể" },
+        { "type": "point", "text": "Mục tiêu dài hạn (5-10 năm): tác động xã hội cụ thể" },
+        { "type": "hook", "text": "Gợi ý câu vision mạnh, cá nhân hóa theo ngành/vision đã nhập" }
+      ],
+      "schoolFit": "..."
+    },
+    {
+      "num": 5,
+      "title": "Why Scholarship – Vai trò học bổng",
+      "badge": "100–150 từ",
+      "purpose": "...",
+      "points": [
+        { "type": "point", "text": "Học bổng là đòn bẩy để làm gì cụ thể (không viết 'tôi cần tiền')" },
+        { "type": "point", "text": "Lý do chọn đúng trường này, phù hợp với mục tiêu của em" },
+        { "type": "warning", "text": "Tránh: [lỗi thường gặp với profile này]" }
+      ],
+      "schoolFit": "..."
+    },
+    {
+      "num": 6,
+      "title": "Kết luận – Cam kết & Chốt",
+      "badge": "80–120 từ",
+      "purpose": "...",
+      "points": [
+        { "type": "hook", "text": "Gợi ý câu kết mạnh, echo lại hook mở bài" },
+        { "type": "point", "text": "Cam kết cụ thể nếu được nhận học bổng" },
+        { "type": "point", "text": "Tầm nhìn dài hạn — đầu tư này có ý nghĩa với ai/cộng đồng nào" }
+      ],
+      "schoolFit": "..."
+    }
+  ]
+}
+
+QUY TẮC:
+- Mỗi "text" trong points: ≤ 25 từ, KHÔNG chung chung, PHẢI dùng thông tin thật từ hồ sơ học sinh.
+- Nếu học sinh thiếu thông tin (VD: chưa có story), ghi rõ "💡 Cần bổ sung: [gợi ý cụ thể]".
+- strengths: đánh giá 3 điểm mạnh thực tế (score 0-100 phản ánh mức độ cạnh tranh so với tiêu chí trường, KHÔNG làm tròn lạc quan).
+- schoolFit: chỉ nêu 1 điểm cụ thể vì sao phần này quan trọng với HĐ của trường đó.
+- JSON phải hoàn chỉnh.`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 3000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error?.message || 'Lỗi API: ' + response.status);
+    const raw = (data.content?.[0]?.text || '').replace(/```json|```/g, '').trim();
+    const result = JSON.parse(raw);
+    renderOutline(result);
+
+  } catch (e) {
+    document.getElementById('ogOutline').innerHTML = `
+      <div style="text-align:center;padding:24px;color:#dc2626;font-size:.88rem;line-height:1.8;">
+        ⚠️ <strong>Lỗi:</strong> ${e.message}<br>
+        <span style="color:#6b7280;font-size:.8rem;">Thử lại sau vài giây hoặc kiểm tra kết nối.</span>
+      </div>`;
+    console.error('Outline Generator Error:', e);
+  }
+
+  btn.classList.remove('loading');
+  btn.disabled = false;
+}
+
+function renderOutline(r) {
+  // Summary
+  document.getElementById('ogResultSummary').textContent = r.summary || '';
+
+  // Strength bars
+  if (r.strengths && r.strengths.length) {
+    const bar = document.getElementById('ogStrengthBar');
+    bar.style.display = 'block';
+    const rows = document.getElementById('ogStrengthRows');
+    rows.innerHTML = '';
+    r.strengths.forEach(s => {
+      const v = Math.min(100, Math.max(0, s.score || 0));
+      const color = v >= 75 ? 'green' : v >= 55 ? '' : 'amber';
+      const row = document.createElement('div');
+      row.className = 'og-strength-row';
+      row.innerHTML = `
+        <div class="og-strength-name">${s.label}</div>
+        <div class="og-strength-track"><div class="og-strength-fill ${color}" style="width:0%" data-w="${v}"></div></div>
+        <div class="og-strength-val">${v}</div>`;
+      rows.appendChild(row);
+    });
+    // Animate bars
+    setTimeout(() => {
+      rows.querySelectorAll('.og-strength-fill').forEach(el => {
+        el.style.width = el.dataset.w + '%';
+      });
+    }, 120);
+
+    // Tooltip note under bars
+    const noteEl = document.createElement('div');
+    noteEl.style = 'margin-top:8px;font-size:.72rem;color:var(--text-soft);line-height:1.5;';
+    r.strengths.forEach(s => {
+      if (s.note) noteEl.innerHTML += `<span style="color:var(--text-mid);font-weight:600;">${s.label}:</span> ${s.note}<br>`;
+    });
+    rows.after(noteEl);
+  }
+
+  // Outline sections
+  const container = document.getElementById('ogOutline');
+  container.innerHTML = '';
+
+  (r.outline || []).forEach((sec, idx) => {
+    const pointsHtml = (sec.points || []).map(p =>
+      `<li class="${p.type || 'point'}">${p.text}</li>`
+    ).join('');
+
+    const fitHtml = sec.schoolFit
+      ? `<div class="og-school-fit">🎯 <strong>Quan trọng với HĐ ${ogSelectedSchool.name}:</strong> ${sec.schoolFit}</div>`
+      : '';
+
+    const el = document.createElement('div');
+    el.className = 'og-section' + (idx === 0 ? ' open' : '');
+    el.innerHTML = `
+      <div class="og-section-head" onclick="toggleOgSection(${idx})">
+        <div class="og-section-num">${sec.num}</div>
+        <div class="og-section-title">${sec.title}</div>
+        <span class="og-section-badge">📝 ${sec.badge}</span>
+        <svg class="og-section-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="og-section-body">
+        <div class="og-purpose">🎯 Mục đích: ${sec.purpose}</div>
+        <ul class="og-bullets">${pointsHtml}</ul>
+        ${fitHtml}
+        <div class="og-word-hint">📏 Độ dài mục tiêu: ${sec.badge}</div>
+      </div>`;
+    container.appendChild(el);
+  });
+}
+
+function toggleOgSection(idx) {
+  const secs = document.querySelectorAll('.og-section');
+  const sec = secs[idx];
+  if (!sec) return;
+  sec.classList.toggle('open');
+}
+
+function resetOutline() {
+  document.getElementById('ogResult').style.display = 'none';
+  document.getElementById('ogOutline').innerHTML = '';
+  window.scrollTo({ top: document.getElementById('outlineSection').offsetTop - 80, behavior: 'smooth' });
+}
+
+function copyOutline() {
+  let text = `DÀN Ý BÀI LUẬN HỌC BỔNG – ${ogSelectedSchool.name}\n`;
+  text += `Tiêu chí: ${ogSelectedSchool.criteria}\n\n`;
+  text += document.getElementById('ogResultSummary').textContent + '\n\n';
+
+  document.querySelectorAll('.og-section').forEach(sec => {
+    const title = sec.querySelector('.og-section-title')?.textContent || '';
+    const badge = sec.querySelector('.og-section-badge')?.textContent || '';
+    text += `── ${title} (${badge}) ──\n`;
+    const purpose = sec.querySelector('.og-purpose')?.textContent || '';
+    if (purpose) text += purpose + '\n';
+    sec.querySelectorAll('.og-bullets li').forEach(li => {
+      text += '  • ' + li.textContent.trim() + '\n';
+    });
+    const fit = sec.querySelector('.og-school-fit')?.textContent || '';
+    if (fit) text += '  ' + fit + '\n';
+    text += '\n';
+  });
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✅ Đã sao chép!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  });
+}
 </script>
 </body>
 </html>
