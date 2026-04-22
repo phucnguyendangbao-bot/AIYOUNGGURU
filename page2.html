@@ -227,121 +227,6 @@ html { scroll-behavior: smooth; }
   color: var(--text-soft); font-size: .88rem;
 }
 
-/* ── ESSAY SECTION ── */
-.essay-section {
-  scroll-margin-top: 90px;
-  border-radius: 22px;
-  overflow: hidden;
-  box-shadow: 0 8px 28px rgba(99,102,241,0.10);
-  transition: box-shadow .4s;
-}
-.essay-section.highlight {
-  animation: highlightPulse 1.5s ease;
-}
-.essay-header {
-  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
-  padding: 28px 28px 22px;
-  display: flex; align-items: flex-start; gap: 18px;
-}
-.essay-header-icon {
-  width: 56px; height: 56px; border-radius: 16px;
-  background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.3);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.6rem; flex-shrink: 0;
-}
-.essay-header-info { flex: 1; }
-.essay-header-title {
-  font-family: var(--font-display); font-weight: 900;
-  font-size: 1.25rem; color: #fff; margin-bottom: 4px;
-}
-.essay-header-sub { font-size: .85rem; color: rgba(255,255,255,0.8); line-height: 1.5; }
-.essay-body {
-  background: rgba(255,255,255,0.6);
-  border: 1.5px solid rgba(255,255,255,0.9);
-  border-top: none; border-radius: 0 0 22px 22px;
-  backdrop-filter: blur(10px);
-  padding: 24px;
-  display: flex; flex-direction: column; gap: 24px;
-}
-.essay-formula {
-  background: linear-gradient(135deg, rgba(99,102,241,0.07), rgba(124,58,237,0.05));
-  border: 1.5px solid rgba(99,102,241,0.18);
-  border-radius: 16px; padding: 18px 20px;
-  display: flex; flex-direction: column; gap: 10px;
-}
-.essay-formula-title {
-  font-size: .8rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: .05em;
-}
-.essay-formula-steps {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
-}
-.essay-formula-step {
-  display: inline-flex; align-items: center; gap: 5px;
-  background: rgba(255,255,255,0.8); border: 1.5px solid rgba(99,102,241,0.2);
-  border-radius: 999px; padding: 5px 12px;
-  font-size: .78rem; font-weight: 700; color: var(--text-dark);
-}
-.essay-formula-arrow { color: var(--accent); font-size: .85rem; font-weight: 900; }
-.essay-formula-note {
-  font-size: .8rem; color: var(--text-soft); line-height: 1.55;
-  border-top: 1px solid rgba(99,102,241,0.12); padding-top: 10px; margin-top: 2px;
-}
-.essay-block-title {
-  font-family: var(--font-display); font-weight: 800;
-  font-size: .95rem; color: var(--text-dark);
-  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
-}
-.essay-struct-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px;
-}
-.essay-struct-card {
-  background: rgba(255,255,255,0.78); border: 1.5px solid rgba(255,255,255,0.9);
-  border-radius: 16px; padding: 16px 18px;
-  box-shadow: 0 2px 10px rgba(99,102,241,0.07);
-}
-.essay-struct-card-head {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
-}
-.essay-struct-num {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--grad); color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .78rem; font-weight: 800; flex-shrink: 0;
-}
-.essay-struct-label {
-  font-weight: 800; font-size: .88rem; color: var(--text-dark);
-}
-.essay-struct-items { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-.essay-struct-items li {
-  display: flex; gap: 8px; align-items: flex-start;
-  font-size: .8rem; color: var(--text-soft); line-height: 1.5;
-}
-.essay-struct-items li::before {
-  content: '›'; color: var(--accent); font-weight: 900; flex-shrink: 0; margin-top: 0;
-}
-.essay-tips-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;
-}
-.essay-tip-card {
-  background: rgba(255,255,255,0.75); border: 1.5px solid rgba(255,255,255,0.9);
-  border-radius: 14px; padding: 14px 16px;
-  box-shadow: 0 2px 8px rgba(99,102,241,0.06);
-  transition: transform .18s, box-shadow .18s;
-}
-.essay-tip-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(99,102,241,0.12); }
-.essay-tip-icon { font-size: 1.3rem; margin-bottom: 7px; }
-.essay-tip-name { font-weight: 800; font-size: .84rem; color: var(--text-dark); margin-bottom: 5px; }
-.essay-tip-desc { font-size: .78rem; color: var(--text-soft); line-height: 1.55; }
-.essay-sidebar-link {
-  margin-top: 10px;
-  border-top: 1px solid rgba(99,102,241,0.1);
-  padding-top: 10px;
-}
-.essay-sidebar-label {
-  font-size: .7rem; font-weight: 800; color: var(--text-soft);
-  text-transform: uppercase; letter-spacing: .06em; padding: 6px 10px 4px;
-}
-
 /* ── FOOTER ── */
 .p2-footer {
   background: rgba(255,255,255,0.55);
@@ -366,71 +251,6 @@ html { scroll-behavior: smooth; }
 ::-webkit-scrollbar-track { background: rgba(99,102,241,0.05); }
 ::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.25); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,0.45); }
-/* ── ACCORDION DETAIL ── */
-.essay-accordion-card:hover { box-shadow: 0 6px 22px rgba(99,102,241,0.13); }
-.essay-accordion-card.open { background: rgba(255,255,255,0.9); }
-.acc-section-title {
-  font-weight: 800; font-size: .82rem; color: var(--accent);
-  margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
-}
-.acc-list { list-style: none; display: flex; flex-direction: column; gap: 5px; padding-left: 0; }
-.acc-list li {
-  display: flex; gap: 8px; align-items: flex-start;
-  font-size: .8rem; color: var(--text-soft); line-height: 1.55;
-}
-.acc-list li::before { content: '›'; color: var(--accent); font-weight: 900; flex-shrink: 0; }
-.acc-list-danger li::before { content: '⚠'; font-style: normal; }
-.acc-method-card {
-  background: rgba(99,102,241,0.04); border: 1px solid rgba(99,102,241,0.12);
-  border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;
-}
-.acc-method-title {
-  font-weight: 800; font-size: .82rem; color: var(--text-dark);
-  margin-bottom: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
-}
-.acc-quote {
-  background: rgba(255,255,255,0.8); border-left: 3px solid var(--accent);
-  padding: 8px 12px; border-radius: 0 8px 8px 0;
-  font-size: .79rem; color: var(--text-mid); line-height: 1.6;
-  font-style: italic; margin: 6px 0;
-}
-.acc-tip { font-size: .78rem; color: var(--text-soft); margin-top: 6px; line-height: 1.5; }
-.acc-warn {
-  font-size: .78rem; color: #d97706; margin-top: 8px;
-  background: rgba(245,158,11,0.08); border-radius: 8px; padding: 6px 10px;
-  border: 1px solid rgba(245,158,11,0.2);
-}
-.acc-note {
-  border-radius: 10px; border: 1px solid rgba(251,191,36,0.35);
-  background: rgba(254,249,195,0.7); padding: 10px 14px;
-  font-size: .8rem; color: #92400e; line-height: 1.6; margin-top: 10px;
-}
-.acc-compare { display: flex; flex-direction: column; gap: 5px; margin: 8px 0; }
-.acc-compare-bad {
-  font-size: .79rem; color: #dc2626; background: rgba(220,38,38,0.06);
-  border-radius: 8px; padding: 5px 10px; border: 1px solid rgba(220,38,38,0.15);
-}
-.acc-compare-good {
-  font-size: .79rem; color: #059669; background: rgba(5,150,105,0.06);
-  border-radius: 8px; padding: 5px 10px; border: 1px solid rgba(5,150,105,0.15);
-}
-.acc-formula-mini {
-  font-size: .79rem; font-weight: 700; color: var(--accent);
-  background: rgba(99,102,241,0.08); border-radius: 8px; padding: 5px 10px;
-  margin: 6px 0; display: inline-block;
-}
-.acc-badge {
-  display: inline-block; border-radius: 999px; padding: 1px 9px;
-  font-size: .7rem; font-weight: 700;
-}
-.acc-badge-green { background: rgba(16,185,129,0.1); color: #059669; border: 1px solid rgba(16,185,129,0.2); }
-.acc-badge-purple { background: rgba(99,102,241,0.1); color: var(--accent); border: 1px solid rgba(99,102,241,0.2); }
-.acc-badge-amber { background: rgba(245,158,11,0.1); color: #d97706; border: 1px solid rgba(245,158,11,0.2); }
-.acc-length-row {
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: .8rem; color: var(--text-mid); padding: 4px 0;
-  border-bottom: 1px solid rgba(99,102,241,0.07);
-}
 </style>
 </head>
 <body>
@@ -1326,255 +1146,6 @@ const SCHOOLS = [
   }
 ];
 
-/* ═══════════════ ESSAY SECTION ═══════════════ */
-const ESSAY_SECTION_HTML = `
-<section class="essay-section" id="viet-luan">
-  <div class="essay-header">
-    <div class="essay-header-icon">✍️</div>
-    <div class="essay-header-info">
-      <div class="essay-header-title">Bí quyết chinh phục bài luận học bổng</div>
-      <div class="essay-header-sub">Hướng dẫn cấu trúc, yếu tố cốt lõi và công thức viết luận ghi điểm với hội đồng xét duyệt</div>
-    </div>
-  </div>
-  <div class="essay-body">
-
-    <!-- CÔNG THỨC NHANH -->
-    <div class="essay-formula">
-      <div class="essay-formula-title">🛠️ Công thức viết luận nhanh</div>
-      <div class="essay-formula-steps">
-        <span class="essay-formula-step">💡 Điều gì xảy ra</span>
-        <span class="essay-formula-arrow">→</span>
-        <span class="essay-formula-step">❓ Vì sao quan trọng</span>
-        <span class="essay-formula-arrow">→</span>
-        <span class="essay-formula-step">🔧 Cách bạn xử lý</span>
-        <span class="essay-formula-arrow">→</span>
-        <span class="essay-formula-step">📚 Bạn học được gì</span>
-        <span class="essay-formula-arrow">→</span>
-        <span class="essay-formula-step">🎯 Liên hệ tương lai</span>
-      </div>
-      <div class="essay-formula-note">👉 Học bổng không chỉ chọn người <strong>giỏi nhất</strong>, mà chọn người <strong>thuyết phục rằng họ sẽ đóng góp nhiều nhất</strong> nếu được đầu tư.</div>
-    </div>
-
-    <!-- CẤU TRÚC BÀI LUẬN -->
-    <div>
-      <div class="essay-block-title">🧠 Cấu trúc cơ bản của bài luận</div>
-      <div class="essay-struct-grid">
-
-        <!-- MỞ BÀI -->
-        <div class="essay-struct-card essay-accordion-card" onclick="toggleAccordion(this)" style="cursor:pointer;grid-column:1;transition:all .3s;">
-          <div class="essay-struct-card-head" style="justify-content:space-between;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="essay-struct-num">1</div>
-              <div class="essay-struct-label">Mở bài</div>
-            </div>
-            <svg class="accordion-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .3s;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
-          <ul class="essay-struct-items">
-            <li>Giới thiệu ngắn gọn về bản thân</li>
-            <li>Nêu ngay mục tiêu chính của bài luận</li>
-            <li>Tạo "hook" thu hút — câu chuyện hoặc một quan điểm mạnh</li>
-          </ul>
-          <div class="accordion-detail" style="display:none;margin-top:14px;border-top:1px solid rgba(99,102,241,0.15);padding-top:14px;">
-            <div class="acc-section-title">🎯 Mục tiêu mở bài</div>
-            <ul class="acc-list">
-              <li>Tạo cảm xúc ngay từ đầu</li>
-              <li>Cho thấy bạn có tư duy rõ ràng</li>
-              <li>Giới thiệu định hướng một cách thuyết phục</li>
-            </ul>
-
-            <div class="acc-section-title" style="margin-top:12px;">✍️ 3 cách mở bài mạnh</div>
-
-            <div class="acc-method-card">
-              <div class="acc-method-title">Cách 1: Mở bằng khoảnh khắc cá nhân <span class="acc-badge acc-badge-green">Rất mạnh</span></div>
-              <div class="acc-quote">"Năm lớp 9, khi lần đầu tiên tôi tham gia cuộc thi STEM cấp trường và thất bại, tôi nhận ra rằng điều tôi thiếu không phải là khả năng, mà là cơ hội và sự đầu tư đúng hướng."</div>
-              <div class="acc-tip">👉 Dùng khi bạn có câu chuyện thật, có chuyển biến rõ ràng.</div>
-            </div>
-
-            <div class="acc-method-card">
-              <div class="acc-method-title">Cách 2: Mở bằng quan điểm cá nhân <span class="acc-badge acc-badge-purple">Tư duy hệ thống</span></div>
-              <div class="acc-quote">"Tôi tin rằng học bổng không chỉ dành cho người giỏi nhất, mà dành cho người có kế hoạch rõ ràng để tạo ra giá trị lâu dài."</div>
-              <div class="acc-tip">👉 Rất hợp nếu bạn thích tư duy logic, phân tích.</div>
-            </div>
-
-            <div class="acc-method-card">
-              <div class="acc-method-title">Cách 3: Mở bằng mục tiêu tương lai <span class="acc-badge acc-badge-amber">Định hướng rõ</span></div>
-              <div class="acc-quote">"Tôi mong muốn trở thành một kỹ sư công nghệ có thể xây dựng các nền tảng hỗ trợ học sinh Việt Nam tiếp cận học bổng một cách minh bạch và dễ dàng."</div>
-              <div class="acc-tip">👉 Phù hợp khi bạn có mục tiêu nghề nghiệp cụ thể, dài hạn.</div>
-            </div>
-
-            <div class="acc-note">
-              📌 <strong>Sau câu mở:</strong> Giới thiệu ngắn gọn bạn là ai (1–2 câu) → Ngành bạn theo đuổi → Mục tiêu chính<br>
-              📝 <strong>Độ dài mở bài:</strong> 80–120 từ
-            </div>
-          </div>
-        </div>
-
-        <!-- THÂN BÀI -->
-        <div class="essay-struct-card essay-accordion-card" onclick="toggleAccordion(this)" style="cursor:pointer;transition:all .3s;">
-          <div class="essay-struct-card-head" style="justify-content:space-between;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="essay-struct-num">2</div>
-              <div class="essay-struct-label">Thân bài</div>
-            </div>
-            <svg class="accordion-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .3s;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
-          <ul class="essay-struct-items">
-            <li>Câu chuyện cá nhân liên quan đến học tập / nghề nghiệp</li>
-            <li>Ví dụ cụ thể để hội đồng thấy rõ bạn là ai</li>
-            <li>Thành tựu & kỹ năng liên quan đến học bổng</li>
-            <li>Mục tiêu tương lai và vì sao học bổng quan trọng</li>
-          </ul>
-          <div class="accordion-detail" style="display:none;margin-top:14px;border-top:1px solid rgba(99,102,241,0.15);padding-top:14px;">
-            <div class="acc-section-title">🏆 Thân bài = 70% điểm — chia 4 phần rõ ràng</div>
-
-            <div class="acc-method-card">
-              <div class="acc-method-title">1️⃣ Câu chuyện cá nhân (Background)</div>
-              <ul class="acc-list">
-                <li>Bạn xuất phát từ đâu?</li>
-                <li>Điều gì định hình con người bạn?</li>
-                <li>Khó khăn nào bạn đã vượt qua?</li>
-              </ul>
-              <div class="acc-quote" style="margin-top:8px;">"Tôi sinh ra và lớn lên tại Cần Thơ. Trong môi trường cạnh tranh học tập cao, thay vì nản chí, tôi bắt đầu xây dựng hệ thống học tập riêng..."</div>
-              <div class="acc-warn">⚠️ Không kể lể · Không than khổ · Phải có <strong>"chuyển biến"</strong></div>
-            </div>
-
-            <div class="acc-method-card">
-              <div class="acc-method-title">2️⃣ Thành tích & minh chứng cụ thể (Evidence)</div>
-              <div class="acc-compare">
-                <div class="acc-compare-bad">❌ "Tôi học tốt môn Toán"</div>
-                <div class="acc-compare-good">✅ "Tôi đạt giải Nhì Olympic 30/4 môn Toán và duy trì GPA 9.2"</div>
-              </div>
-              <div class="acc-formula-mini"><strong>Action → Result → Impact</strong></div>
-              <div class="acc-quote">"Tôi xây dựng website tổng hợp thông tin học bổng. Sau 3 tuần, dự án thu hút hơn 200 lượt truy cập từ các bạn trong trường."</div>
-              <div class="acc-tip">👉 Hội đồng thích số liệu cụ thể — luôn gắn con số vào thành tích.</div>
-            </div>
-
-            <div class="acc-method-card">
-              <div class="acc-method-title">3️⃣ Mục tiêu tương lai (Vision)</div>
-              <ul class="acc-list">
-                <li>Bạn muốn học gì, chuyên sâu ngành nào?</li>
-                <li>Sau đại học bạn muốn làm gì?</li>
-                <li>Bạn đóng góp gì cho xã hội / cộng đồng?</li>
-              </ul>
-              <div class="acc-quote" style="margin-top:8px;">"Tôi mong muốn theo học ngành Công nghệ thông tin để phát triển các hệ thống giáo dục ứng dụng AI, giúp học sinh vùng xa tiếp cận thông tin học tập chất lượng."</div>
-            </div>
-
-            <div class="acc-method-card">
-              <div class="acc-method-title">4️⃣ Vì sao học bổng quan trọng với bạn?</div>
-              <div class="acc-compare">
-                <div class="acc-compare-bad">❌ "Vì gia đình tôi không đủ điều kiện"</div>
-                <div class="acc-compare-good">✅ "Học bổng giúp tôi có thêm thời gian tập trung vào nghiên cứu và phát triển các dự án cộng đồng."</div>
-              </div>
-              <div class="acc-tip">👉 Nhấn mạnh: <strong>Học bổng = đầu tư · Bạn = sinh lời giá trị</strong></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- KẾT LUẬN -->
-        <div class="essay-struct-card essay-accordion-card" onclick="toggleAccordion(this)" style="cursor:pointer;transition:all .3s;">
-          <div class="essay-struct-card-head" style="justify-content:space-between;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="essay-struct-num">3</div>
-              <div class="essay-struct-label">Kết luận</div>
-            </div>
-            <svg class="accordion-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .3s;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
-          <ul class="essay-struct-items">
-            <li>Tóm lại lý do bạn xứng đáng nhận học bổng</li>
-            <li>Nhấn mạnh giá trị bạn mang lại nếu được nhận</li>
-          </ul>
-          <div class="accordion-detail" style="display:none;margin-top:14px;border-top:1px solid rgba(99,102,241,0.15);padding-top:14px;">
-            <div class="acc-section-title">🎯 Mục tiêu kết luận</div>
-            <ul class="acc-list">
-              <li>Tóm lại lý do bạn xứng đáng — không lặp lại thân bài</li>
-              <li>Nhấn mạnh giá trị dài hạn bạn mang lại</li>
-              <li>Kết thúc tự tin, không van xin hay cầu khẩn</li>
-            </ul>
-
-            <div class="acc-section-title" style="margin-top:12px;">✍️ Khung viết kết luận mạnh</div>
-            <div class="acc-quote">"Nếu được trao cơ hội này, tôi cam kết không chỉ nỗ lực trong học tập mà còn tiếp tục phát triển các dự án hỗ trợ học sinh khác. Tôi tin rằng sự đầu tư vào tôi hôm nay sẽ tạo ra giá trị bền vững cho cộng đồng trong tương lai."</div>
-            <div class="acc-tip">👉 Kết phải tự tin, không xin xỏ — bạn đang đề xuất một <strong>hợp tác đôi bên cùng có lợi</strong>.</div>
-
-            <div class="acc-note">📝 <strong>Độ dài kết luận:</strong> 80–120 từ</div>
-
-            <div class="acc-section-title" style="margin-top:12px;">📏 Độ dài chuẩn toàn bài</div>
-            <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px;">
-              <div class="acc-length-row"><span>Học bổng trong nước</span><span class="acc-badge acc-badge-purple">500–800 từ</span></div>
-              <div class="acc-length-row"><span>Học bổng quốc tế</span><span class="acc-badge acc-badge-amber">800–1.200 từ</span></div>
-              <div class="acc-length-row"><span>Học bổng 100%</span><span class="acc-badge acc-badge-green">1.000+ từ</span></div>
-            </div>
-
-            <div class="acc-section-title" style="margin-top:12px;">🚨 6 lỗi nguy hiểm nhất cần tránh</div>
-            <ul class="acc-list acc-list-danger">
-              <li>Kể lể quá dài, lan man không có điểm nhấn</li>
-              <li>Không có số liệu minh chứng cụ thể</li>
-              <li>Viết chung chung, không cá nhân hóa</li>
-              <li>Không có định hướng tương lai rõ ràng</li>
-              <li>Lặp từ "I" quá nhiều (bài luận tiếng Anh)</li>
-              <li>Không chỉnh sửa nhiều lần trước khi nộp</li>
-            </ul>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- 9 YẾU TỐ CỐT LÕI -->
-    <div>
-      <div class="essay-block-title">💡 9 yếu tố cốt lõi giúp bài luận ghi điểm</div>
-      <div class="essay-tips-grid">
-        <div class="essay-tip-card">
-          <div class="essay-tip-icon">🔥</div>
-          <div class="essay-tip-name">Chân thực & cá nhân hóa</div>
-          <div class="essay-tip-desc">Bài luận phải phản ánh chính bạn, không phải những điều chung chung, sáo rỗng.</div>
-        </div>
-        <div class="essay-tip-card">
-          <div class="essay-tip-icon">📖</div>
-          <div class="essay-tip-name">Câu chuyện có ý nghĩa</div>
-          <div class="essay-tip-desc">Kể câu chuyện giúp người đọc hiểu con người bạn và cách bạn đối diện thử thách.</div>
-        </div>
-        <div class="essay-tip-card">
-          <div class="essay-tip-icon">🎯</div>
-          <div class="essay-tip-name">Mục tiêu rõ ràng</div>
-          <div class="essay-tip-desc">Nêu rõ bạn muốn gì và học bổng sẽ giúp bạn thế nào — hội đồng rất chú trọng điều này.</div>
-        </div>
-        <div class="essay-tip-card">
-          <div class="essay-tip-icon">🧠</div>
-          <div class="essay-tip-name">Kết nối với tiêu chí học bổng</div>
-          <div class="essay-tip-desc">Hiểu rõ giá trị & sứ mệnh của tổ chức cấp học bổng và thể hiện bạn phù hợp với tiêu chí đó.</div>
-        </div>
-        <div class="essay-tip-card">
-          <div class="essay-tip-icon">✍️</div>
-          <div class="essay-tip-name">Ngôn ngữ rõ ràng, logic</div>
-          <div class="essay-tip-desc">Trình bày rõ ý, không lan man. Dùng đoạn văn ngắn, dễ đọc, câu chữ mạch lạc.</div>
-        </div>
-        <div class="essay-tip-card">
-          <div class="essay-tip-icon">✔️</div>
-          <div class="essay-tip-name">Minh chứng bằng ví dụ cụ thể</div>
-          <div class="essay-tip-desc">Đừng chỉ nêu "tôi chăm học" — hãy kể tình huống cụ thể chứng minh điều đó.</div>
-        </div>
-        <div class="essay-tip-card">
-          <div class="essay-tip-icon">😊</div>
-          <div class="essay-tip-name">Tích cực & lạc quan</div>
-          <div class="essay-tip-desc">Dù kể về khó khăn, hãy chuyển sang hướng tích cực — bạn học được gì và trưởng thành ra sao.</div>
-        </div>
-        <div class="essay-tip-card">
-          <div class="essay-tip-icon">📌</div>
-          <div class="essay-tip-name">Tránh lặp lại CV</div>
-          <div class="essay-tip-desc">Bài luận cần diễn giải cảm xúc, tư duy, mục tiêu — không chỉ liệt kê lại hồ sơ.</div>
-        </div>
-        <div class="essay-tip-card">
-          <div class="essay-tip-icon">🧹</div>
-          <div class="essay-tip-name">Chỉnh sửa & nhận phản hồi</div>
-          <div class="essay-tip-desc">Viết xong hãy chỉnh sửa nhiều lần và nhờ giáo viên / mentor góp ý để hoàn thiện.</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-`;
-
 /* ═══════════════ RENDER ═══════════════ */
 const sidebar = document.getElementById('sidebar');
 const mainContent = document.getElementById('mainContent');
@@ -1591,11 +1162,7 @@ function renderSidebar(schools) {
     const emptyMsg = safeSchools.length === 0
       ? '<div style="padding:12px;color:#6b7280;font-size:.8rem;">Không có trường nào khớp từ khóa.</div>'
       : '';
-    const essayLinkHtml = `
-      <div class="essay-sidebar-label">Hướng dẫn</div>
-      <a href="#viet-luan" data-id="viet-luan" onclick="highlightSection('viet-luan')" style="color:#6366f1;background:rgba(99,102,241,0.07);border-left:3px solid #6366f1;">✍️ Bí quyết viết luận</a>
-    `;
-    sidebar.innerHTML = titleHtml + linksHtml + emptyMsg + essayLinkHtml;
+    sidebar.innerHTML = titleHtml + linksHtml + emptyMsg;
   } catch (err) {
     console.error('[renderSidebar] error:', err);
     sidebar.innerHTML = '<div class="p2-sidebar-title">📚 Danh sách trường</div><div style="padding:12px;color:#dc2626;font-size:.8rem;">Lỗi hiển thị danh sách. Vui lòng tải lại trang.</div>';
@@ -1644,7 +1211,7 @@ function renderSchools(schools) {
         </div>
       </section>
     `;
-  }).join('') + ESSAY_SECTION_HTML;
+  }).join('');
 
   // Inject logos: Clearbit -> Google Favicon -> emoji
   schools.forEach(s => {
@@ -1694,7 +1261,7 @@ function filterSchools(val) {
     renderSchools(filtered);
     // Rebuild observer for newly rendered sections
     try {
-      setupObserver([...filtered.map(s => s.id), 'viet-luan']);
+      setupObserver(filtered.map(s => s.id));
     } catch (e) { /* observer is optional */ }
   } catch (err) {
     console.error('[filterSchools] error:', err);
@@ -1705,7 +1272,7 @@ function filterSchools(val) {
 }
 
 function highlightSection(id) {
-  document.querySelectorAll('.school-section.highlight, .essay-section.highlight').forEach(el => el.classList.remove('highlight'));
+  document.querySelectorAll('.school-section.highlight').forEach(el => el.classList.remove('highlight'));
   const el = document.getElementById(id);
   if (el) {
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1787,7 +1354,7 @@ function initPage2() {
   }
   try {
     if (typeof IntersectionObserver !== 'undefined') {
-      setupObserver([...SCHOOLS.map(s => s.id), 'viet-luan']);
+      setupObserver(SCHOOLS.map(s => s.id));
     }
   } catch (e) {
     console.error('[init observer] error:', e);
