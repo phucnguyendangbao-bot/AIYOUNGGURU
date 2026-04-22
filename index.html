@@ -3708,6 +3708,239 @@ window.addEventListener('load', function(){
     </div>
   </div>
 
+<!-- ═══════════════════════════════════════════════════════
+     BRIGHTWAY SECURITY MODULE v1.0
+     Tăng cường bảo mật: CSP, Rate Limit, XSS, Session, Input Sanitize
+═══════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  'use strict';
+
+  /* ─── 1. CONTENT SECURITY & HEADERS META ─── */
+  // Thêm meta referrer để tránh lộ referer khi click link ngoài
+  if (!document.querySelector('meta[name="referrer"]')) {
+    var refMeta = document.createElement('meta');
+    refMeta.name = 'referrer';
+    refMeta.content = 'strict-origin-when-cross-origin';
+    document.head.appendChild(refMeta);
+  }
+
+  /* ─── 2. RATE LIMITER - Chống brute force auth ─── */
+  var RateLimit = (function(){
+    var PREFIX = 'bws_rl_';
+    var RULES = {
+      login:    { max: 5,  windowMs: 15 * 60 * 1000, label: 'Đăng nhập' },
+      register: { max: 3,  windowMs: 60 * 60 * 1000, label: 'Đăng ký' },
+      forgot:   { max: 3,  windowMs: 60 * 60 * 1000, label: 'Quên mật khẩu' }
+    };
+
+    function getRecord(action){
+      try {
+        var raw = sessionStorage.getItem(PREFIX + action);
+        return raw ? JSON.parse(raw) : { count: 0, resetAt: Date.now() + RULES[action].windowMs };
+      } catch(e) { return { count: 0, resetAt: Date.now() + RULES[action].windowMs }; }
+    }
+    function saveRecord(action, rec){
+      try { sessionStorage.setItem(PREFIX + action, JSON.stringify(rec)); } catch(e) {}
+    }
+
+    return {
+      check: function(action){
+        var rule = RULES[action];
+        if (!rule) return { allowed: true };
+        var rec = getRecord(action);
+        var now = Date.now();
+        if (now > rec.resetAt) {
+          rec = { count: 0, resetAt: now + rule.windowMs };
+        }
+        if (rec.count >= rule.max) {
+          var waitSec = Math.ceil((rec.resetAt - now) / 1000);
+          var waitMin = Math.ceil(waitSec / 60);
+          return { allowed: false, waitMin: waitMin, waitSec: waitSec };
+        }
+        rec.count++;
+        saveRecord(action, rec);
+        return { allowed: true, remaining: rule.max - rec.count };
+      },
+      reset: function(action){
+        try { sessionStorage.removeItem(PREFIX + action); } catch(e) {}
+      }
+    };
+  })();
+  window.__RateLimit = RateLimit;
+
+  /* ─── 3. INPUT SANITIZER ─── */
+  var Sanitize = {
+    // Xóa các ký tự có thể gây XSS trong text thuần
+    text: function(s) {
+      return String(s || '').replace(/[<>"'`]/g, '').trim().slice(0, 500);
+    },
+    // Chỉ cho phép email hợp lệ
+    email: function(s) {
+      var v = String(s || '').trim().toLowerCase().slice(0, 254);
+      return /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(v) ? v : null;
+    },
+    // Mật khẩu: kiểm tra độ mạnh cơ bản
+    password: function(s) {
+      var v = String(s || '');
+      if (v.length < 6)  return { ok: false, msg: 'Mật khẩu cần ít nhất 6 ký tự' };
+      if (v.length > 72) return { ok: false, msg: 'Mật khẩu quá dài (tối đa 72 ký tự)' };
+      return { ok: true, value: v };
+    },
+    // Tên hiển thị
+    displayName: function(s) {
+      return String(s || '').replace(/[<>&"]/g, '').trim().slice(0, 50);
+    }
+  };
+  window.__Sanitize = Sanitize;
+
+  /* ─── 4. SESSION TIMEOUT - Tự động logout sau 2 giờ không hoạt động ─── */
+  var SessionGuard = (function(){
+    var TIMEOUT_MS = 2 * 60 * 60 * 1000; // 2 giờ
+    var WARN_MS    = 5 * 60 * 1000;       // cảnh báo trước 5 phút
+    var timer = null, warnTimer = null;
+    var isActive = false;
+
+    function resetTimer(){
+      if (!isActive) return;
+      clearTimeout(timer);
+      clearTimeout(warnTimer);
+      warnTimer = setTimeout(function(){
+        // Cảnh báo nhẹ qua console (không dùng alert để không làm phiền)
+        console.info('[BrightWay Security] Phiên sẽ hết hạn sau 5 phút do không hoạt động.');
+      }, TIMEOUT_MS - WARN_MS);
+      timer = setTimeout(function(){
+        console.info('[BrightWay Security] Phiên hết hạn → đăng xuất tự động.');
+        window.dispatchEvent(new CustomEvent('session-timeout'));
+        stop();
+      }, TIMEOUT_MS);
+    }
+
+    var EVENTS = ['click','keydown','scroll','mousemove','touchstart'];
+    function onActivity(){ resetTimer(); }
+
+    function start(){
+      if (isActive) return;
+      isActive = true;
+      EVENTS.forEach(function(ev){ document.addEventListener(ev, onActivity, { passive: true }); });
+      resetTimer();
+    }
+    function stop(){
+      isActive = false;
+      clearTimeout(timer);
+      clearTimeout(warnTimer);
+      EVENTS.forEach(function(ev){ document.removeEventListener(ev, onActivity); });
+    }
+
+    // Lắng nghe auth-changed để bật/tắt session guard
+    window.addEventListener('auth-changed', function(e){
+      var user = e.detail && e.detail.user;
+      if (user) start();
+      else stop();
+    });
+
+    // Khi timeout → tự động signOut
+    window.addEventListener('session-timeout', function(){
+      function doSignOut(){
+        if (window.__sb && window.__sb.auth) {
+          window.__sb.auth.signOut().catch(function(){});
+        }
+      }
+      if (window.__sb) doSignOut();
+      else window.addEventListener('sb-ready', doSignOut, { once: true });
+    });
+
+    return { start: start, stop: stop, reset: resetTimer };
+  })();
+  window.__SessionGuard = SessionGuard;
+
+  /* ─── 5. CLICKJACKING PROTECTION ─── */
+  if (window.self !== window.top) {
+    // Trang đang bị nhúng trong iframe → ẩn nội dung
+    document.documentElement.style.display = 'none';
+    console.warn('[BrightWay Security] Phát hiện iframe embedding — bị chặn.');
+  }
+
+  /* ─── 6. LOCAL STORAGE INTEGRITY CHECK ─── */
+  // Kiểm tra và làm sạch dữ liệu localStorage nếu có giá trị bất thường
+  (function cleanStorage(){
+    var SAFE_KEYS = ['bws_calendar_events_v1', 'bw_daynote_v1_'];
+    try {
+      var keysToRemove = [];
+      for (var i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i);
+        if (!key) continue;
+        // Chỉ giữ các key thuộc về ứng dụng
+        var isSafe = SAFE_KEYS.some(function(sk){ return key.startsWith(sk); });
+        if (!isSafe && key.startsWith('bws_') || key.startsWith('bw_')) {
+          // Key bất thường không thuộc whitelist → kiểm tra giá trị
+          var val = localStorage.getItem(key);
+          if (val && /<script/i.test(val)) {
+            keysToRemove.push(key);
+          }
+        }
+      }
+      keysToRemove.forEach(function(k){ localStorage.removeItem(k); });
+    } catch(e) {}
+  })();
+
+  /* ─── 7. CONSOLE WARNING cho devtools ─── */
+  var warnStyle = 'color:#ef4444;font-size:18px;font-weight:bold;';
+  var infoStyle = 'color:#6366f1;font-size:13px;';
+  console.log('%c⚠ CẢNH BÁO BẢO MẬT', warnStyle);
+  console.log('%cĐây là công cụ dành cho nhà phát triển. Không dán bất kỳ mã lạ nào vào đây — điều đó có thể gây lộ thông tin tài khoản của bạn.', infoStyle);
+
+  /* ─── 8. PREVENT OPEN REDIRECT trong SPA links ─── */
+  // Chặn các href có thể redirect ra ngoài domain không an toàn
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    // Kiểm tra javascript: protocol
+    if (/^\s*javascript\s*:/i.test(href)) {
+      e.preventDefault();
+      console.warn('[BrightWay Security] Blocked javascript: link');
+      return;
+    }
+    // Kiểm tra data: protocol
+    if (/^\s*data\s*:/i.test(href)) {
+      e.preventDefault();
+      console.warn('[BrightWay Security] Blocked data: link');
+      return;
+    }
+  }, true);
+
+  console.info('[BrightWay Security] Module v1.0 đã khởi động.');
+
+  /* ─── 9. PASSWORD STRENGTH METER ─── */
+  window.__updatePwdStrength = function(val){
+    var fill  = document.getElementById('pwdStrengthFill');
+    var label = document.getElementById('pwdStrengthLabel');
+    if (!fill || !label) return;
+    var len = val.length;
+    var score = 0;
+    if (len >= 6)  score++;
+    if (len >= 10) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    var levels = [
+      { pct:'0%',   color:'#e2e8f0', text:'Mật khẩu cần ít nhất 6 ký tự' },
+      { pct:'25%',  color:'#ef4444', text:'Yếu — nên thêm chữ hoa và số' },
+      { pct:'50%',  color:'#f59e0b', text:'Trung bình — thêm ký tự đặc biệt để mạnh hơn' },
+      { pct:'75%',  color:'#3b82f6', text:'Khá mạnh' },
+      { pct:'90%',  color:'#10b981', text:'Mạnh ✓' },
+      { pct:'100%', color:'#059669', text:'Rất mạnh ✓✓' }
+    ];
+    var lv = len === 0 ? levels[0] : levels[Math.min(score, 5)];
+    fill.style.width = lv.pct;
+    fill.style.background = lv.color;
+    label.textContent = lv.text;
+    label.style.color = lv.color === '#e2e8f0' ? '' : lv.color;
+  };
+})();
+</script>
+
 <!-- BRIGHTWAY CMS - SUPABASE LOADER (append by Claude) -->
 <script type="module">
   import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -4371,8 +4604,9 @@ window.addEventListener('load', function(){
         </div>
         <div class="auth-form-group">
           <label class="auth-form-label" for="regPassword">Mật khẩu</label>
-          <input type="password" class="auth-form-input" id="regPassword" required autocomplete="new-password" minlength="6" placeholder="Tối thiểu 6 ký tự">
-          <div class="auth-form-hint">Mật khẩu cần ít nhất 6 ký tự</div>
+          <input type="password" class="auth-form-input" id="regPassword" required autocomplete="new-password" minlength="6" placeholder="Tối thiểu 6 ký tự" oninput="window.__updatePwdStrength && window.__updatePwdStrength(this.value)">
+          <div id="pwdStrengthBar" style="height:4px;border-radius:2px;margin-top:6px;background:#e2e8f0;overflow:hidden;"><div id="pwdStrengthFill" style="height:100%;width:0;border-radius:2px;transition:all .3s;"></div></div>
+          <div id="pwdStrengthLabel" class="auth-form-hint" style="margin-top:4px;">Mật khẩu cần ít nhất 6 ký tự</div>
         </div>
         <button type="submit" class="auth-submit-btn" id="regSubmitBtn">Tạo tài khoản</button>
         <div class="auth-form-footer">
@@ -4569,13 +4803,25 @@ window.addEventListener('load', function(){
     loginForm.addEventListener('submit', async function(e){
       e.preventDefault();
       clearAlert();
+      // ── Rate limit check ──
+      var rl = window.__RateLimit && window.__RateLimit.check('login');
+      if (rl && !rl.allowed) {
+        showAlert('Quá nhiều lần thử. Vui lòng đợi ' + rl.waitMin + ' phút rồi thử lại.', 'error');
+        return;
+      }
+      // ── Input sanitize ──
+      var rawEmail = document.getElementById('loginEmail').value.trim();
+      var cleanEmail = window.__Sanitize ? window.__Sanitize.email(rawEmail) : rawEmail;
+      if (!cleanEmail) { showAlert('Địa chỉ email không hợp lệ.', 'error'); return; }
+      var pass = document.getElementById('loginPassword').value;
+      if (!pass || pass.length < 6) { showAlert('Mật khẩu phải có ít nhất 6 ký tự.', 'error'); return; }
+
       var btn = document.getElementById('loginSubmitBtn');
       setBusy(btn, true, 'Đang đăng nhập...');
-      var email = document.getElementById('loginEmail').value.trim();
-      var pass  = document.getElementById('loginPassword').value;
       try {
-        var res = await sb.auth.signInWithPassword({ email: email, password: pass });
+        var res = await sb.auth.signInWithPassword({ email: cleanEmail, password: pass });
         if(res.error) throw res.error;
+        if (window.__RateLimit) window.__RateLimit.reset('login');
         showAlert('Đăng nhập thành công!', 'success');
         setTimeout(closeModal, 600);
       } catch(err){
@@ -4592,24 +4838,37 @@ window.addEventListener('load', function(){
     regForm.addEventListener('submit', async function(e){
       e.preventDefault();
       clearAlert();
+      // ── Rate limit check ──
+      var rl = window.__RateLimit && window.__RateLimit.check('register');
+      if (rl && !rl.allowed) {
+        showAlert('Quá nhiều lần đăng ký. Vui lòng đợi ' + rl.waitMin + ' phút.', 'error');
+        return;
+      }
+      // ── Input sanitize ──
+      var rawName  = document.getElementById('regName').value.trim();
+      var cleanName = window.__Sanitize ? window.__Sanitize.displayName(rawName) : rawName;
+      if (!cleanName) { showAlert('Vui lòng nhập tên hiển thị hợp lệ.', 'error'); return; }
+      var rawEmail = document.getElementById('regEmail').value.trim();
+      var cleanEmail = window.__Sanitize ? window.__Sanitize.email(rawEmail) : rawEmail;
+      if (!cleanEmail) { showAlert('Địa chỉ email không hợp lệ.', 'error'); return; }
+      var pass = document.getElementById('regPassword').value;
+      var passCheck = window.__Sanitize ? window.__Sanitize.password(pass) : { ok: pass.length >= 6, msg: 'Mật khẩu cần ít nhất 6 ký tự', value: pass };
+      if (!passCheck.ok) { showAlert(passCheck.msg, 'error'); return; }
+
       var btn = document.getElementById('regSubmitBtn');
       setBusy(btn, true, 'Đang tạo tài khoản...');
-      var name  = document.getElementById('regName').value.trim();
-      var email = document.getElementById('regEmail').value.trim();
-      var pass  = document.getElementById('regPassword').value;
       try {
         var res = await sb.auth.signUp({
-          email: email,
-          password: pass,
+          email: cleanEmail,
+          password: passCheck.value,
           options: {
-            data: { display_name: name },
+            data: { display_name: cleanName },
             emailRedirectTo: location.origin + '/index.html'
           }
         });
         if(res.error) throw res.error;
-        // Nếu Supabase yêu cầu confirm email
         if(res.data.user && !res.data.session){
-          showAlert('✓ Đã gửi email xác nhận tới ' + email + '. Vui lòng kiểm tra hộp thư.', 'success');
+          showAlert('✓ Đã gửi email xác nhận tới ' + cleanEmail + '. Vui lòng kiểm tra hộp thư.', 'success');
         } else {
           showAlert('Tạo tài khoản thành công!', 'success');
           setTimeout(closeModal, 800);
@@ -4628,15 +4887,25 @@ window.addEventListener('load', function(){
     forgotForm.addEventListener('submit', async function(e){
       e.preventDefault();
       clearAlert();
+      // ── Rate limit check ──
+      var rl = window.__RateLimit && window.__RateLimit.check('forgot');
+      if (rl && !rl.allowed) {
+        showAlert('Quá nhiều yêu cầu. Vui lòng đợi ' + rl.waitMin + ' phút.', 'error');
+        return;
+      }
+      // ── Input sanitize ──
+      var rawEmail = document.getElementById('forgotEmail').value.trim();
+      var cleanEmail = window.__Sanitize ? window.__Sanitize.email(rawEmail) : rawEmail;
+      if (!cleanEmail) { showAlert('Địa chỉ email không hợp lệ.', 'error'); return; }
+
       var btn = document.getElementById('forgotSubmitBtn');
       setBusy(btn, true, 'Đang gửi...');
-      var email = document.getElementById('forgotEmail').value.trim();
       try {
-        var res = await sb.auth.resetPasswordForEmail(email, {
+        var res = await sb.auth.resetPasswordForEmail(cleanEmail, {
           redirectTo: location.origin + '/index.html'
         });
         if(res.error) throw res.error;
-        showAlert('✓ Đã gửi email đặt lại mật khẩu tới ' + email, 'success');
+        showAlert('✓ Đã gửi email đặt lại mật khẩu tới ' + cleanEmail, 'success');
       } catch(err){
         showAlert(err.message || 'Gửi email thất bại', 'error');
       } finally {
@@ -4828,9 +5097,9 @@ window.addEventListener('load', function(){
   openDbgBtn.title = 'Debug scroll (Ctrl+Shift+D)';
   openDbgBtn.style.cssText = [
     'position:fixed','bottom:10px','left:10px','z-index:2147483645',
-    'background:rgba(0,0,0,0.5)','color:#0f0','border:none',
-    'width:28px','height:28px','border-radius:50%','cursor:pointer',
-    'font-size:14px','padding:0'
+    'background:transparent','color:transparent','border:none',
+    'width:28px','height:28px','border-radius:50%','cursor:default',
+    'font-size:14px','padding:0','pointer-events:none'
   ].join(';');
   openDbgBtn.onclick = function(){
     debugPanel.style.display = 'block';
@@ -5194,4 +5463,3 @@ window.addEventListener('load', function(){
 
 </body>
 </html>
-    
