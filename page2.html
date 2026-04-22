@@ -973,8 +973,8 @@ const SCHOOLS = [
     logoFallback: "🌿",website:"https://tuyensinh.ntt.edu.vn/chinh-sach-hoc-bong",scholarships:[{title:"Học bổng tài năng / khuyến học",target:"Tân sinh viên & sinh viên",requirements:"Điểm đầu vào/GPA đạt chuẩn từng mức học bổng",timeline:"Theo đợt",note:"Kiểm tra website học bổng từng năm"},{title:"Học bổng vượt khó",target:"Sinh viên có hoàn cảnh khó khăn",requirements:"Hồ sơ minh chứng + kết quả học tập/rèn luyện phù hợp",timeline:"Theo đợt",note:"Số lượng & mức hỗ trợ tùy quỹ"}]},
   {id:"hcmut-ai",name:"Đại học Bách khoa – ĐHQG TP.HCM",short:"HCMUT",city:"TP.HCM",logoUrl: "https://logo.clearbit.com/hcmut.edu.vn",
     logoFallback: "🤖",website:"https://oisp.hcmut.edu.vn/tuyen-sinh/hoc-bong",scholarships:[{title:"Học bổng khuyến khích học tập",target:"Sinh viên đang học",requirements:"GPA & rèn luyện theo quy định học kỳ",timeline:"Xét theo học kỳ",note:"Có thể đạt mức cao tùy kết quả"},{title:"Học bổng doanh nghiệp AI/Robotics",target:"Sinh viên có dự án/portfolio",requirements:"Tham gia CLB, dự án, NCKH; phỏng vấn (tùy đợt)",timeline:"Theo đợt",note:"Theo dõi thông báo Khoa/CTSV"}]},
-  {id:"uit",name:"Đại học Công nghệ Thông tin – ĐHQG TP.HCM",short:"UIT",city:"TP.HCM",logoUrl: "https://logo.clearbit.com/uit.edu.vn",
-    logoFallback: "💻",website:"https://www.uit.edu.vn/chinh-sach-hoc-bong-tai-uit",scholarships:[{title:"Học bổng khuyến khích học tập",target:"Sinh viên đang học",requirements:"GPA tốt + rèn luyện đạt chuẩn",timeline:"Theo học kỳ/năm",note:"Thường xét theo kết quả học tập"},{title:"Học bổng doanh nghiệp (AI/Data)",target:"Sinh viên có năng lực nổi bật",requirements:"Thành tích học tập/giải thưởng/portfolio là lợi thế",timeline:"Theo đợt",note:"Các đơn vị tài trợ thay đổi theo năm"}]},
+  {id:"uit-ai",name:"Đại học Công nghệ Thông tin – ĐHQG TP.HCM (AI/Data)",short:"UIT AI",city:"TP.HCM",logoUrl: "https://logo.clearbit.com/uit.edu.vn",
+    logoFallback: "🤖",website:"https://www.uit.edu.vn/chinh-sach-hoc-bong-tai-uit",scholarships:[{title:"Học bổng khuyến khích học tập",target:"Sinh viên đang học",requirements:"GPA tốt + rèn luyện đạt chuẩn",timeline:"Theo học kỳ/năm",note:"Thường xét theo kết quả học tập"},{title:"Học bổng doanh nghiệp (AI/Data)",target:"Sinh viên có năng lực nổi bật",requirements:"Thành tích học tập/giải thưởng/portfolio là lợi thế",timeline:"Theo đợt",note:"Các đơn vị tài trợ thay đổi theo năm"}]},
   {id:"fpt-ai",name:"Đại học FPT",short:"FPTU",city:"TP.HCM/Cần Thơ/...",logoUrl: "https://logo.clearbit.com/daihoc.fpt.edu.vn",
     logoFallback: "🤖",website:"https://daihoc.fpt.edu.vn/hoc-bong/",scholarships:[{title:"Học bổng toàn phần / bán phần (toàn khóa)",target:"Tân sinh viên",requirements:"Xét học bạ/điểm thi + thành tích + phỏng vấn/thi (tùy đợt)",timeline:"Theo đợt tuyển sinh",note:"Điều kiện thay đổi theo năm"},{title:"Học bổng theo kỳ thi học bổng",target:"Học sinh THPT",requirements:"Tham gia kỳ thi học bổng của FPTU",timeline:"Theo lịch trường",note:"Cần theo dõi lịch thi/đăng ký"}]},
   {id:"hcmiu",name:"Đại học Quốc tế – ĐHQG TP.HCM",short:"HCMIU",city:"TP.HCM",logoUrl: "https://logo.clearbit.com/hcmiu.edu.vn",
@@ -1574,15 +1574,25 @@ const mainContent = document.getElementById('mainContent');
 let searchTerm = '';
 
 function renderSidebar(schools) {
-  const titleHtml = '<div class="p2-sidebar-title">📚 Danh sách trường</div>';
-  const linksHtml = schools.map(s =>
-    `<a href="#${s.id}" data-id="${s.id}" onclick="highlightSection('${s.id}')">${s.logoFallback || '🏫'} ${s.short}</a>`
-  ).join('');
-  const essayLinkHtml = `
-    <div class="essay-sidebar-label">Hướng dẫn</div>
-    <a href="#viet-luan" data-id="viet-luan" onclick="highlightSection('viet-luan')" style="color:#6366f1;background:rgba(99,102,241,0.07);border-left:3px solid #6366f1;">✍️ Bí quyết viết luận</a>
-  `;
-  sidebar.innerHTML = titleHtml + linksHtml + essayLinkHtml;
+  if (!sidebar) return;
+  try {
+    const titleHtml = '<div class="p2-sidebar-title">📚 Danh sách trường</div>';
+    const safeSchools = Array.isArray(schools) ? schools : [];
+    const linksHtml = safeSchools.map(s =>
+      `<a href="#${s.id}" data-id="${s.id}" onclick="highlightSection('${s.id}')">${s.logoFallback || '🏫'} ${s.short || s.name || '---'}</a>`
+    ).join('');
+    const emptyMsg = safeSchools.length === 0
+      ? '<div style="padding:12px;color:#6b7280;font-size:.8rem;">Không có trường nào khớp từ khóa.</div>'
+      : '';
+    const essayLinkHtml = `
+      <div class="essay-sidebar-label">Hướng dẫn</div>
+      <a href="#viet-luan" data-id="viet-luan" onclick="highlightSection('viet-luan')" style="color:#6366f1;background:rgba(99,102,241,0.07);border-left:3px solid #6366f1;">✍️ Bí quyết viết luận</a>
+    `;
+    sidebar.innerHTML = titleHtml + linksHtml + emptyMsg + essayLinkHtml;
+  } catch (err) {
+    console.error('[renderSidebar] error:', err);
+    sidebar.innerHTML = '<div class="p2-sidebar-title">📚 Danh sách trường</div><div style="padding:12px;color:#dc2626;font-size:.8rem;">Lỗi hiển thị danh sách. Vui lòng tải lại trang.</div>';
+  }
 }
 
 function renderSchools(schools) {
@@ -1655,13 +1665,36 @@ function renderSchools(schools) {
   });
 }
 
+// Normalize Vietnamese text: lowercase + remove diacritics for accent-insensitive search
+function normalizeText(str) {
+  return (str || '')
+    .toString()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .trim();
+}
+
 function filterSchools(val) {
-  searchTerm = val.toLowerCase().trim();
-  const filtered = SCHOOLS.filter(s =>
-    (s.name + ' ' + s.short + ' ' + s.city).toLowerCase().includes(searchTerm)
-  );
-  renderSidebar(filtered);
-  renderSchools(filtered);
+  try {
+    searchTerm = normalizeText(val);
+    const filtered = !searchTerm ? SCHOOLS : SCHOOLS.filter(s => {
+      const haystack = normalizeText(s.name + ' ' + s.short + ' ' + s.city);
+      return haystack.includes(searchTerm);
+    });
+    renderSidebar(filtered);
+    renderSchools(filtered);
+    // Rebuild observer for newly rendered sections
+    try {
+      setupObserver([...filtered.map(s => s.id), 'viet-luan']);
+    } catch (e) { /* observer is optional */ }
+  } catch (err) {
+    console.error('[filterSchools] error:', err);
+    // Fallback: render full list so the UI never stays empty
+    renderSidebar(SCHOOLS);
+    renderSchools(SCHOOLS);
+  }
 }
 
 function highlightSection(id) {
@@ -1739,12 +1772,23 @@ function toggleAccordion(card) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  renderSidebar(SCHOOLS);
-  renderSchools(SCHOOLS);
-  setupObserver([...SCHOOLS.map(s => s.id), 'viet-luan']);
-
+  try {
+    renderSidebar(SCHOOLS);
+    renderSchools(SCHOOLS);
+  } catch (e) {
+    console.error('[init render] error:', e);
+  }
+  try {
+    if (typeof IntersectionObserver !== 'undefined') {
+      setupObserver([...SCHOOLS.map(s => s.id), 'viet-luan']);
+    }
+  } catch (e) {
+    console.error('[init observer] error:', e);
+  }
   // Delay a bit to ensure layout is ready
-  setTimeout(scrollToTargetFromUrl, 150);
+  setTimeout(() => {
+    try { scrollToTargetFromUrl(); } catch (e) { console.error('[scrollTo] error:', e); }
+  }, 150);
 });
 
 window.addEventListener('hashchange', () => {
