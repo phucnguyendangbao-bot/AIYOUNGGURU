@@ -468,6 +468,13 @@ html { scroll-behavior: smooth; }
 </footer>
 
 <script>
+(function() {
+  // Guard: nếu script đã chạy 1 lần trên document này thì thoát, tránh re-declare
+  if (window.__BRIGHTWAY_PAGE2_INITIALIZED__) {
+    return;
+  }
+  window.__BRIGHTWAY_PAGE2_INITIALIZED__ = true;
+
 /* ═══════════════════════════════════════
    SCHOLARSHIP DATA
 ═══════════════════════════════════════ */
@@ -1771,7 +1778,7 @@ function toggleAccordion(card) {
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+function initPage2() {
   try {
     renderSidebar(SCHOOLS);
     renderSchools(SCHOOLS);
@@ -1789,11 +1796,27 @@ window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     try { scrollToTargetFromUrl(); } catch (e) { console.error('[scrollTo] error:', e); }
   }, 150);
-});
+}
+
+// Run init now if DOM is already ready (script may be injected after DOMContentLoaded by SPA),
+// otherwise wait for the event.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initPage2);
+} else {
+  initPage2();
+}
 
 window.addEventListener('hashchange', () => {
   setTimeout(scrollToTargetFromUrl, 50);
 });
+
+// Expose functions that are referenced by inline HTML handlers (oninput/onclick)
+// so they remain callable even though our code runs inside an IIFE.
+window.filterSchools    = filterSchools;
+window.highlightSection = highlightSection;
+window.toggleAccordion  = toggleAccordion;
+
+})(); // end IIFE
 </script>
 </body>
 </html>
