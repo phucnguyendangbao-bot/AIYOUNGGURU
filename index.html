@@ -937,17 +937,196 @@ body{
 .page1-left,.page1-right{padding:22px 26px 26px;}
 .page1-right{display:flex; flex-direction:column; gap:0;}
 .page1-right section + section{margin-top:30px;padding-top:28px;border-top:1px solid #e6eef7;}
-.page1-topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 0 16px;border-bottom:1px solid #e8f0f7;}
-.page1-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#0f172a;font-weight:800;min-width:max-content;}
-.page1-brand-logo{width:42px;height:42px;border-radius:14px;overflow:hidden;box-shadow:0 8px 18px rgba(53,109,255,.16);border:1px solid rgba(82,142,255,.18);background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+/* ── SIDEBAR LAYOUT ── */
+body{
+  padding-left:64px !important;
+}
+.page1-shell{
+  display:block !important;
+  padding:18px 18px 30px !important;
+  margin-top:0 !important;
+  max-width:100% !important;
+}
+.page1-left{
+  display:none !important;
+}
+.page1-right{
+  width:100%;
+  margin:0;
+  border-radius:28px;
+}
+
+/* ── SIDEBAR ITSELF ── */
+.page1-topbar{
+  position:fixed;
+  top:0;
+  left:0;
+  height:100vh;
+  width:64px;               /* collapsed */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px 0 24px;
+  gap:0;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(18px);
+  border-right:1px solid rgba(220,230,245,0.7);
+  box-shadow:4px 0 28px rgba(37,99,235,0.07);
+  transition:width .28s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+  z-index:100;
+  flex-shrink:0;
+}
+.page1-topbar:hover,
+.page1-topbar.expanded{
+  width:230px;
+}
+/* .page1-left giữ nguyên width 64px làm spacer (không hiển thị gì) */
+/* .page1-right đẩy sang phải đúng bằng sidebar width */
+
+/* Brand / logo at top */
+.page1-brand{
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;color:#0f172a;font-weight:800;
+  padding:0 11px 20px;
+  border-bottom:1px solid #e8f0f7;
+  width:100%;
+  white-space:nowrap;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.page1-brand-logo{
+  width:42px;height:42px;border-radius:14px;overflow:hidden;
+  box-shadow:0 8px 18px rgba(53,109,255,.16);
+  border:1px solid rgba(82,142,255,.18);
+  background:#fff;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
 .page1-brand-logo img{width:88%;height:88%;object-fit:contain;display:block;}
-.page1-brand-copy{display:flex;flex-direction:column;line-height:1.1;}
-.page1-brand-text{font-size:1.02rem;font-weight:900;}
-.page1-brand-sub{font-size:.74rem;color:#64748b;font-weight:700;letter-spacing:.02em;}
-.page1-navlinks{display:flex;align-items:center;gap:22px;flex:1;justify-content:center;}
-.page1-navlinks a{font-size:.94rem;color:#475569;text-decoration:none;font-weight:600;}
-.page1-navlinks a:hover{color:#2563eb;}
-.page1-navcta{display:inline-flex;align-items:center;justify-content:center;padding:11px 18px;border-radius:999px;background:linear-gradient(135deg,#2f80ff,#2563eb);color:#fff;text-decoration:none;font-weight:800;font-size:.92rem;box-shadow:0 12px 24px rgba(37,99,235,.18);}
+.page1-brand-copy{
+  display:flex;flex-direction:column;line-height:1.1;
+  opacity:0;transform:translateX(-8px);
+  transition:opacity .2s .05s,transform .2s .05s;
+  min-width:0;
+}
+.page1-topbar:hover .page1-brand-copy,
+.page1-topbar.expanded .page1-brand-copy{
+  opacity:1;transform:translateX(0);
+}
+.page1-brand-text{font-size:1.02rem;font-weight:900;white-space:nowrap;}
+.page1-brand-sub{font-size:.74rem;color:#64748b;font-weight:700;letter-spacing:.02em;white-space:nowrap;}
+
+/* Nav links */
+.page1-navlinks{
+  display:flex;flex-direction:column;
+  align-items:flex-start;
+  gap:2px;
+  flex:1;
+  padding:14px 8px 0;
+  width:100%;
+  overflow:hidden;
+}
+.page1-navlinks a{
+  display:flex;align-items:center;gap:12px;
+  font-size:.93rem;color:#475569;text-decoration:none;font-weight:600;
+  padding:9px 10px;border-radius:12px;
+  white-space:nowrap;width:100%;
+  transition:background .18s,color .18s;
+}
+.page1-navlinks a:hover{color:#2563eb;background:rgba(37,99,235,0.07);}
+/* Icon for each nav item */
+.page1-navlinks a::before{
+  content:attr(data-icon);
+  font-size:1.15rem;
+  flex-shrink:0;
+  width:26px;text-align:center;
+  display:block;
+}
+.page1-navlinks a span{
+  opacity:0;transform:translateX(-6px);
+  transition:opacity .18s .04s, transform .18s .04s;
+  white-space:nowrap;
+}
+.page1-topbar:hover .page1-navlinks a span,
+.page1-topbar.expanded .page1-navlinks a span{
+  opacity:1;transform:translateX(0);
+}
+
+/* CTA + auth at bottom */
+.auth-nav-group{
+  display:flex;flex-direction:column;align-items:center;
+  gap:8px;padding:12px 8px 0;width:100%;
+  border-top:1px solid #e8f0f7;
+  overflow:hidden;
+}
+.page1-navcta{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:10px 14px;border-radius:999px;
+  background:linear-gradient(135deg,#2f80ff,#2563eb);
+  color:#fff;text-decoration:none;font-weight:800;font-size:.88rem;
+  box-shadow:0 8px 20px rgba(37,99,235,.22);
+  width:42px;height:42px;overflow:hidden;
+  transition:width .22s,padding .22s,border-radius .22s;
+  white-space:nowrap;
+}
+.page1-topbar:hover .page1-navcta,
+.page1-topbar.expanded .page1-navcta{
+  width:calc(100% - 16px);height:auto;padding:10px 18px;border-radius:999px;
+}
+.page1-navcta .nav-cta-icon{flex-shrink:0;font-size:1rem;}
+.page1-navcta .nav-cta-label{
+  opacity:0;max-width:0;overflow:hidden;
+  transition:opacity .18s .04s,max-width .22s;
+}
+.page1-topbar:hover .page1-navcta .nav-cta-label,
+.page1-topbar.expanded .page1-navcta .nav-cta-label{
+  opacity:1;max-width:160px;
+}
+
+/* Mobile hamburger */
+#sidebarHamburger{
+  display:none;
+  position:fixed;top:14px;left:14px;z-index:200;
+  width:42px;height:42px;border-radius:12px;
+  background:rgba(255,255,255,0.92);
+  border:1px solid rgba(220,230,245,.9);
+  box-shadow:0 4px 16px rgba(37,99,235,.12);
+  cursor:pointer;
+  flex-direction:column;justify-content:center;align-items:center;gap:5px;
+  backdrop-filter:blur(10px);
+}
+#sidebarHamburger span{width:18px;height:2px;background:#2563eb;border-radius:2px;display:block;transition:all .3s;}
+
+/* Mobile overlay */
+#sidebarOverlay{
+  display:none;
+  position:fixed;inset:0;z-index:149;
+  background:rgba(10,20,50,0.32);
+  backdrop-filter:blur(3px);
+}
+#sidebarOverlay.open{display:block;}
+
+@media(max-width:900px){
+  body{ padding-left:0 !important; }
+  .page1-shell{ flex-direction:column !important; padding:0 12px 24px !important; }
+  .page1-left{ display:none !important; }
+  .page1-right{ margin:68px 0 24px !important; border-radius:20px; }
+  .page1-topbar{
+    position:fixed;left:0;top:0;height:100vh;
+    width:230px !important;
+    transform:translateX(-100%);
+    transition:transform .28s cubic-bezier(.4,0,.2,1);
+    z-index:150;
+  }
+  .page1-topbar.mobile-open{ transform:translateX(0); }
+  /* always show text on mobile when open */
+  .page1-topbar .page1-brand-copy,
+  .page1-topbar .page1-navlinks a span,
+  .page1-topbar .page1-navcta .nav-cta-label{ opacity:1 !important; transform:none !important; max-width:160px !important; }
+  .page1-topbar .page1-navcta{ width:calc(100% - 16px) !important; height:auto !important; padding:10px 18px !important; }
+  #sidebarHamburger{ display:flex; }
+  #tipsTicker{ margin-left:0 !important; }
+}
 .page1-hero{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);gap:26px;align-items:center;padding:28px 2px 26px;}
 .page1-hero h1{font-size:2.75rem;line-height:1.1;margin:0 0 14px;color:#0f172a;font-weight:900;max-width:620px;}
 .page1-hero p{font-size:1rem;line-height:1.7;color:#5b6475;margin:0 0 22px;max-width:560px;}
@@ -1034,10 +1213,7 @@ body{
 .lp-footer-links a{color:rgba(255,255,255,.82) !important;}
 .lp-footer-social{justify-self:end;}
 body > footer.lp-footer{display:none !important;}
-@media(max-width:900px){
-  .page1-hero{grid-template-columns:1fr;}
-  .page1-navlinks{display:none;}
-}
+/* mobile sidebar handled above */
 @media(max-width:640px){
   .page1-shell{padding:0 12px 18px;gap:18px;}
   .page1-left,.page1-right{padding:16px;}
@@ -1052,7 +1228,9 @@ body > footer.lp-footer{display:none !important;}
 
 
 /* scroll-behavior smooth đã xóa để tránh Edge compositor freeze */
-body{overflow-x:hidden;}
+/* overflow-x chuyển lên html để không block padding-left của body */
+html{overflow-x:hidden;}
+body{overflow-x:visible;}
 .page1-panel,
 .sn-hero-card,
 .sn-profile-card,
@@ -1778,53 +1956,62 @@ body.spa-active #spa-topbar { display: flex; }
   </div>
 </div>
 
-<!-- NAVBAR -->
+<!-- MOBILE HAMBURGER -->
+<button id="sidebarHamburger" aria-label="Mở menu">
+  <span></span><span></span><span></span>
+</button>
+<div id="sidebarOverlay"></div>
 
-<div class="page1-shell">
-  <div class="page1-panel page1-left">
-    <div class="page1-topbar">
-      <a href="#home" class="page1-brand">
-        <span class="page1-brand-logo"><img src="/favicon.png" alt="BrightWay Scholars logo" loading="lazy" decoding="async"></span>
-        <span class="page1-brand-copy">
-          <span class="page1-brand-text">BrightWay Scholars</span>
-          <span class="page1-brand-sub">Học bổng đại học</span>
-        </span>
-      </a>
-      <div class="page1-navlinks">
-        <a href="#sectors">Ngành học</a>
-        <a href="#tool">Trường</a>
-        <a href="#tool">Học bổng</a>
-        <a href="careers.html">Khám phá bản thân</a>
-        <a href="#features">Hướng dẫn</a>
-        <a href="#contact">Liên hệ</a>
-      </div>
-      <div class="auth-nav-group">
-        <a href="#tool" class="page1-navcta">Tìm học bổng</a>
-        <button type="button" class="auth-btn" id="authLoginBtn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <span class="btn-txt">Đăng nhập</span>
-        </button>
-        <div class="auth-user-chip" id="authUserChip" style="display:none;">
-          <div class="auth-user-avatar" id="authUserAvatar">?</div>
-          <span class="auth-user-name" id="authUserName">User</span>
-          <span class="auth-user-caret">▼</span>
-          <div class="auth-dropdown" id="authDropdown">
-            <div class="auth-dropdown-header">
-              <div class="auth-dropdown-name" id="authDropName">User</div>
-              <div class="auth-dropdown-email" id="authDropEmail">...</div>
-            </div>
-            <button class="auth-dropdown-item" id="authGoCalendar">
-              <span>📅</span><span>Lịch kế hoạch của tôi</span>
-            </button>
-            <div class="auth-dropdown-divider"></div>
-            <button class="auth-dropdown-item danger" id="authLogoutBtn">
-              <span>🚪</span><span>Đăng xuất</span>
-            </button>
-          </div>
+<!-- SIDEBAR (độc lập, position:fixed, ngoài page1-shell) -->
+<div class="page1-topbar" id="mainSidebar">
+  <a href="#home" class="page1-brand">
+    <span class="page1-brand-logo"><img src="/favicon.png" alt="BrightWay Scholars logo" loading="lazy" decoding="async"></span>
+    <span class="page1-brand-copy">
+      <span class="page1-brand-text">BrightWay Scholars</span>
+      <span class="page1-brand-sub">Học bổng đại học</span>
+    </span>
+  </a>
+  <div class="page1-navlinks">
+    <a href="#sectors" data-icon="🎓"><span>Ngành học</span></a>
+    <a href="#tool" data-icon="🏫"><span>Trường</span></a>
+    <a href="#tool" data-icon="💰"><span>Học bổng</span></a>
+    <a href="careers.html" data-icon="🔍"><span>Khám phá bản thân</span></a>
+    <a href="#features" data-icon="📖"><span>Hướng dẫn</span></a>
+    <a href="#contact" data-icon="📩"><span>Liên hệ</span></a>
+  </div>
+  <div class="auth-nav-group">
+    <a href="#tool" class="page1-navcta">
+      <span class="nav-cta-icon">🔎</span>
+      <span class="nav-cta-label">Tìm học bổng</span>
+    </a>
+    <button type="button" class="auth-btn" id="authLoginBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span class="btn-txt">Đăng nhập</span>
+    </button>
+    <div class="auth-user-chip" id="authUserChip" style="display:none;">
+      <div class="auth-user-avatar" id="authUserAvatar">?</div>
+      <span class="auth-user-name" id="authUserName">User</span>
+      <span class="auth-user-caret">▼</span>
+      <div class="auth-dropdown" id="authDropdown">
+        <div class="auth-dropdown-header">
+          <div class="auth-dropdown-name" id="authDropName">User</div>
+          <div class="auth-dropdown-email" id="authDropEmail">...</div>
         </div>
+        <button class="auth-dropdown-item" id="authGoCalendar">
+          <span>📅</span><span>Lịch kế hoạch của tôi</span>
+        </button>
+        <div class="auth-dropdown-divider"></div>
+        <button class="auth-dropdown-item danger" id="authLogoutBtn">
+          <span>🚪</span><span>Đăng xuất</span>
+        </button>
       </div>
     </div>
+  </div>
+</div>
 
+<div class="page1-shell">
+
+  <div class="page1-panel page1-right">
     <section class="page1-hero" id="home">
       <div>
         <h1>Khám phá học bổng đại học phù hợp với bạn</h1>
@@ -1955,9 +2142,7 @@ body.spa-active #spa-topbar { display: flex; }
         <a href="#tool" class="page1-more-link">More ›</a>
       </div>
     </section>
-  </div>
 
-  <div class="page1-panel page1-right">
     <section>
       <h2>🏆 Bảng xếp hạng Đại học Việt Nam <span style="font-size:.7em;font-weight:600;color:#6b7280;">Nguồn: VNUR 2025</span></h2>
       <div class="vnur-table-wrap">
@@ -3708,239 +3893,6 @@ window.addEventListener('load', function(){
     </div>
   </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     BRIGHTWAY SECURITY MODULE v1.0
-     Tăng cường bảo mật: CSP, Rate Limit, XSS, Session, Input Sanitize
-═══════════════════════════════════════════════════════ -->
-<script>
-(function(){
-  'use strict';
-
-  /* ─── 1. CONTENT SECURITY & HEADERS META ─── */
-  // Thêm meta referrer để tránh lộ referer khi click link ngoài
-  if (!document.querySelector('meta[name="referrer"]')) {
-    var refMeta = document.createElement('meta');
-    refMeta.name = 'referrer';
-    refMeta.content = 'strict-origin-when-cross-origin';
-    document.head.appendChild(refMeta);
-  }
-
-  /* ─── 2. RATE LIMITER - Chống brute force auth ─── */
-  var RateLimit = (function(){
-    var PREFIX = 'bws_rl_';
-    var RULES = {
-      login:    { max: 5,  windowMs: 15 * 60 * 1000, label: 'Đăng nhập' },
-      register: { max: 3,  windowMs: 60 * 60 * 1000, label: 'Đăng ký' },
-      forgot:   { max: 3,  windowMs: 60 * 60 * 1000, label: 'Quên mật khẩu' }
-    };
-
-    function getRecord(action){
-      try {
-        var raw = sessionStorage.getItem(PREFIX + action);
-        return raw ? JSON.parse(raw) : { count: 0, resetAt: Date.now() + RULES[action].windowMs };
-      } catch(e) { return { count: 0, resetAt: Date.now() + RULES[action].windowMs }; }
-    }
-    function saveRecord(action, rec){
-      try { sessionStorage.setItem(PREFIX + action, JSON.stringify(rec)); } catch(e) {}
-    }
-
-    return {
-      check: function(action){
-        var rule = RULES[action];
-        if (!rule) return { allowed: true };
-        var rec = getRecord(action);
-        var now = Date.now();
-        if (now > rec.resetAt) {
-          rec = { count: 0, resetAt: now + rule.windowMs };
-        }
-        if (rec.count >= rule.max) {
-          var waitSec = Math.ceil((rec.resetAt - now) / 1000);
-          var waitMin = Math.ceil(waitSec / 60);
-          return { allowed: false, waitMin: waitMin, waitSec: waitSec };
-        }
-        rec.count++;
-        saveRecord(action, rec);
-        return { allowed: true, remaining: rule.max - rec.count };
-      },
-      reset: function(action){
-        try { sessionStorage.removeItem(PREFIX + action); } catch(e) {}
-      }
-    };
-  })();
-  window.__RateLimit = RateLimit;
-
-  /* ─── 3. INPUT SANITIZER ─── */
-  var Sanitize = {
-    // Xóa các ký tự có thể gây XSS trong text thuần
-    text: function(s) {
-      return String(s || '').replace(/[<>"'`]/g, '').trim().slice(0, 500);
-    },
-    // Chỉ cho phép email hợp lệ
-    email: function(s) {
-      var v = String(s || '').trim().toLowerCase().slice(0, 254);
-      return /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(v) ? v : null;
-    },
-    // Mật khẩu: kiểm tra độ mạnh cơ bản
-    password: function(s) {
-      var v = String(s || '');
-      if (v.length < 6)  return { ok: false, msg: 'Mật khẩu cần ít nhất 6 ký tự' };
-      if (v.length > 72) return { ok: false, msg: 'Mật khẩu quá dài (tối đa 72 ký tự)' };
-      return { ok: true, value: v };
-    },
-    // Tên hiển thị
-    displayName: function(s) {
-      return String(s || '').replace(/[<>&"]/g, '').trim().slice(0, 50);
-    }
-  };
-  window.__Sanitize = Sanitize;
-
-  /* ─── 4. SESSION TIMEOUT - Tự động logout sau 2 giờ không hoạt động ─── */
-  var SessionGuard = (function(){
-    var TIMEOUT_MS = 2 * 60 * 60 * 1000; // 2 giờ
-    var WARN_MS    = 5 * 60 * 1000;       // cảnh báo trước 5 phút
-    var timer = null, warnTimer = null;
-    var isActive = false;
-
-    function resetTimer(){
-      if (!isActive) return;
-      clearTimeout(timer);
-      clearTimeout(warnTimer);
-      warnTimer = setTimeout(function(){
-        // Cảnh báo nhẹ qua console (không dùng alert để không làm phiền)
-        console.info('[BrightWay Security] Phiên sẽ hết hạn sau 5 phút do không hoạt động.');
-      }, TIMEOUT_MS - WARN_MS);
-      timer = setTimeout(function(){
-        console.info('[BrightWay Security] Phiên hết hạn → đăng xuất tự động.');
-        window.dispatchEvent(new CustomEvent('session-timeout'));
-        stop();
-      }, TIMEOUT_MS);
-    }
-
-    var EVENTS = ['click','keydown','scroll','mousemove','touchstart'];
-    function onActivity(){ resetTimer(); }
-
-    function start(){
-      if (isActive) return;
-      isActive = true;
-      EVENTS.forEach(function(ev){ document.addEventListener(ev, onActivity, { passive: true }); });
-      resetTimer();
-    }
-    function stop(){
-      isActive = false;
-      clearTimeout(timer);
-      clearTimeout(warnTimer);
-      EVENTS.forEach(function(ev){ document.removeEventListener(ev, onActivity); });
-    }
-
-    // Lắng nghe auth-changed để bật/tắt session guard
-    window.addEventListener('auth-changed', function(e){
-      var user = e.detail && e.detail.user;
-      if (user) start();
-      else stop();
-    });
-
-    // Khi timeout → tự động signOut
-    window.addEventListener('session-timeout', function(){
-      function doSignOut(){
-        if (window.__sb && window.__sb.auth) {
-          window.__sb.auth.signOut().catch(function(){});
-        }
-      }
-      if (window.__sb) doSignOut();
-      else window.addEventListener('sb-ready', doSignOut, { once: true });
-    });
-
-    return { start: start, stop: stop, reset: resetTimer };
-  })();
-  window.__SessionGuard = SessionGuard;
-
-  /* ─── 5. CLICKJACKING PROTECTION ─── */
-  if (window.self !== window.top) {
-    // Trang đang bị nhúng trong iframe → ẩn nội dung
-    document.documentElement.style.display = 'none';
-    console.warn('[BrightWay Security] Phát hiện iframe embedding — bị chặn.');
-  }
-
-  /* ─── 6. LOCAL STORAGE INTEGRITY CHECK ─── */
-  // Kiểm tra và làm sạch dữ liệu localStorage nếu có giá trị bất thường
-  (function cleanStorage(){
-    var SAFE_KEYS = ['bws_calendar_events_v1', 'bw_daynote_v1_'];
-    try {
-      var keysToRemove = [];
-      for (var i = 0; i < localStorage.length; i++) {
-        var key = localStorage.key(i);
-        if (!key) continue;
-        // Chỉ giữ các key thuộc về ứng dụng
-        var isSafe = SAFE_KEYS.some(function(sk){ return key.startsWith(sk); });
-        if (!isSafe && key.startsWith('bws_') || key.startsWith('bw_')) {
-          // Key bất thường không thuộc whitelist → kiểm tra giá trị
-          var val = localStorage.getItem(key);
-          if (val && /<script/i.test(val)) {
-            keysToRemove.push(key);
-          }
-        }
-      }
-      keysToRemove.forEach(function(k){ localStorage.removeItem(k); });
-    } catch(e) {}
-  })();
-
-  /* ─── 7. CONSOLE WARNING cho devtools ─── */
-  var warnStyle = 'color:#ef4444;font-size:18px;font-weight:bold;';
-  var infoStyle = 'color:#6366f1;font-size:13px;';
-  console.log('%c⚠ CẢNH BÁO BẢO MẬT', warnStyle);
-  console.log('%cĐây là công cụ dành cho nhà phát triển. Không dán bất kỳ mã lạ nào vào đây — điều đó có thể gây lộ thông tin tài khoản của bạn.', infoStyle);
-
-  /* ─── 8. PREVENT OPEN REDIRECT trong SPA links ─── */
-  // Chặn các href có thể redirect ra ngoài domain không an toàn
-  document.addEventListener('click', function(e){
-    var a = e.target.closest && e.target.closest('a[href]');
-    if (!a) return;
-    var href = a.getAttribute('href') || '';
-    // Kiểm tra javascript: protocol
-    if (/^\s*javascript\s*:/i.test(href)) {
-      e.preventDefault();
-      console.warn('[BrightWay Security] Blocked javascript: link');
-      return;
-    }
-    // Kiểm tra data: protocol
-    if (/^\s*data\s*:/i.test(href)) {
-      e.preventDefault();
-      console.warn('[BrightWay Security] Blocked data: link');
-      return;
-    }
-  }, true);
-
-  console.info('[BrightWay Security] Module v1.0 đã khởi động.');
-
-  /* ─── 9. PASSWORD STRENGTH METER ─── */
-  window.__updatePwdStrength = function(val){
-    var fill  = document.getElementById('pwdStrengthFill');
-    var label = document.getElementById('pwdStrengthLabel');
-    if (!fill || !label) return;
-    var len = val.length;
-    var score = 0;
-    if (len >= 6)  score++;
-    if (len >= 10) score++;
-    if (/[A-Z]/.test(val)) score++;
-    if (/[0-9]/.test(val)) score++;
-    if (/[^A-Za-z0-9]/.test(val)) score++;
-    var levels = [
-      { pct:'0%',   color:'#e2e8f0', text:'Mật khẩu cần ít nhất 6 ký tự' },
-      { pct:'25%',  color:'#ef4444', text:'Yếu — nên thêm chữ hoa và số' },
-      { pct:'50%',  color:'#f59e0b', text:'Trung bình — thêm ký tự đặc biệt để mạnh hơn' },
-      { pct:'75%',  color:'#3b82f6', text:'Khá mạnh' },
-      { pct:'90%',  color:'#10b981', text:'Mạnh ✓' },
-      { pct:'100%', color:'#059669', text:'Rất mạnh ✓✓' }
-    ];
-    var lv = len === 0 ? levels[0] : levels[Math.min(score, 5)];
-    fill.style.width = lv.pct;
-    fill.style.background = lv.color;
-    label.textContent = lv.text;
-    label.style.color = lv.color === '#e2e8f0' ? '' : lv.color;
-  };
-})();
-</script>
-
 <!-- BRIGHTWAY CMS - SUPABASE LOADER (append by Claude) -->
 <script type="module">
   import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -4604,9 +4556,8 @@ window.addEventListener('load', function(){
         </div>
         <div class="auth-form-group">
           <label class="auth-form-label" for="regPassword">Mật khẩu</label>
-          <input type="password" class="auth-form-input" id="regPassword" required autocomplete="new-password" minlength="6" placeholder="Tối thiểu 6 ký tự" oninput="window.__updatePwdStrength && window.__updatePwdStrength(this.value)">
-          <div id="pwdStrengthBar" style="height:4px;border-radius:2px;margin-top:6px;background:#e2e8f0;overflow:hidden;"><div id="pwdStrengthFill" style="height:100%;width:0;border-radius:2px;transition:all .3s;"></div></div>
-          <div id="pwdStrengthLabel" class="auth-form-hint" style="margin-top:4px;">Mật khẩu cần ít nhất 6 ký tự</div>
+          <input type="password" class="auth-form-input" id="regPassword" required autocomplete="new-password" minlength="6" placeholder="Tối thiểu 6 ký tự">
+          <div class="auth-form-hint">Mật khẩu cần ít nhất 6 ký tự</div>
         </div>
         <button type="submit" class="auth-submit-btn" id="regSubmitBtn">Tạo tài khoản</button>
         <div class="auth-form-footer">
@@ -4803,25 +4754,13 @@ window.addEventListener('load', function(){
     loginForm.addEventListener('submit', async function(e){
       e.preventDefault();
       clearAlert();
-      // ── Rate limit check ──
-      var rl = window.__RateLimit && window.__RateLimit.check('login');
-      if (rl && !rl.allowed) {
-        showAlert('Quá nhiều lần thử. Vui lòng đợi ' + rl.waitMin + ' phút rồi thử lại.', 'error');
-        return;
-      }
-      // ── Input sanitize ──
-      var rawEmail = document.getElementById('loginEmail').value.trim();
-      var cleanEmail = window.__Sanitize ? window.__Sanitize.email(rawEmail) : rawEmail;
-      if (!cleanEmail) { showAlert('Địa chỉ email không hợp lệ.', 'error'); return; }
-      var pass = document.getElementById('loginPassword').value;
-      if (!pass || pass.length < 6) { showAlert('Mật khẩu phải có ít nhất 6 ký tự.', 'error'); return; }
-
       var btn = document.getElementById('loginSubmitBtn');
       setBusy(btn, true, 'Đang đăng nhập...');
+      var email = document.getElementById('loginEmail').value.trim();
+      var pass  = document.getElementById('loginPassword').value;
       try {
-        var res = await sb.auth.signInWithPassword({ email: cleanEmail, password: pass });
+        var res = await sb.auth.signInWithPassword({ email: email, password: pass });
         if(res.error) throw res.error;
-        if (window.__RateLimit) window.__RateLimit.reset('login');
         showAlert('Đăng nhập thành công!', 'success');
         setTimeout(closeModal, 600);
       } catch(err){
@@ -4838,37 +4777,24 @@ window.addEventListener('load', function(){
     regForm.addEventListener('submit', async function(e){
       e.preventDefault();
       clearAlert();
-      // ── Rate limit check ──
-      var rl = window.__RateLimit && window.__RateLimit.check('register');
-      if (rl && !rl.allowed) {
-        showAlert('Quá nhiều lần đăng ký. Vui lòng đợi ' + rl.waitMin + ' phút.', 'error');
-        return;
-      }
-      // ── Input sanitize ──
-      var rawName  = document.getElementById('regName').value.trim();
-      var cleanName = window.__Sanitize ? window.__Sanitize.displayName(rawName) : rawName;
-      if (!cleanName) { showAlert('Vui lòng nhập tên hiển thị hợp lệ.', 'error'); return; }
-      var rawEmail = document.getElementById('regEmail').value.trim();
-      var cleanEmail = window.__Sanitize ? window.__Sanitize.email(rawEmail) : rawEmail;
-      if (!cleanEmail) { showAlert('Địa chỉ email không hợp lệ.', 'error'); return; }
-      var pass = document.getElementById('regPassword').value;
-      var passCheck = window.__Sanitize ? window.__Sanitize.password(pass) : { ok: pass.length >= 6, msg: 'Mật khẩu cần ít nhất 6 ký tự', value: pass };
-      if (!passCheck.ok) { showAlert(passCheck.msg, 'error'); return; }
-
       var btn = document.getElementById('regSubmitBtn');
       setBusy(btn, true, 'Đang tạo tài khoản...');
+      var name  = document.getElementById('regName').value.trim();
+      var email = document.getElementById('regEmail').value.trim();
+      var pass  = document.getElementById('regPassword').value;
       try {
         var res = await sb.auth.signUp({
-          email: cleanEmail,
-          password: passCheck.value,
+          email: email,
+          password: pass,
           options: {
-            data: { display_name: cleanName },
+            data: { display_name: name },
             emailRedirectTo: location.origin + '/index.html'
           }
         });
         if(res.error) throw res.error;
+        // Nếu Supabase yêu cầu confirm email
         if(res.data.user && !res.data.session){
-          showAlert('✓ Đã gửi email xác nhận tới ' + cleanEmail + '. Vui lòng kiểm tra hộp thư.', 'success');
+          showAlert('✓ Đã gửi email xác nhận tới ' + email + '. Vui lòng kiểm tra hộp thư.', 'success');
         } else {
           showAlert('Tạo tài khoản thành công!', 'success');
           setTimeout(closeModal, 800);
@@ -4887,25 +4813,15 @@ window.addEventListener('load', function(){
     forgotForm.addEventListener('submit', async function(e){
       e.preventDefault();
       clearAlert();
-      // ── Rate limit check ──
-      var rl = window.__RateLimit && window.__RateLimit.check('forgot');
-      if (rl && !rl.allowed) {
-        showAlert('Quá nhiều yêu cầu. Vui lòng đợi ' + rl.waitMin + ' phút.', 'error');
-        return;
-      }
-      // ── Input sanitize ──
-      var rawEmail = document.getElementById('forgotEmail').value.trim();
-      var cleanEmail = window.__Sanitize ? window.__Sanitize.email(rawEmail) : rawEmail;
-      if (!cleanEmail) { showAlert('Địa chỉ email không hợp lệ.', 'error'); return; }
-
       var btn = document.getElementById('forgotSubmitBtn');
       setBusy(btn, true, 'Đang gửi...');
+      var email = document.getElementById('forgotEmail').value.trim();
       try {
-        var res = await sb.auth.resetPasswordForEmail(cleanEmail, {
+        var res = await sb.auth.resetPasswordForEmail(email, {
           redirectTo: location.origin + '/index.html'
         });
         if(res.error) throw res.error;
-        showAlert('✓ Đã gửi email đặt lại mật khẩu tới ' + cleanEmail, 'success');
+        showAlert('✓ Đã gửi email đặt lại mật khẩu tới ' + email, 'success');
       } catch(err){
         showAlert(err.message || 'Gửi email thất bại', 'error');
       } finally {
@@ -5097,9 +5013,9 @@ window.addEventListener('load', function(){
   openDbgBtn.title = 'Debug scroll (Ctrl+Shift+D)';
   openDbgBtn.style.cssText = [
     'position:fixed','bottom:10px','left:10px','z-index:2147483645',
-    'background:transparent','color:transparent','border:none',
-    'width:28px','height:28px','border-radius:50%','cursor:default',
-    'font-size:14px','padding:0','pointer-events:none'
+    'background:rgba(0,0,0,0.5)','color:#0f0','border:none',
+    'width:28px','height:28px','border-radius:50%','cursor:pointer',
+    'font-size:14px','padding:0'
   ].join(';');
   openDbgBtn.onclick = function(){
     debugPanel.style.display = 'block';
@@ -5461,5 +5377,43 @@ window.addEventListener('load', function(){
 })();
 </script>
 
+<script>
+/* ── SIDEBAR TOGGLE (mobile hamburger) ── */
+(function(){
+  var ham     = document.getElementById('sidebarHamburger');
+  var sidebar = document.getElementById('mainSidebar');
+  var overlay = document.getElementById('sidebarOverlay');
+  if(!ham || !sidebar || !overlay) return;
+
+  function openSidebar(){
+    sidebar.classList.add('mobile-open');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSidebar(){
+    sidebar.classList.remove('mobile-open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  ham.addEventListener('click', function(e){
+    e.stopPropagation();
+    sidebar.classList.contains('mobile-open') ? closeSidebar() : openSidebar();
+  });
+  overlay.addEventListener('click', closeSidebar);
+
+  // Close when a nav link is tapped on mobile
+  sidebar.querySelectorAll('.page1-navlinks a, .page1-navcta').forEach(function(a){
+    a.addEventListener('click', function(){
+      if(window.innerWidth <= 900) closeSidebar();
+    });
+  });
+
+  // ESC closes sidebar
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeSidebar();
+  });
+})();
+</script>
 </body>
 </html>
