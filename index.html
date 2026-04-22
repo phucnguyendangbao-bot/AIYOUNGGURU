@@ -532,6 +532,138 @@ body::after-disabled{
   .sn-mp-modal{max-height:92vh;}
   .sn-mp-opt-label{font-size:.82rem;}
 }
+
+/* ═══ Holland quiz ═══ */
+.sn-holland-opener{margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.sn-holland-opener.active{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 6px 16px rgba(99,102,241,0.3);}
+.sn-holland-code{
+  display:none;padding:2px 10px;border-radius:999px;background:rgba(255,255,255,0.28);
+  color:inherit;font-size:.72rem;font-weight:800;letter-spacing:.8px;
+}
+.sn-holland-code.show{display:inline-block;}
+.sn-holland-opener:not(.active) .sn-holland-code.show{background:rgba(99,102,241,0.14);color:var(--accent);}
+
+.sn-hq-item{
+  padding:12px 14px;border:1.5px solid rgba(99,102,241,0.14);border-radius:12px;
+  margin-bottom:10px;background:#fff;transition:border-color .15s;
+}
+.sn-hq-item.answered{border-color:rgba(139,92,246,0.35);background:rgba(139,92,246,0.03);}
+.sn-hq-q{
+  font-size:.88rem;font-weight:600;color:var(--text-dark,#1a1a3e);
+  margin-bottom:10px;display:flex;gap:8px;align-items:flex-start;line-height:1.45;
+}
+.sn-hq-q-num{
+  flex:0 0 24px;width:24px;height:24px;border-radius:6px;
+  background:rgba(99,102,241,0.1);color:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;font-weight:800;margin-top:1px;
+}
+.sn-hq-item.answered .sn-hq-q-num{background:var(--grad);color:#fff;}
+.sn-hq-scale{display:flex;gap:6px;flex-wrap:wrap;}
+.sn-hq-opt{
+  flex:1;min-width:60px;padding:7px 4px;border-radius:8px;
+  border:1.5px solid rgba(99,102,241,0.18);background:#fff;
+  font-size:.72rem;font-weight:600;color:var(--text-mid);
+  cursor:pointer;transition:all .15s;font-family:var(--font);
+  text-align:center;line-height:1.2;
+}
+.sn-hq-opt:hover{border-color:var(--accent);}
+.sn-hq-opt.selected{background:var(--grad);border-color:transparent;color:#fff;
+  box-shadow:0 4px 10px rgba(99,102,241,0.25);}
+
+/* Thang 1-5 dot style (đồng bộ careers.html) */
+.sn-hq-scale-5{align-items:center;gap:8px;}
+.sn-hq-scale-5 .sn-hq-scale-lbl{
+  font-size:.7rem;color:var(--text-mid);font-weight:600;white-space:nowrap;
+}
+.sn-hq-opt-dot{
+  flex:0 0 auto;width:34px;height:34px;border-radius:50%;
+  border:2px solid rgba(99,102,241,0.22);background:#fff;
+  font-size:.82rem;font-weight:700;color:var(--text-mid);
+  cursor:pointer;transition:all .15s;font-family:var(--font);
+}
+.sn-hq-opt-dot:hover{border-color:var(--accent);transform:scale(1.08);}
+.sn-hq-opt-dot.selected{
+  background:var(--grad);border-color:transparent;color:#fff;
+  box-shadow:0 4px 10px rgba(99,102,241,0.3);
+}
+@media(max-width:520px){
+  .sn-hq-scale-5{flex-wrap:wrap;justify-content:center;}
+  .sn-hq-opt-dot{width:30px;height:30px;font-size:.76rem;}
+  .sn-hq-scale-5 .sn-hq-scale-lbl{flex:1 0 100%;text-align:center;font-size:.65rem;}
+}
+
+/* Banner đã đọc được kết quả từ careers.html */
+.sn-hq-banner{
+  padding:10px 14px;border-radius:10px;margin-bottom:12px;
+  background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(99,102,241,0.08));
+  border:1.5px solid rgba(139,92,246,0.25);
+  font-size:.82rem;color:#4c1d95;line-height:1.45;
+}
+
+/* Header kết quả với emoji lớn */
+.sn-hq-result-head{display:flex;gap:12px;align-items:center;margin-bottom:10px;}
+.sn-hq-result-emoji{font-size:2.2rem;line-height:1;}
+.sn-hq-result-title{font-size:.95rem;font-weight:700;color:var(--text-dark,#1a1a3e);margin-top:2px;}
+.sn-hq-progress{
+  position:sticky;top:0;z-index:2;padding:8px 0 12px;background:#fff;
+  display:flex;align-items:center;gap:10px;margin-bottom:10px;
+}
+.sn-hq-bar{flex:1;height:6px;border-radius:999px;background:rgba(99,102,241,0.15);overflow:hidden;}
+.sn-hq-bar-fill{height:100%;background:var(--grad);transition:width .25s;border-radius:999px;}
+.sn-hq-count{font-size:.76rem;font-weight:700;color:var(--accent);}
+.sn-hq-result{
+  margin-top:8px;padding:14px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(139,92,246,0.08));
+  border:1.5px solid rgba(99,102,241,0.2);
+}
+.sn-hq-result-code{
+  font-family:'Nunito',var(--font);font-size:1.6rem;font-weight:900;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;
+  color:transparent;letter-spacing:2px;margin-bottom:4px;
+}
+.sn-hq-result-desc{font-size:.82rem;color:var(--text-mid);line-height:1.5;}
+.sn-hq-result-bars{margin-top:10px;display:flex;flex-direction:column;gap:5px;}
+.sn-hq-result-bar{display:flex;align-items:center;gap:8px;font-size:.72rem;}
+.sn-hq-result-bar-letter{
+  flex:0 0 22px;width:22px;height:22px;border-radius:6px;
+  background:var(--grad);color:#fff;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+}
+.sn-hq-result-bar-label{flex:0 0 80px;font-weight:600;color:var(--text-dark,#1a1a3e);}
+.sn-hq-result-bar-track{flex:1;height:6px;border-radius:999px;background:rgba(99,102,241,0.12);overflow:hidden;}
+.sn-hq-result-bar-fill{height:100%;background:var(--grad);border-radius:999px;transition:width .4s;}
+.sn-hq-result-bar-val{flex:0 0 34px;text-align:right;color:var(--text-mid);font-weight:700;}
+
+/* ═══ Huy hiệu Khuyến nghị #N ═══ */
+.sn-rec-ribbon{
+  position:absolute;top:10px;right:-6px;z-index:5;
+  padding:5px 12px 5px 14px;border-radius:6px 2px 2px 6px;
+  font-size:.72rem;font-weight:800;color:#fff;letter-spacing:.3px;
+  display:flex;align-items:center;gap:5px;font-family:var(--font);
+  box-shadow:0 6px 16px rgba(0,0,0,0.18);
+}
+.sn-rec-ribbon::after{
+  content:"";position:absolute;top:100%;right:0;
+  border:3px solid transparent;border-top-color:rgba(0,0,0,0.35);border-right-color:transparent;
+}
+.sn-rec-ribbon.rec-1{background:linear-gradient(135deg,#f59e0b,#ef4444);}
+.sn-rec-ribbon.rec-2{background:linear-gradient(135deg,#8b5cf6,#6366f1);}
+.sn-rec-ribbon.rec-3{background:linear-gradient(135deg,#14b8a6,#0891b2);}
+.sn-card{position:relative;}
+
+/* ═══ Badge giá trị HB & Holland-fit trên card ═══ */
+.sn-meta-row{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;
+}
+.sn-meta-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:999px;font-size:.7rem;font-weight:700;
+  background:rgba(99,102,241,0.08);color:var(--accent);border:1px solid rgba(99,102,241,0.18);
+}
+.sn-meta-chip.val-high{background:rgba(245,158,11,0.14);color:#b45309;border-color:rgba(245,158,11,0.3);}
+.sn-meta-chip.val-mid{background:rgba(16,185,129,0.12);color:#047857;border-color:rgba(16,185,129,0.25);}
+.sn-meta-chip.fit-strong{background:linear-gradient(135deg,rgba(139,92,246,0.18),rgba(99,102,241,0.14));color:#6d28d9;border-color:rgba(139,92,246,0.3);}
 .sn-search-wrap{position:relative;width:100%;max-width:300px;}
 .sn-search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:rgba(99,102,241,0.6);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;}
 
@@ -2472,6 +2604,7 @@ body.spa-active #spa-topbar { display: flex; }
         <button class="sn-toggle-btn" data-key="essay" onclick="toggleBool('essay',this)">✍️ Có bài luận</button>
         <button class="sn-toggle-btn" data-key="conduct" onclick="toggleBool('conduct',this)">⭐ Hạnh kiểm tốt</button>
       </div>
+      <button class="sn-reset-btn sn-holland-opener" id="hollandOpener" onclick="openHollandQuiz()">🎯 Sở thích / Tính cách <span class="sn-holland-code" id="hollandCodeBadge"></span></button>
       <button class="sn-reset-btn" onclick="resetStudent()">↺ Reset dữ liệu thử</button>
     </div>
 
@@ -2489,6 +2622,24 @@ body.spa-active #spa-topbar { display: flex; }
         <div class="sn-mp-footer">
           <button class="sn-mp-btn sn-mp-btn-ghost" onclick="clearMultiPicker()">Bỏ chọn tất cả</button>
           <button class="sn-mp-btn sn-mp-btn-primary" onclick="closeMultiPicker()">Xong</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ HOLLAND QUIZ MODAL (sở thích / tính cách theo RIASEC) ═══ -->
+    <div class="sn-mp-overlay" id="hollandOverlay" onclick="closeHollandQuiz(event)">
+      <div class="sn-mp-modal" onclick="event.stopPropagation()" style="max-width:620px;">
+        <div class="sn-mp-header" style="background:linear-gradient(180deg,rgba(139,92,246,0.08),transparent);">
+          <div>
+            <div class="sn-mp-title">🎯 Trắc nghiệm Holland RIASEC</div>
+            <div class="sn-mp-sub" id="hollandSub">12 câu nhanh — chọn mức bạn đồng ý với mỗi hoạt động</div>
+          </div>
+          <button class="sn-mp-close" onclick="closeHollandQuiz()" aria-label="Đóng">✕</button>
+        </div>
+        <div class="sn-mp-body" id="hollandBody"></div>
+        <div class="sn-mp-footer">
+          <button class="sn-mp-btn sn-mp-btn-ghost" onclick="resetHollandQuiz()">Làm lại từ đầu</button>
+          <button class="sn-mp-btn sn-mp-btn-primary" onclick="closeHollandQuiz()">Xong</button>
         </div>
       </div>
     </div>
@@ -4292,13 +4443,17 @@ function renderGrid(tab) {
       : regionOfUni === selectedRegion ? 2
       : regionOfUni === "all" ? 1
       : 0;
-    return { uni: u, percent: ev.percent, met: ev.met, total: ev.total, regionScore };
+    const schValue   = scholarshipValueScore(u);
+    const hollandFit = hollandFitScore(u, tab);
+    return { uni: u, percent: ev.percent, met: ev.met, total: ev.total, regionScore, schValue, hollandFit };
   });
 
   if (hasInput) {
-    // Sort giảm dần theo: (1) percent khớp tiêu chí, (2) region, (3) met count
+    // Tie-break: (1) % khớp ↓ (2) giá trị HB ↓ (3) hợp Holland ↓ (4) region ↓ (5) met count ↓
     unis.sort((a, b) => {
-      if (b.percent !== a.percent) return b.percent - a.percent;
+      if (b.percent    !== a.percent)    return b.percent    - a.percent;
+      if (b.schValue   !== a.schValue)   return b.schValue   - a.schValue;
+      if (b.hollandFit !== a.hollandFit) return b.hollandFit - a.hollandFit;
       if (b.regionScore !== a.regionScore) return b.regionScore - a.regionScore;
       return b.met - a.met;
     });
@@ -4307,19 +4462,22 @@ function renderGrid(tab) {
     const matched   = unis.filter(x => x.percent >= 50);
     const unmatched = unis.filter(x => x.percent < 50);
 
+    // Gắn huy hiệu Khuyến nghị #1..#3 cho nhóm matched
+    matched.forEach((x, i) => { x._recRank = i < 3 ? i+1 : 0; });
+
     let html = "";
     if (matched.length > 0) {
       html += `<div class="sn-group-label sn-group-ok" style="grid-column:1/-1">
         ✅ Phù hợp với hồ sơ của bạn · <strong>${matched.length} trường</strong>
       </div>`;
-      html += matched.map(x => buildCard(x.uni)).join("");
+      html += matched.map(x => buildCard(x.uni, { recRank:x._recRank, schValue:x.schValue, hollandFit:x.hollandFit, tab })).join("");
     }
     if (unmatched.length > 0) {
       html += `<div class="sn-group-label sn-group-warn" style="grid-column:1/-1">
         ⚠️ Chưa đạt đủ tiêu chí · <strong>${unmatched.length} trường</strong>
         <span style="font-weight:500;opacity:.85;">— cần cải thiện hồ sơ để có cơ hội</span>
       </div>`;
-      html += unmatched.map(x => `<div class="sn-card-dim">${buildCard(x.uni)}</div>`).join("");
+      html += unmatched.map(x => `<div class="sn-card-dim">${buildCard(x.uni, { schValue:x.schValue, hollandFit:x.hollandFit, tab })}</div>`).join("");
     }
     if (matched.length === 0 && unmatched.length === 0) {
       grid.innerHTML = `<div class="sn-empty" style="grid-column:1/-1">Không có trường nào để hiển thị.</div>`;
@@ -4329,11 +4487,12 @@ function renderGrid(tab) {
   } else {
     // Chưa nhập gì → sort theo region như cũ
     unis.sort((a, b) => b.regionScore - a.regionScore);
-    grid.innerHTML = unis.map(x => buildCard(x.uni)).join("");
+    grid.innerHTML = unis.map(x => buildCard(x.uni, { schValue:x.schValue, hollandFit:x.hollandFit, tab })).join("");
   }
 }
 
-function buildCard(uni) {
+function buildCard(uni, meta) {
+  meta = meta || {};
   const { met, total, percent, details } = evaluate(uni.requirements);
 
   const startRaw = (uni.applyStart ?? uni.apply_start ?? uni.startDate ?? uni.start_date ?? "").toString().trim();
@@ -4444,7 +4603,31 @@ function buildCard(uni) {
         <span>Dữ liệu năm <strong>${uni._dataYear}</strong></span>
       </div>` : "");
   const fallbackCardClass = uni._isFallback ? " is-fallback" : "";
+
+  // ═ Huy hiệu Khuyến nghị & chip giá trị / Holland-fit ═
+  const recRank = meta.recRank || 0;
+  let recRibbon = "";
+  if (recRank === 1) recRibbon = `<div class="sn-rec-ribbon rec-1">⭐ Khuyến nghị #1</div>`;
+  else if (recRank === 2) recRibbon = `<div class="sn-rec-ribbon rec-2">🥈 Khuyến nghị #2</div>`;
+  else if (recRank === 3) recRibbon = `<div class="sn-rec-ribbon rec-3">🥉 Khuyến nghị #3</div>`;
+
+  const valLabel = (typeof meta.schValue === "number") ? scholarshipValueLabel(meta.schValue) : null;
+  const valChip  = valLabel ? `<span class="sn-meta-chip ${valLabel.cls}">${valLabel.text}</span>` : "";
+
+  let fitChip = "";
+  if (typeof meta.hollandFit === "number" && meta.hollandFit > 0 && (student.holland?.answered || 0) >= 18) {
+    const uniLetters = hollandForUni(uni, meta.tab || currentTab);
+    if (meta.hollandFit >= 60) {
+      fitChip = `<span class="sn-meta-chip fit-strong" title="Hợp với hồ sơ Holland của bạn (${Math.round(meta.hollandFit)}%)">🎯 Hợp tính cách · ${uniLetters.slice(0,2).join("")}</span>`;
+    } else if (meta.hollandFit >= 40) {
+      fitChip = `<span class="sn-meta-chip" title="Tương đối hợp Holland (${Math.round(meta.hollandFit)}%)">🎯 ${uniLetters.slice(0,2).join("")}</span>`;
+    }
+  }
+
+  const metaRow = (valChip || fitChip) ? `<div class="sn-meta-row">${valChip}${fitChip}</div>` : "";
+
   return `<div class="sn-card${fallbackCardClass}">
+    ${recRibbon}
     ${fallbackBanner}
     <div class="sn-card-header">
       <div class="sn-card-header-row">
@@ -4457,6 +4640,7 @@ function buildCard(uni) {
               <span class="sn-badge-out">${uni.city}</span>
               ${regionBadge}
             </div>
+            ${metaRow}
             ${deadlineHtml}
           </div>
         </div>
@@ -4729,19 +4913,421 @@ document.addEventListener("keydown", function(e) {
   if (e.key === "Escape" && document.getElementById("mpOverlay")?.classList.contains("open")) {
     closeMultiPicker();
   }
+  if (e.key === "Escape" && document.getElementById("hollandOverlay")?.classList.contains("open")) {
+    closeHollandQuiz();
+  }
 });
+
+/* ═══════════════════════════════════════════════════════════
+   HOLLAND RIASEC — đồng bộ với careers.html (42 câu, thang 1-5)
+   Lưu / đọc chung key localStorage: studentHollandV1
+═══════════════════════════════════════════════════════════ */
+
+// 6 nhóm Holland — giữ nguyên mô tả dài của careers.html + short name dùng trong chip
+const HOLLAND_TYPES = {
+  R: { name: 'Thực tế (Realistic)', short:'Thực tế', emoji:'🔧', color:'#f59e0b',
+    desc: 'Bạn thích làm việc với tay, máy móc, dụng cụ và vật thể cụ thể. Bạn thực tế, kiên trì và có tư duy kỹ thuật.',
+    majors: ['Kỹ thuật cơ khí','Điện – Điện tử','Xây dựng','Nông nghiệp','Kiến trúc','Lâm nghiệp','Hàng không'] },
+  I: { name: 'Nghiên cứu (Investigative)', short:'Nghiên cứu', emoji:'🔬', color:'#6366f1',
+    desc: 'Bạn thích phân tích, khám phá và giải quyết vấn đề phức tạp. Bạn tò mò, logic và độc lập trong tư duy.',
+    majors: ['Khoa học máy tính','Toán học','Vật lý','Hóa học','Y khoa','Sinh học','Dược học','Công nghệ AI'] },
+  A: { name: 'Nghệ thuật (Artistic)', short:'Nghệ thuật', emoji:'🎨', color:'#ec4899',
+    desc: 'Bạn sáng tạo, biểu đạt phong phú và thích tự do. Bạn giỏi nghệ thuật, âm nhạc, viết lách hoặc thiết kế.',
+    majors: ['Thiết kế đồ họa','Kiến trúc nội thất','Âm nhạc','Điện ảnh','Truyền thông sáng tạo','Mỹ thuật','Viết sáng tác'] },
+  S: { name: 'Xã hội (Social)', short:'Xã hội', emoji:'🤝', color:'#10b981',
+    desc: 'Bạn yêu thích giao tiếp, giúp đỡ và làm việc với mọi người. Bạn đồng cảm, kiên nhẫn và có khả năng lãnh đạo nhóm.',
+    majors: ['Sư phạm','Tâm lý học','Công tác xã hội','Y tế cộng đồng','Nhân sự (HR)','Ngoại giao','Xã hội học'] },
+  E: { name: 'Lãnh đạo (Enterprising)', short:'Lãnh đạo', emoji:'🚀', color:'#f97316',
+    desc: 'Bạn có tư duy kinh doanh, thuyết phục và muốn dẫn dắt. Bạn tự tin, năng động và thích cạnh tranh.',
+    majors: ['Quản trị kinh doanh','Marketing','Luật','Tài chính – Ngân hàng','Kinh tế','Khởi nghiệp','Quan hệ công chúng'] },
+  C: { name: 'Quy củ (Conventional)', short:'Quy củ', emoji:'📊', color:'#3b82f6',
+    desc: 'Bạn thích trật tự, chi tiết và làm việc với dữ liệu, con số. Bạn đáng tin cậy, cẩn thận và làm theo quy trình.',
+    majors: ['Kế toán – Kiểm toán','Hệ thống thông tin','Thống kê','Tài chính','Hành chính văn phòng','Logistics','Ngân hàng'] }
+};
+
+// 42 câu — y chang thứ tự của careers.html
+const HOLLAND_QUESTIONS = [
+  // R - Thực tế
+  { type:'R', q:'Tôi thích sửa chữa hoặc lắp ráp đồ vật bằng tay.' },
+  { type:'R', q:'Tôi thích làm việc ngoài trời hơn là trong văn phòng.' },
+  { type:'R', q:'Tôi thích sử dụng các công cụ, máy móc trong công việc.' },
+  { type:'R', q:'Tôi giỏi các môn kỹ thuật hoặc thủ công.' },
+  { type:'R', q:'Tôi thích tạo ra sản phẩm vật chất hơn là ý tưởng trừu tượng.' },
+  { type:'R', q:'Tôi thích các bài tập thể chất và hoạt động ngoài trời.' },
+  { type:'R', q:'Tôi có khả năng định hướng không gian và đọc bản vẽ kỹ thuật.' },
+  // I - Nghiên cứu
+  { type:'I', q:'Tôi thích giải những bài toán khó và câu đố logic.' },
+  { type:'I', q:'Tôi tò mò về cách mọi thứ hoạt động trong khoa học.' },
+  { type:'I', q:'Tôi thích đọc sách khoa học, nghiên cứu hơn là đọc tiểu thuyết.' },
+  { type:'I', q:'Tôi thích phân tích dữ liệu để tìm ra quy luật.' },
+  { type:'I', q:'Tôi thích làm thí nghiệm và kiểm chứng giả thuyết.' },
+  { type:'I', q:'Tôi thường đặt câu hỏi "Tại sao?" và tìm hiểu sâu vấn đề.' },
+  { type:'I', q:'Tôi thích làm việc một mình với sách và tài liệu nghiên cứu.' },
+  // A - Nghệ thuật
+  { type:'A', q:'Tôi thích vẽ, chụp ảnh hoặc tạo ra các tác phẩm nghệ thuật.' },
+  { type:'A', q:'Tôi có khả năng âm nhạc hoặc biểu diễn nghệ thuật.' },
+  { type:'A', q:'Tôi thích viết sáng tác, thơ, truyện hoặc kịch bản.' },
+  { type:'A', q:'Tôi thích làm việc trong môi trường tự do, không có quy tắc cứng nhắc.' },
+  { type:'A', q:'Tôi thường nghĩ ra những ý tưởng độc đáo, khác biệt.' },
+  { type:'A', q:'Tôi thích thiết kế, trang trí không gian hoặc tạo ra thứ mang tính thẩm mỹ.' },
+  { type:'A', q:'Tôi biểu đạt cảm xúc qua nghệ thuật hoặc sáng tạo.' },
+  // S - Xã hội
+  { type:'S', q:'Tôi thích giảng dạy hoặc hướng dẫn người khác học điều gì đó.' },
+  { type:'S', q:'Tôi thường là người lắng nghe và an ủi bạn bè khi họ gặp khó khăn.' },
+  { type:'S', q:'Tôi thích làm việc nhóm và cảm thấy năng lượng khi giao tiếp.' },
+  { type:'S', q:'Tôi muốn cống hiến để giúp đỡ cộng đồng hoặc xã hội.' },
+  { type:'S', q:'Tôi dễ dàng hiểu cảm xúc và quan điểm của người khác.' },
+  { type:'S', q:'Tôi thích tổ chức các hoạt động tập thể, sự kiện nhóm.' },
+  { type:'S', q:'Tôi giỏi giải quyết mâu thuẫn và kết nối mọi người.' },
+  // E - Lãnh đạo
+  { type:'E', q:'Tôi thích dẫn dắt và ra quyết định cho nhóm.' },
+  { type:'E', q:'Tôi tự tin thuyết trình và bảo vệ ý kiến trước đám đông.' },
+  { type:'E', q:'Tôi thích cạnh tranh và luôn muốn đứng đầu.' },
+  { type:'E', q:'Tôi có khả năng thuyết phục người khác đồng ý với mình.' },
+  { type:'E', q:'Tôi hay nảy ra ý tưởng kinh doanh và muốn thực hiện chúng.' },
+  { type:'E', q:'Tôi thích đàm phán, mặc cả hoặc bán hàng.' },
+  { type:'E', q:'Tôi tự tin đối mặt với rủi ro khi có cơ hội lớn.' },
+  // C - Quy củ
+  { type:'C', q:'Tôi thích làm việc theo danh sách và kế hoạch rõ ràng.' },
+  { type:'C', q:'Tôi chú ý đến từng chi tiết nhỏ và không thích sai sót.' },
+  { type:'C', q:'Tôi giỏi quản lý hồ sơ, tài liệu và số liệu.' },
+  { type:'C', q:'Tôi thích làm việc trong môi trường có quy trình ổn định.' },
+  { type:'C', q:'Tôi thích toán, kế toán hoặc phân tích số liệu.' },
+  { type:'C', q:'Tôi thích tuân thủ quy tắc và hướng dẫn được đặt ra.' },
+  { type:'C', q:'Tôi cảm thấy thoải mái với công việc lặp lại nhưng chính xác.' }
+];
+
+const HOLLAND_STORAGE_KEY = "studentHollandV1";
+const HOLLAND_MAX_PER_TYPE = 7 * 5; // 7 câu x thang 5 = 35
+
+// student.holland.answers: mảng (dài = HOLLAND_QUESTIONS.length) giá trị 1..5 (null nếu chưa trả lời)
+if (!student.holland) student.holland = { answers: Array(HOLLAND_QUESTIONS.length).fill(null), scores:{R:0,I:0,A:0,S:0,E:0,C:0}, code:"", answered:0 };
+
+/* Đọc kết quả đã lưu từ localStorage (ví dụ: từ careers.html) */
+function loadHollandFromStorage() {
+  try {
+    const raw = localStorage.getItem(HOLLAND_STORAGE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    if (!data || typeof data !== "object") return false;
+    // Khả năng 1: full answers array (cùng độ dài 42) — cả 2 file đồng bộ hoàn toàn
+    if (Array.isArray(data.answers) && data.answers.length === HOLLAND_QUESTIONS.length) {
+      student.holland.answers = data.answers.slice();
+    }
+    // Khả năng 2: chỉ có scores (careers.html phiên bản cũ) → dùng scores trực tiếp
+    if (data.scores && typeof data.scores === "object") {
+      student.holland.scores = Object.assign({R:0,I:0,A:0,S:0,E:0,C:0}, data.scores);
+    }
+    if (typeof data.code === "string") student.holland.code = data.code;
+    if (typeof data.answered === "number") student.holland.answered = data.answered;
+    // Tính lại đầy đủ để đảm bảo nhất quán
+    computeHollandScores();
+    return true;
+  } catch(e) { return false; }
+}
+
+/* Ghi kết quả vào localStorage để careers.html (và tự reload) đọc được */
+function saveHollandToStorage() {
+  try {
+    const data = {
+      answers: student.holland.answers,
+      scores:  student.holland.scores,
+      code:    student.holland.code,
+      answered:student.holland.answered,
+      savedAt: Date.now(),
+      source:  "index"
+    };
+    localStorage.setItem(HOLLAND_STORAGE_KEY, JSON.stringify(data));
+  } catch(e) { /* storage disabled — bỏ qua */ }
+}
+
+function computeHollandScores() {
+  const scores = {R:0,I:0,A:0,S:0,E:0,C:0};
+  const counts = {R:0,I:0,A:0,S:0,E:0,C:0};
+  student.holland.answers.forEach((v, i) => {
+    if (v === null || v === undefined) return;
+    const t = HOLLAND_QUESTIONS[i].type;
+    scores[t] += v;         // 1..5 per câu
+    counts[t] += 1;
+  });
+  // Chuẩn hoá về thang 0..100 dựa trên max = counts[t] * 5
+  const norm = {};
+  Object.keys(scores).forEach(t => {
+    const max = (counts[t] || 1) * 5;
+    norm[t] = max ? Math.round(scores[t] / max * 100) : 0;
+  });
+  student.holland.scores = norm;
+  const ranked = Object.keys(norm).sort((a,b) => norm[b] - norm[a]);
+  const answered = student.holland.answers.filter(v => v !== null && v !== undefined).length;
+  // Cần ≥ 18/42 câu (≈3 câu/nhóm) để ra code đáng tin cậy
+  student.holland.code = answered >= 18 ? ranked.slice(0,3).join("") : "";
+  student.holland.answered = answered;
+  return { norm, ranked, answered };
+}
+
+function openHollandQuiz() {
+  renderHollandQuiz();
+  document.getElementById("hollandOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeHollandQuiz(ev) {
+  if (ev && ev.target && ev.target.id !== "hollandOverlay") return;
+  document.getElementById("hollandOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function renderHollandQuiz() {
+  const body = document.getElementById("hollandBody");
+  const scaleLabels = ["1","2","3","4","5"]; // thang 1-5 như careers.html
+  const answered = student.holland.answers.filter(v => v !== null && v !== undefined).length;
+  const total = HOLLAND_QUESTIONS.length;
+  const pct = Math.round(answered/total*100);
+
+  let html = `
+    <div class="sn-hq-progress">
+      <div class="sn-hq-bar"><div class="sn-hq-bar-fill" style="width:${pct}%"></div></div>
+      <div class="sn-hq-count">${answered}/${total}</div>
+    </div>
+  `;
+
+  // Banner nếu đã có dữ liệu từ careers.html
+  if (answered > 0 && student.holland._fromCareers) {
+    html += `<div class="sn-hq-banner">
+      ✨ Đã tự động đọc kết quả bạn làm từ trang <strong>Test Holland</strong>. Bạn có thể chỉnh sửa bên dưới hoặc xem kết quả luôn.
+    </div>`;
+  }
+
+  HOLLAND_QUESTIONS.forEach((item, idx) => {
+    const val = student.holland.answers[idx];
+    const ans = val !== null && val !== undefined;
+    html += `
+      <div class="sn-hq-item${ans ? ' answered' : ''}">
+        <div class="sn-hq-q">
+          <span class="sn-hq-q-num">${idx+1}</span>
+          <span>${item.q}</span>
+        </div>
+        <div class="sn-hq-scale sn-hq-scale-5">
+          <span class="sn-hq-scale-lbl">Không đúng</span>
+          ${[1,2,3,4,5].map(n => `<button class="sn-hq-opt-dot${val===n ? ' selected' : ''}" onclick="answerHolland(${idx},${n})">${n}</button>`).join("")}
+          <span class="sn-hq-scale-lbl">Rất đúng</span>
+        </div>
+      </div>
+    `;
+  });
+
+  // Kết quả (cần ≥18 câu để tin cậy)
+  if (answered >= 18) {
+    const { norm, ranked } = computeHollandScores();
+    const top3 = ranked.slice(0,3);
+    const codeStr = top3.join(" – ");
+    const topInfo = HOLLAND_TYPES[top3[0]];
+    html += `
+      <div class="sn-hq-result">
+        <div class="sn-hq-result-head">
+          <span class="sn-hq-result-emoji">${topInfo.emoji}</span>
+          <div>
+            <div class="sn-hq-result-code">${codeStr}</div>
+            <div class="sn-hq-result-title">${topInfo.name}</div>
+          </div>
+        </div>
+        <div class="sn-hq-result-desc">${topInfo.desc}</div>
+        <div class="sn-hq-result-bars">
+          ${ranked.map(t => `
+            <div class="sn-hq-result-bar">
+              <div class="sn-hq-result-bar-letter" style="background:${HOLLAND_TYPES[t].color}">${t}</div>
+              <div class="sn-hq-result-bar-label">${HOLLAND_TYPES[t].emoji} ${HOLLAND_TYPES[t].short}</div>
+              <div class="sn-hq-result-bar-track"><div class="sn-hq-result-bar-fill" style="width:${norm[t]}%;background:${HOLLAND_TYPES[t].color}"></div></div>
+              <div class="sn-hq-result-bar-val">${norm[t]}%</div>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  } else if (answered > 0) {
+    html += `<div class="sn-hq-result" style="background:rgba(99,102,241,0.05);"><div class="sn-hq-result-desc">Trả lời thêm ít nhất ${18-answered} câu nữa để ra kết quả RIASEC đáng tin cậy.</div></div>`;
+  }
+
+  body.innerHTML = html;
+  syncHollandBadge();
+}
+
+function answerHolland(idx, val) {
+  student.holland.answers[idx] = val;
+  student.holland._fromCareers = false; // đã chỉnh tay nên không còn "nguyên" từ careers
+  computeHollandScores();
+  saveHollandToStorage();
+  syncHollandBadge();
+  renderHollandQuiz();
+  renderGrid(currentTab);
+}
+
+function resetHollandQuiz() {
+  student.holland = { answers: Array(HOLLAND_QUESTIONS.length).fill(null), scores:{R:0,I:0,A:0,S:0,E:0,C:0}, code:"", answered:0 };
+  try { localStorage.removeItem(HOLLAND_STORAGE_KEY); } catch(e){}
+  syncHollandBadge();
+  renderHollandQuiz();
+  renderGrid(currentTab);
+}
+
+function syncHollandBadge() {
+  const btn = document.getElementById("hollandOpener");
+  const badge = document.getElementById("hollandCodeBadge");
+  if (!btn || !badge) return;
+  const code = student.holland?.code || "";
+  if (code) {
+    badge.textContent = code;
+    badge.classList.add("show");
+    btn.classList.add("active");
+  } else {
+    const n = student.holland?.answered || 0;
+    if (n > 0) {
+      badge.textContent = n + "/" + HOLLAND_QUESTIONS.length;
+      badge.classList.add("show");
+      btn.classList.remove("active");
+    } else {
+      badge.textContent = "";
+      badge.classList.remove("show");
+      btn.classList.remove("active");
+    }
+  }
+}
+
+// Khi load trang: thử đọc kết quả từ localStorage
+(function initHollandFromStorage(){
+  const ok = loadHollandFromStorage();
+  if (ok) {
+    student.holland._fromCareers = true;
+    setTimeout(() => { syncHollandBadge(); renderGrid(currentTab); }, 0);
+  }
+})();
+
+// Lắng nghe thay đổi từ tab khác (careers.html mở song song)
+window.addEventListener("storage", function(e){
+  if (e.key !== HOLLAND_STORAGE_KEY) return;
+  loadHollandFromStorage();
+  student.holland._fromCareers = true;
+  syncHollandBadge();
+  renderGrid(currentTab);
+});
+
+/* ═══════════════════════════════════════════════════════════
+   MAPPING: ngành (tab) → Holland letters & giá trị HB cho mỗi trường
+═══════════════════════════════════════════════════════════ */
+const TAB_HOLLAND = {
+  cntt: ["I","R"],       // CNTT: nghiên cứu + kỹ thuật
+  yte:  ["I","S"],       // Y tế: nghiên cứu + xã hội
+  tt:   ["A","E"],       // Truyền thông: sáng tạo + quản lý
+  tc:   ["E","C"],       // Tài chính: quản lý + quy trình
+  sp:   ["S","A"],       // Sư phạm: xã hội + sáng tạo
+  env:  ["I","R"],       // Môi trường: nghiên cứu + thực tế
+  ai:   ["I","R"],       // AI: nghiên cứu + kỹ thuật
+  bio:  ["I","R"]        // Biotech: nghiên cứu + kỹ thuật
+};
+
+// Override theo tên trường / từ khoá riêng (một số trường có đặc thù)
+const UNI_HOLLAND_OVERRIDE = {
+  // Nghệ thuật / báo chí nhấn A
+  "AJC": ["A","S","E"],
+  "HUC": ["A","S"],
+  "USSH-VNU": ["S","A","I"],
+  "HUSC-HUE": ["S","A"],
+  // Kinh tế / tài chính nhấn E-C
+  "NEU": ["E","C","S"],
+  "FTU": ["E","C"],
+  "UEL": ["E","C"],
+  "UEH": ["E","C"],
+  // Y tế — nhấn S nhiều hơn
+  "HMU": ["I","S"],
+  "UMP": ["I","S"],
+  "HueUMP": ["I","S"],
+  "UMP-VNU": ["I","S"],
+  // Bách khoa / kỹ thuật nặng
+  "HUST": ["R","I"],
+  "HCMUT": ["R","I"],
+  "DUT":  ["R","I"],
+  "UET":  ["I","R"],
+  "PKA":  ["I","R"]
+};
+
+function hollandForUni(uni, tab) {
+  if (UNI_HOLLAND_OVERRIDE[uni.short]) return UNI_HOLLAND_OVERRIDE[uni.short];
+  return TAB_HOLLAND[tab] || ["I","R"];
+}
+
+/* Điểm fit Holland cho trường so với hồ sơ học sinh.
+   Nếu học sinh chưa làm đủ ≥18/42 câu → trả về 0 (không ảnh hưởng tie-break). */
+function hollandFitScore(uni, tab) {
+  if (!student.holland || (student.holland.answered || 0) < 18) return 0;
+  const scores = student.holland.scores;
+  const uniLetters = hollandForUni(uni, tab);
+  // Lấy điểm trung bình các chữ cái mà trường mạnh — trọng số giảm dần
+  const w = [1.0, 0.7, 0.4];
+  let sum = 0, totalW = 0;
+  uniLetters.forEach((L, i) => {
+    const weight = w[i] ?? 0.3;
+    sum += (scores[L] || 0) * weight;
+    totalW += weight;
+  });
+  return totalW ? sum/totalW : 0; // 0..100
+}
+
+/* ═══════════════════════════════════════════════════════════
+   GIÁ TRỊ HỌC BỔNG — parse sẵn từ scholarshipMethods (chuỗi VN)
+═══════════════════════════════════════════════════════════ */
+function scholarshipValueScore(uni) {
+  const text = (uni.scholarshipMethods || []).join(" ").toLowerCase();
+  let v = 25; // base thấp hơn để có dư địa
+
+  // % học phí — điểm tối đa 55
+  const pctMatches = [...text.matchAll(/(\d{2,3})\s*%/g)].map(m => parseInt(m[1],10)).filter(n => n>0 && n<=100);
+  const maxPct = pctMatches.length ? Math.max(...pctMatches) : 0;
+  if (maxPct >= 100) v += 45;
+  else if (maxPct >= 75) v += 35;
+  else if (maxPct >= 50) v += 22;
+  else if (maxPct >= 30) v += 12;
+
+  // Toàn khóa / toàn phần (nhiều năm) — cao hơn 100% học kỳ
+  if (/toàn\s*khóa|toàn\s*phần/.test(text)) v += 10;
+
+  // "Có thể đạt 100%" / "cạnh tranh cao" — hạ bớt (khó đạt)
+  if (/cạnh tranh cao|rất cạnh tranh|có thể đạt/.test(text)) v -= 5;
+
+  // Từ khoá chất lượng
+  if (/tài năng|xuất sắc|genie|ib scholarship|talent/i.test(text)) v += 4;
+  if (/doanh nghiệp|tài trợ|fpt|samsung|vng/i.test(text)) v += 3;
+  if (/nckh|nghiên cứu khoa học|research/i.test(text)) v += 2;
+  if (/khuyến khích|khuyến học/i.test(text)) v += 1;
+  if (/quỹ.*(tỷ|tỉ)/.test(text)) v += 4; // quỹ lớn
+
+  // Số gói HB (nhiều gói = đa dạng cơ hội)
+  const n = (uni.scholarshipMethods || []).length;
+  if (n >= 4) v += 3;
+  else if (n >= 3) v += 1;
+
+  return Math.max(10, Math.min(100, Math.round(v)));
+}
+
+function scholarshipValueLabel(score) {
+  if (score >= 85) return { cls:"val-high", text:"💰 HB giá trị cao" };
+  if (score >= 65) return { cls:"val-mid",  text:"💵 HB khá" };
+  return null;
+}
 
 function resetStudent() {
   student = {
     gpa:"", thpt:"", dgnl:"", ielts:"", region:"",
     award:false, english:false, conduct:false,
     activities:false, essay:false, portfolio:false, commitment:false,
-    awards_list: [], activities_list: []
+    awards_list: [], activities_list: [],
+    holland: { answers: Array(HOLLAND_QUESTIONS.length).fill(null), scores:{R:0,I:0,A:0,S:0,E:0,C:0}, code:"", answered:0 }
   };
   ["gpa","thpt","dgnl","ielts"].forEach(k => { document.getElementById("s_"+k).value = ""; });
   document.getElementById("s_region").value = "";
   document.querySelectorAll(".sn-toggle-btn").forEach(b => b.classList.remove("active"));
+  try { localStorage.removeItem(HOLLAND_STORAGE_KEY); } catch(e){}
   syncMultiOpenerBadges();
+  syncHollandBadge();
   renderGrid(currentTab);
 }
 
