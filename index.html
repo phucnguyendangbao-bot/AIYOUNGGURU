@@ -437,6 +437,101 @@ body::after-disabled{
   color:var(--accent);cursor:pointer;transition:all .18s;font-family:var(--font);font-weight:600;
 }
 .sn-reset-btn:hover{background:#fff;border-color:var(--accent);transform:translateY(-1px);}
+
+/* ═══ Multi-select opener badge ═══ */
+.sn-count-badge{
+  display:none;margin-left:4px;padding:1px 7px;border-radius:999px;
+  background:rgba(255,255,255,0.28);color:inherit;font-size:.72rem;font-weight:700;
+  min-width:20px;text-align:center;vertical-align:middle;
+}
+.sn-count-badge.show{display:inline-block;}
+.sn-toggle-btn:not(.active) .sn-count-badge.show{background:rgba(99,102,241,0.14);color:var(--accent);}
+
+/* ═══ Multi-select picker modal ═══ */
+.sn-mp-overlay{
+  position:fixed;inset:0;background:rgba(20,20,40,0.55);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;z-index:9999;padding:16px;
+  animation:mpFadeIn .18s ease;
+}
+.sn-mp-overlay.open{display:flex;}
+@keyframes mpFadeIn{from{opacity:0}to{opacity:1}}
+.sn-mp-modal{
+  background:#fff;border-radius:18px;width:100%;max-width:560px;max-height:85vh;
+  display:flex;flex-direction:column;box-shadow:0 25px 60px rgba(20,20,60,0.35);
+  animation:mpSlide .22s cubic-bezier(.2,.9,.3,1.2);overflow:hidden;
+  font-family:var(--font);
+}
+@keyframes mpSlide{from{transform:translateY(20px) scale(.96);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+.sn-mp-header{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+  padding:18px 20px 14px;border-bottom:1px solid rgba(99,102,241,0.12);
+  background:linear-gradient(180deg,rgba(99,102,241,0.06),transparent);
+}
+.sn-mp-title{font-size:1.05rem;font-weight:700;color:var(--text-dark,#1a1a3e);}
+.sn-mp-sub{font-size:.78rem;color:var(--text-mid);margin-top:2px;}
+.sn-mp-close{
+  border:none;background:rgba(99,102,241,0.08);color:var(--accent);
+  width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;transition:all .15s;
+}
+.sn-mp-close:hover{background:rgba(99,102,241,0.18);}
+.sn-mp-body{padding:14px 20px 8px;overflow-y:auto;flex:1;}
+.sn-mp-group{margin-bottom:14px;}
+.sn-mp-group-title{
+  font-size:.72rem;font-weight:700;color:var(--accent);
+  text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;
+  display:flex;align-items:center;gap:6px;
+}
+.sn-mp-group-title::before{
+  content:"";display:inline-block;width:4px;height:14px;border-radius:2px;background:var(--grad);
+}
+.sn-mp-option{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;
+  cursor:pointer;border:1.5px solid rgba(99,102,241,0.12);background:#fff;
+  margin-bottom:6px;transition:all .15s;user-select:none;
+}
+.sn-mp-option:hover{border-color:rgba(99,102,241,0.35);background:rgba(99,102,241,0.03);}
+.sn-mp-option.checked{
+  border-color:transparent;
+  background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(139,92,246,0.1));
+  box-shadow:0 2px 8px rgba(99,102,241,0.15);
+}
+.sn-mp-check{
+  flex:0 0 20px;width:20px;height:20px;border-radius:6px;
+  border:2px solid rgba(99,102,241,0.35);background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.sn-mp-option.checked .sn-mp-check{
+  background:var(--grad);border-color:transparent;color:#fff;
+}
+.sn-mp-check::after{content:"";opacity:0;color:#fff;font-size:.85rem;font-weight:700;}
+.sn-mp-option.checked .sn-mp-check::after{content:"✓";opacity:1;}
+.sn-mp-opt-label{flex:1;font-size:.86rem;color:var(--text-dark,#1a1a3e);font-weight:500;}
+.sn-mp-opt-tag{
+  font-size:.64rem;font-weight:700;padding:2px 7px;border-radius:999px;
+  background:rgba(99,102,241,0.1);color:var(--accent);letter-spacing:.3px;
+}
+.sn-mp-opt-tag.lvl-nat{background:rgba(239,68,68,0.12);color:#dc2626;}
+.sn-mp-opt-tag.lvl-int{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;}
+.sn-mp-opt-tag.lvl-prov{background:rgba(16,185,129,0.12);color:#047857;}
+.sn-mp-opt-tag.lvl-school{background:rgba(99,102,241,0.1);color:var(--accent);}
+.sn-mp-footer{
+  display:flex;gap:10px;padding:12px 20px 16px;
+  border-top:1px solid rgba(99,102,241,0.1);background:rgba(250,250,255,0.7);
+}
+.sn-mp-btn{
+  flex:1;padding:10px 14px;border-radius:10px;font-family:var(--font);
+  font-weight:600;font-size:.85rem;cursor:pointer;transition:all .15s;border:1.5px solid transparent;
+}
+.sn-mp-btn-ghost{background:#fff;border-color:rgba(99,102,241,0.2);color:var(--text-mid);}
+.sn-mp-btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+.sn-mp-btn-primary{background:var(--grad);color:#fff;box-shadow:0 6px 16px rgba(99,102,241,0.3);}
+.sn-mp-btn-primary:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(99,102,241,0.4);}
+@media(max-width:520px){
+  .sn-mp-modal{max-height:92vh;}
+  .sn-mp-opt-label{font-size:.82rem;}
+}
 .sn-search-wrap{position:relative;width:100%;max-width:300px;}
 .sn-search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:rgba(99,102,241,0.6);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;}
 
@@ -2370,14 +2465,32 @@ body.spa-active #spa-topbar { display: flex; }
         </select>
       </div>
       <div class="sn-grid-2" id="boolBtns">
-        <button class="sn-toggle-btn" data-key="award" onclick="toggleBool('award',this)">🏅 Có giải thưởng</button>
+        <button class="sn-toggle-btn sn-multi-opener" data-list="awards_list" onclick="openMultiPicker('awards_list')">🏅 Giải thưởng <span class="sn-count-badge" id="count_awards_list"></span></button>
         <button class="sn-toggle-btn" data-key="english" onclick="toggleBool('english',this)">🌐 Tiếng Anh tốt</button>
-        <button class="sn-toggle-btn" data-key="activities" onclick="toggleBool('activities',this)">⚡ Ngoại khóa mạnh</button>
+        <button class="sn-toggle-btn sn-multi-opener" data-list="activities_list" onclick="openMultiPicker('activities_list')">⚡ Ngoại khóa <span class="sn-count-badge" id="count_activities_list"></span></button>
         <button class="sn-toggle-btn" data-key="portfolio" onclick="toggleBool('portfolio',this)">📁 Có portfolio</button>
         <button class="sn-toggle-btn" data-key="essay" onclick="toggleBool('essay',this)">✍️ Có bài luận</button>
         <button class="sn-toggle-btn" data-key="conduct" onclick="toggleBool('conduct',this)">⭐ Hạnh kiểm tốt</button>
       </div>
       <button class="sn-reset-btn" onclick="resetStudent()">↺ Reset dữ liệu thử</button>
+    </div>
+
+    <!-- ═══ MULTI-SELECT PICKER MODAL (giải thưởng / ngoại khóa) ═══ -->
+    <div class="sn-mp-overlay" id="mpOverlay" onclick="closeMultiPicker(event)">
+      <div class="sn-mp-modal" onclick="event.stopPropagation()">
+        <div class="sn-mp-header">
+          <div>
+            <div class="sn-mp-title" id="mpTitle">Chọn mục</div>
+            <div class="sn-mp-sub" id="mpSub">Có thể chọn nhiều mục</div>
+          </div>
+          <button class="sn-mp-close" onclick="closeMultiPicker()" aria-label="Đóng">✕</button>
+        </div>
+        <div class="sn-mp-body" id="mpBody"></div>
+        <div class="sn-mp-footer">
+          <button class="sn-mp-btn sn-mp-btn-ghost" onclick="clearMultiPicker()">Bỏ chọn tất cả</button>
+          <button class="sn-mp-btn sn-mp-btn-primary" onclick="closeMultiPicker()">Xong</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -4152,7 +4265,10 @@ function regionLabel(region) {
 function hasStudentInput() {
   if (student.gpa || student.thpt || student.dgnl || student.ielts) return true;
   const bools = ["award","english","conduct","activities","essay","portfolio","commitment"];
-  return bools.some(k => student[k]);
+  if (bools.some(k => student[k])) return true;
+  if (Array.isArray(student.awards_list) && student.awards_list.length) return true;
+  if (Array.isArray(student.activities_list) && student.activities_list.length) return true;
+  return false;
 }
 
 function renderGrid(tab) {
@@ -4484,6 +4600,137 @@ function toggleStudentMulti(key, optId) {
   renderGrid(currentTab);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   MULTI-PICKER POPUP: chọn nhiều mục giải thưởng / ngoại khóa
+═══════════════════════════════════════════════════════════ */
+let _mpCurrentKey = null;
+
+const MP_CONFIG = {
+  awards_list: {
+    title: "🏅 Giải thưởng & thành tích",
+    sub: "Tick các mục bạn đã đạt được (có thể chọn nhiều cấp độ)",
+    options: typeof AWARD_OPTIONS !== "undefined" ? AWARD_OPTIONS : [],
+    groups: [
+      { key:"hsg",    title:"Học sinh giỏi",               match:id => id.startsWith("hsg_") },
+      { key:"stem",   title:"STEM / Khoa học kỹ thuật",    match:id => id.startsWith("stem_") },
+      { key:"acad",   title:"Olympic & học thuật khác",    match:id => id.startsWith("acad_") },
+      { key:"talent", title:"Năng khiếu / nghệ thuật / thể thao", match:id => id.startsWith("talent_") }
+    ]
+  },
+  activities_list: {
+    title: "⚡ Hoạt động ngoại khóa",
+    sub: "Tick các loại hoạt động bạn tham gia",
+    options: typeof ACTIVITY_OPTIONS !== "undefined" ? ACTIVITY_OPTIONS : [],
+    groups: [
+      { key:"club",   title:"Câu lạc bộ & lãnh đạo",         match:id => id==="clb_member"||id==="clb_lead"||id==="event_org" },
+      { key:"volun",  title:"Tình nguyện & cộng đồng",       match:id => id.startsWith("volun_") },
+      { key:"media",  title:"Truyền thông & sáng tạo",       match:id => id.startsWith("media_") },
+      { key:"proj",   title:"Dự án & trải nghiệm thực tế",   match:id => id==="startup"||id==="intern" },
+      { key:"intl",   title:"Trải nghiệm quốc tế",           match:id => id==="exchange"||id==="competition_int" }
+    ]
+  }
+};
+
+function openMultiPicker(key) {
+  const cfg = MP_CONFIG[key];
+  if (!cfg) return;
+  _mpCurrentKey = key;
+  if (!Array.isArray(student[key])) student[key] = [];
+
+  document.getElementById("mpTitle").textContent = cfg.title;
+  document.getElementById("mpSub").textContent = cfg.sub;
+
+  const picked = new Set(student[key]);
+  const body = document.getElementById("mpBody");
+
+  // Render theo group
+  let html = "";
+  const used = new Set();
+  cfg.groups.forEach(g => {
+    const items = cfg.options.filter(o => g.match(o.id));
+    if (!items.length) return;
+    items.forEach(o => used.add(o.id));
+    html += `<div class="sn-mp-group"><div class="sn-mp-group-title">${g.title}</div>`;
+    items.forEach(o => {
+      html += renderMpOption(key, o, picked.has(o.id));
+    });
+    html += `</div>`;
+  });
+  // Mục nào không khớp group nào thì gom vào "Khác"
+  const rest = cfg.options.filter(o => !used.has(o.id));
+  if (rest.length) {
+    html += `<div class="sn-mp-group"><div class="sn-mp-group-title">Khác</div>`;
+    rest.forEach(o => { html += renderMpOption(key, o, picked.has(o.id)); });
+    html += `</div>`;
+  }
+
+  body.innerHTML = html;
+  document.getElementById("mpOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function renderMpOption(key, opt, isChecked) {
+  const lvl = opt.level || "school";
+  const tagClass = `lvl-${lvl}`;
+  const tagLabel = opt.levelLabel || "";
+  return `
+    <label class="sn-mp-option${isChecked ? " checked" : ""}" data-opt="${opt.id}" onclick="mpToggle('${opt.id}', this)">
+      <span class="sn-mp-check"></span>
+      <span class="sn-mp-opt-label">${opt.label}</span>
+      ${tagLabel ? `<span class="sn-mp-opt-tag ${tagClass}">${tagLabel}</span>` : ""}
+    </label>
+  `;
+}
+
+function mpToggle(optId, el) {
+  if (!_mpCurrentKey) return;
+  if (!Array.isArray(student[_mpCurrentKey])) student[_mpCurrentKey] = [];
+  const arr = student[_mpCurrentKey];
+  const idx = arr.indexOf(optId);
+  if (idx === -1) { arr.push(optId); el.classList.add("checked"); }
+  else            { arr.splice(idx, 1); el.classList.remove("checked"); }
+  syncMultiOpenerBadges();
+  renderGrid(currentTab);
+}
+
+function clearMultiPicker() {
+  if (!_mpCurrentKey) return;
+  student[_mpCurrentKey] = [];
+  // Bỏ tick hết các option đang hiển thị
+  document.querySelectorAll("#mpBody .sn-mp-option.checked").forEach(el => el.classList.remove("checked"));
+  syncMultiOpenerBadges();
+  renderGrid(currentTab);
+}
+
+function closeMultiPicker(ev) {
+  // Nếu bấm overlay ngoài modal thì ev.target === overlay; không có ev nghĩa là gọi trực tiếp
+  if (ev && ev.target && ev.target.id !== "mpOverlay") return;
+  document.getElementById("mpOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+  _mpCurrentKey = null;
+}
+
+/* Đồng bộ badge "(n)" trên 2 nút opener và active state */
+function syncMultiOpenerBadges() {
+  document.querySelectorAll(".sn-multi-opener").forEach(btn => {
+    const key = btn.getAttribute("data-list");
+    const n = Array.isArray(student[key]) ? student[key].length : 0;
+    const badge = btn.querySelector(".sn-count-badge");
+    if (badge) {
+      if (n > 0) { badge.textContent = n; badge.classList.add("show"); }
+      else       { badge.textContent = "";  badge.classList.remove("show"); }
+    }
+    btn.classList.toggle("active", n > 0);
+  });
+}
+
+/* Cho phép đóng modal bằng phím Esc */
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape" && document.getElementById("mpOverlay")?.classList.contains("open")) {
+    closeMultiPicker();
+  }
+});
+
 function resetStudent() {
   student = {
     gpa:"", thpt:"", dgnl:"", ielts:"", region:"",
@@ -4494,6 +4741,7 @@ function resetStudent() {
   ["gpa","thpt","dgnl","ielts"].forEach(k => { document.getElementById("s_"+k).value = ""; });
   document.getElementById("s_region").value = "";
   document.querySelectorAll(".sn-toggle-btn").forEach(b => b.classList.remove("active"));
+  syncMultiOpenerBadges();
   renderGrid(currentTab);
 }
 
