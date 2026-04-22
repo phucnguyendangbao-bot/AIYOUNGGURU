@@ -541,6 +541,106 @@ body::after-disabled{
 
 .sn-empty{border:1.5px dashed rgba(99,102,241,0.25);border-radius:22px;padding:48px 32px;text-align:center;color:var(--text-soft);background:rgba(255,255,255,0.5);}
 
+/* ═══ TIER BADGES (độ tin cậy dữ liệu) ═══ */
+.tier-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:999px;
+  cursor:help;transition:all .2s;white-space:nowrap;
+}
+.tier-badge.official{
+  background:rgba(16,185,129,0.1);color:#059669;
+  border:1px solid rgba(16,185,129,0.25);
+}
+.tier-badge.reference{
+  background:rgba(245,158,11,0.1);color:#d97706;
+  border:1px solid rgba(245,158,11,0.25);
+}
+.tier-badge.framework{
+  background:rgba(107,114,128,0.1);color:#4b5563;
+  border:1px solid rgba(107,114,128,0.25);
+}
+.tier-badge:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+
+/* ═══ SCORE-WRAP với viền màu theo tier ═══ */
+.score-wrap.official{border-left:3px solid #059669 !important;}
+.score-wrap.reference{border-left:3px solid #d97706 !important;}
+.score-wrap.framework{border-left:3px solid #6b7280 !important;}
+.score-disclaimer{
+  font-size:.72rem;color:var(--text-soft);margin-top:6px;margin-bottom:10px;
+  font-style:italic;line-height:1.4;
+}
+
+/* ═══ VERDICT PILL (thay "đủ/không đủ") ═══ */
+.verdict{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.78rem;font-weight:700;padding:5px 11px;border-radius:999px;
+  white-space:nowrap;
+}
+.verdict.high{background:rgba(16,185,129,0.12);color:#047857;border:1px solid rgba(16,185,129,0.22);}
+.verdict.medium{background:rgba(245,158,11,0.12);color:#b45309;border:1px solid rgba(245,158,11,0.22);}
+.verdict.low{background:rgba(239,68,68,0.08);color:#b91c1c;border:1px solid rgba(239,68,68,0.18);}
+.verdict.insufficient{background:rgba(107,114,128,0.1);color:#4b5563;border:1px solid rgba(107,114,128,0.2);}
+
+/* ═══ SOURCE BLOCK (nguồn đánh giá) ═══ */
+.source-block{
+  margin-top:12px;padding:11px 14px;
+  background:rgba(99,102,241,0.04);
+  border-left:3px solid rgba(99,102,241,0.3);
+  border-radius:8px;
+  font-size:.78rem;color:var(--text-mid);line-height:1.55;
+}
+.source-block-label{
+  font-weight:700;color:var(--text-dark);
+  display:block;margin-bottom:4px;font-size:.8rem;
+}
+
+/* ═══ SECTION DISCLAIMER (đầu section) ═══ */
+.section-disclaimer{
+  background:linear-gradient(135deg,rgba(245,158,11,0.06),rgba(245,158,11,0.02));
+  border:1px solid rgba(245,158,11,0.22);
+  border-radius:14px;padding:14px 18px;margin:0 0 20px;
+  font-size:.88rem;color:#78350f;line-height:1.65;
+}
+.section-disclaimer summary{
+  cursor:pointer;font-weight:600;color:#92400e;
+  list-style:none;display:flex;align-items:center;gap:6px;
+}
+.section-disclaimer summary::-webkit-details-marker{display:none;}
+.section-disclaimer summary::after{
+  content:'▼';margin-left:auto;font-size:.7rem;opacity:.6;transition:transform .2s;
+}
+.section-disclaimer[open] summary::after{transform:rotate(180deg);}
+.section-disclaimer strong{color:#92400e;}
+
+/* ═══ MISSING DATA BANNER ═══ */
+.missing-data-banner{
+  background:rgba(99,102,241,0.05);
+  border:1.5px dashed rgba(99,102,241,0.3);
+  border-radius:14px;padding:16px 20px;margin-bottom:16px;
+}
+.missing-data-banner.soft{
+  background:rgba(99,102,241,0.03);
+  border:1px solid rgba(99,102,241,0.15);
+  border-style:solid;
+}
+.missing-data-title{
+  font-weight:700;color:var(--text-dark);margin-bottom:6px;font-size:.95rem;
+}
+.missing-data-list{
+  list-style:none;padding:0;margin:8px 0 10px;font-size:.85rem;color:var(--text-mid);
+}
+.missing-data-list li{padding:3px 0;}
+.missing-data-list li::before{content:"☐ ";margin-right:4px;color:var(--accent);font-weight:700;}
+.missing-data-btn{
+  margin-top:4px;padding:8px 18px;
+  background:var(--grad-btn);color:#fff;border:none;border-radius:10px;
+  font-weight:700;font-size:.85rem;cursor:pointer;
+  box-shadow:0 4px 12px rgba(99,102,241,0.25);
+  transition:transform .15s,box-shadow .15s;
+  font-family:inherit;
+}
+.missing-data-btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(99,102,241,0.35);}
+
 /* Group labels khi đã nhập tiêu chí */
 .sn-group-label{
   font-size:.88rem;font-weight:700;
@@ -559,6 +659,96 @@ body::after-disabled{
 }
 .sn-card-dim{opacity:.62;filter:grayscale(.15);transition:all .25s;}
 .sn-card-dim:hover{opacity:1;filter:none;}
+
+/* ========== TIER SYSTEM (độ tin cậy dữ liệu) ========== */
+.tier-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:999px;
+  cursor:help;transition:all .2s;white-space:nowrap;
+}
+.tier-badge.official{
+  background:rgba(16,185,129,0.1);color:#059669;
+  border:1px solid rgba(16,185,129,0.25);
+}
+.tier-badge.reference{
+  background:rgba(245,158,11,0.1);color:#d97706;
+  border:1px solid rgba(245,158,11,0.25);
+}
+.tier-badge.framework{
+  background:rgba(107,114,128,0.12);color:#4b5563;
+  border:1px solid rgba(107,114,128,0.3);
+}
+.tier-badge:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+
+/* Score bar wrapper có viền tier */
+.sn-elig-box.tier-official{border-left:3px solid #059669;}
+.sn-elig-box.tier-reference{border-left:3px solid #d97706;}
+.sn-elig-box.tier-framework{border-left:3px solid #6b7280;}
+
+/* Verdict (thay "đủ/không đủ") */
+.verdict-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.78rem;font-weight:700;padding:5px 11px;border-radius:10px;
+  white-space:nowrap;
+}
+.verdict-pill.high{background:rgba(16,185,129,0.12);color:#047857;border:1px solid rgba(16,185,129,0.25);}
+.verdict-pill.medium{background:rgba(245,158,11,0.12);color:#b45309;border:1px solid rgba(245,158,11,0.25);}
+.verdict-pill.low{background:rgba(239,68,68,0.08);color:#b91c1c;border:1px solid rgba(239,68,68,0.2);}
+.verdict-pill.insufficient{background:rgba(107,114,128,0.1);color:#4b5563;border:1px solid rgba(107,114,128,0.25);}
+
+/* Source block */
+.source-block{
+  margin-top:12px;padding:10px 14px;
+  background:rgba(99,102,241,0.04);
+  border-left:3px solid rgba(99,102,241,0.3);
+  border-radius:8px;font-size:.78rem;color:#4b5563;line-height:1.6;
+}
+.source-block-label{font-weight:700;color:#1f2937;display:block;margin-bottom:3px;}
+.source-block a{color:#6366f1;text-decoration:none;font-weight:600;}
+.source-block a:hover{text-decoration:underline;}
+
+/* Section disclaimer banner đầu tool */
+.section-disclaimer{
+  background:linear-gradient(135deg,rgba(245,158,11,0.07),rgba(245,158,11,0.02));
+  border:1px solid rgba(245,158,11,0.25);
+  border-radius:14px;padding:14px 18px;margin:16px 0 20px;
+  font-size:.86rem;color:#78350f;line-height:1.65;
+}
+.section-disclaimer strong{color:#92400e;}
+.section-disclaimer summary{
+  font-weight:700;cursor:pointer;outline:none;user-select:none;
+  color:#92400e;font-size:.88rem;
+}
+.section-disclaimer summary::-webkit-details-marker{display:none;}
+.section-disclaimer summary::before{content:"▸ ";transition:transform .2s;display:inline-block;}
+.section-disclaimer[open] summary::before{content:"▾ ";}
+.section-disclaimer-body{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(245,158,11,0.3);}
+
+/* Missing data banner */
+.missing-data-banner{
+  background:rgba(99,102,241,0.05);
+  border:1.5px dashed rgba(99,102,241,0.3);
+  border-radius:14px;padding:18px 22px;margin-bottom:16px;
+  grid-column:1/-1;
+}
+.missing-data-title{font-weight:800;color:#1f2937;margin-bottom:6px;font-size:1rem;}
+.missing-data-sub{font-size:.85rem;color:#4b5563;margin-bottom:8px;}
+.missing-data-list{list-style:none;padding:0;margin:8px 0 12px;font-size:.85rem;color:#4b5563;}
+.missing-data-list li{padding:4px 0;}
+.missing-data-list li::before{content:"☐ ";margin-right:4px;color:#6366f1;font-weight:700;}
+.missing-data-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 18px;background:#6366f1;color:#fff;border:none;border-radius:10px;
+  font-weight:700;font-size:.85rem;cursor:pointer;transition:all .2s;
+  font-family:inherit;
+}
+.missing-data-btn:hover{background:#4f46e5;transform:translateY(-1px);box-shadow:0 4px 12px rgba(99,102,241,0.3);}
+
+/* Score disclaimer nhỏ dưới progress */
+.score-disclaimer{
+  font-size:.7rem;color:#6b7280;margin-top:4px;font-style:italic;
+  display:flex;align-items:center;gap:4px;
+}
 .sn-tab-panel{display:none;flex-direction:column;gap:16px;}
 .sn-tab-panel.active{display:flex;}
 
@@ -2240,6 +2430,16 @@ body.spa-active #spa-topbar { display: flex; }
     <p>Nhập thông tin hồ sơ của bạn để hệ thống tự đối chiếu điều kiện với từng trường trong 8 nhóm ngành lớn.</p>
   </div>
 
+  <!-- Data trust disclaimer -->
+  <details class="section-disclaimer" open>
+    <summary><strong>⚠️ Về độ chính xác của dữ liệu</strong> — nên đọc trước khi sử dụng</summary>
+    <div style="margin-top:10px;">
+      BrightWay Scholars tổng hợp thông tin học bổng từ website các trường, đề án tuyển sinh và nguồn công khai. Nhiều trường không công bố tiêu chí học bổng chi tiết cho từng năm, nên <strong>một phần dữ liệu ở đây là tham khảo — không phải công bố chính thức</strong>.
+      <br><br>
+      Công cụ này giúp bạn <strong>định hướng</strong> và thu hẹp lựa chọn, nhưng <strong>không thay thế</strong> thông báo chính thức của trường. Mỗi card đều có <strong>nhãn tin cậy</strong> (✅ Chính thức / 📋 Tham khảo / 🧭 Khung chung) và <strong>nguồn tham chiếu</strong> — hãy đọc kỹ trước khi nộp hồ sơ.
+    </div>
+  </details>
+
   <!-- HERO + PROFILE -->
   <section class="sn-hero-grid" style="display:grid;gap:16px;margin-bottom:20px;">
     <div class="sn-hero-card">
@@ -3278,10 +3478,65 @@ function hasStudentInput() {
   return bools.some(k => student[k]);
 }
 
+// Đủ dữ liệu để đối chiếu = ít nhất 1 field số + 1 field khác (hoặc 2 field số)
+function hasEnoughInputForEvaluation() {
+  const numCount = ["gpa","thpt","dgnl","ielts"].filter(k => student[k]).length;
+  const boolCount = ["award","english","conduct","activities","essay","portfolio","commitment"]
+    .filter(k => student[k]).length;
+  return numCount >= 1 && (numCount + boolCount) >= 2;
+}
+
+/* ─────────── Tier detection (official / reference / framework) ─────────── */
+function detectTier(uni) {
+  if (!uni.requirements || uni.requirements.length === 0) return 'framework';
+  // Explicit override nếu dữ liệu có field tier
+  if (uni.tier) return uni.tier;
+
+  // Suy luận từ note field của requirements + note chính của trường
+  const allNotes = (uni.requirements.map(r => r.note || '').join(' ') + ' ' + (uni.note || '')).toLowerCase();
+  const referenceSignals = [
+    'tham khảo', 'mốc tham khảo', 'theo thông báo', 'theo đề án', 'theo năm',
+    'tùy đợt', 'tùy năm', 'tùy chương trình', 'thay đổi theo', 'đang cập nhật'
+  ];
+  const hasReferenceSignal = referenceSignals.some(sig => allNotes.includes(sig));
+  return hasReferenceSignal ? 'reference' : 'official';
+}
+
+const TIER_META = {
+  official:  { icon:'✅', text:'Tiêu chí chính thức', tooltip:'Dữ liệu từ thông báo tuyển sinh / website chính thức của trường' },
+  reference: { icon:'📋', text:'Tiêu chí tham khảo',  tooltip:'Suy luận từ nguồn công khai (đề án, mô tả học bổng), không phải công bố chính thức' },
+  framework: { icon:'🧭', text:'Khung đánh giá chung', tooltip:'Dựa trên khung hồ sơ học bổng phổ quát, chỉ mang tính định hướng' },
+};
+function getTierBadge(tier) {
+  const m = TIER_META[tier] || TIER_META.framework;
+  return `<span class="tier-badge ${tier}" title="${m.tooltip}">${m.icon} ${m.text}</span>`;
+}
+
+function getSourceText(tier, uni) {
+  const year = new Date().getFullYear();
+  if (tier === 'official') {
+    return `Thông tin tuyển sinh / học bổng chính thức của trường · Cập nhật ${year} · <strong>Loại:</strong> Chính thức`;
+  }
+  if (tier === 'reference') {
+    return `Đề án tuyển sinh các năm gần nhất, mô tả học bổng trên website trường · Cập nhật ${year} · <strong>Loại:</strong> Tham khảo (không phải công bố chính thức)`;
+  }
+  return `Trường chưa công bố tiêu chí học bổng cụ thể. Đánh giá dựa trên khung hồ sơ phổ quát (học lực, ngoại ngữ, hoạt động, leadership, impact, fit ngành) · <strong>Loại:</strong> Định hướng chung`;
+}
+
+/* ─────────── Verdict (thay thế "đủ/không đủ") ─────────── */
+function getVerdict(percent, tier, hasEnough) {
+  if (!hasEnough) return { cls:'insufficient', text:'❓ Chưa đủ dữ liệu để đối chiếu' };
+  if (percent >= 80 && tier === 'official')  return { cls:'high',   text:'✅ Phù hợp cao với hồ sơ hiện tại' };
+  if (percent >= 80)                          return { cls:'high',   text:'✅ Có thể phù hợp — hãy kiểm tra lại tại trường' };
+  if (percent >= 50)                          return { cls:'medium', text:'⚠️ Phù hợp ở mức tham khảo' };
+  return                                             { cls:'low',    text:'📌 Cần bổ sung để tăng cơ hội' };
+}
+
 function renderGrid(tab) {
   const grid = document.getElementById("grid-" + tab);
   const selectedRegion = student.region || "";
   const hasInput = hasStudentInput();
+  const hasEnough = hasEnoughInputForEvaluation();
 
   let unis = scholarshipData[tab]
     .filter(u => (u.name + " " + u.short).toLowerCase().includes(currentSearch));
@@ -3302,7 +3557,34 @@ function renderGrid(tab) {
     return { uni: u, percent: ev.percent, met: ev.met, total: ev.total, regionScore };
   });
 
-  if (hasInput) {
+  // Banner hướng dẫn nếu chưa đủ data để đánh giá
+  let missingBanner = '';
+  if (hasInput && !hasEnough) {
+    const numCount = ["gpa","thpt","dgnl","ielts"].filter(k => student[k]).length;
+    const boolCount = ["award","english","conduct","activities","essay","portfolio","commitment"]
+      .filter(k => student[k]).length;
+    const missingItems = [];
+    if (numCount < 1) missingItems.push('GPA hoặc điểm thi (THPT / ĐGNL / IELTS — ít nhất 1 mục)');
+    if ((numCount + boolCount) < 2) missingItems.push('Thêm 1 hoạt động/kỹ năng nổi bật (chọn toggle bất kỳ)');
+    missingBanner = `
+      <div class="missing-data-banner" style="grid-column:1/-1">
+        <div class="missing-data-title">📝 Chưa đủ dữ liệu để đối chiếu chính xác</div>
+        <div style="font-size:.85rem;color:#4b5563;margin-bottom:4px;">Các trường dưới đây vẫn hiển thị, nhưng mức độ phù hợp sẽ chính xác hơn khi bạn nhập thêm:</div>
+        <ul class="missing-data-list">
+          ${missingItems.map(m => `<li>${m}</li>`).join('')}
+        </ul>
+        <button onclick="document.getElementById('s_gpa')?.focus(); document.getElementById('s_gpa')?.scrollIntoView({behavior:'smooth',block:'center'});"
+                class="missing-data-btn">Nhập thông tin ngay →</button>
+      </div>`;
+  } else if (!hasInput) {
+    missingBanner = `
+      <div class="missing-data-banner soft" style="grid-column:1/-1">
+        <div class="missing-data-title">💡 Mẹo: nhập thông tin hồ sơ để xem mức độ phù hợp</div>
+        <div style="font-size:.85rem;color:#4b5563;">Nhập GPA / điểm thi / IELTS hoặc chọn toggle hoạt động ở form phía trên — hệ thống sẽ tự sắp xếp trường phù hợp với hồ sơ bạn.</div>
+      </div>`;
+  }
+
+  if (hasInput && hasEnough) {
     // Sort giảm dần theo: (1) percent khớp tiêu chí, (2) region, (3) met count
     unis.sort((a, b) => {
       if (b.percent !== a.percent) return b.percent - a.percent;
@@ -3314,7 +3596,7 @@ function renderGrid(tab) {
     const matched   = unis.filter(x => x.percent >= 50);
     const unmatched = unis.filter(x => x.percent < 50);
 
-    let html = "";
+    let html = missingBanner;
     if (matched.length > 0) {
       html += `<div class="sn-group-label sn-group-ok" style="grid-column:1/-1">
         ✅ Phù hợp với hồ sơ của bạn · <strong>${matched.length} trường</strong>
@@ -3323,25 +3605,26 @@ function renderGrid(tab) {
     }
     if (unmatched.length > 0) {
       html += `<div class="sn-group-label sn-group-warn" style="grid-column:1/-1">
-        ⚠️ Chưa đạt đủ tiêu chí · <strong>${unmatched.length} trường</strong>
-        <span style="font-weight:500;opacity:.85;">— cần cải thiện hồ sơ để có cơ hội</span>
+        ⚠️ Cần bổ sung để tăng cơ hội · <strong>${unmatched.length} trường</strong>
+        <span style="font-weight:500;opacity:.85;">— hồ sơ chưa khớp đủ tiêu chí</span>
       </div>`;
       html += unmatched.map(x => `<div class="sn-card-dim">${buildCard(x.uni)}</div>`).join("");
     }
-    if (matched.length === 0 && unmatched.length === 0) {
-      grid.innerHTML = `<div class="sn-empty" style="grid-column:1/-1">Không có trường nào để hiển thị.</div>`;
-      return;
-    }
     grid.innerHTML = html;
   } else {
-    // Chưa nhập gì → sort theo region như cũ
+    // Chưa nhập đủ / chưa nhập gì → không sort theo percent, giữ theo region
     unis.sort((a, b) => b.regionScore - a.regionScore);
-    grid.innerHTML = unis.map(x => buildCard(x.uni)).join("");
+    grid.innerHTML = missingBanner + unis.map(x => buildCard(x.uni)).join("");
   }
 }
 
 function buildCard(uni) {
   const { met, total, percent, details } = evaluate(uni.requirements);
+  const tier = detectTier(uni);
+  const hasEnough = hasEnoughInputForEvaluation();
+  const verdict = getVerdict(percent, tier, hasEnough);
+  const tierBadgeHtml = getTierBadge(tier);
+  const sourceText = getSourceText(tier, uni);
 
   const startRaw = (uni.applyStart ?? uni.apply_start ?? uni.startDate ?? uni.start_date ?? "").toString().trim();
   const endRaw = (uni.applyEnd ?? uni.apply_end ?? uni.endDate ?? uni.end_date ?? "").toString().trim();
@@ -3429,6 +3712,7 @@ function buildCard(uni) {
               <span class="sn-badge-sec">${uni.short}</span>
               <span class="sn-badge-out">${uni.city}</span>
               ${regionBadge}
+              ${tierBadgeHtml}
             </div>
             ${deadlineHtml}
           </div>
@@ -3444,13 +3728,16 @@ function buildCard(uni) {
         <div class="sn-section-title">Phương thức xét tuyển / nộp hồ sơ</div>
         <div class="sn-badges">${admitHtml}</div>
       </div>
-      <div class="sn-elig-box">
+      <div class="sn-elig-box score-wrap ${tier}">
         <div class="sn-elig-row">
           <span class="sn-elig-label">Kiểm tra thử độ phù hợp</span>
-          <span class="sn-elig-count">${met}/${total} tiêu chí</span>
+          <span class="verdict ${verdict.cls}">${verdict.text}</span>
         </div>
-        <div class="sn-progress-track"><div class="sn-progress-fill" style="width:${percent}%"></div></div>
-        <p class="sn-elig-hint">* Đây là đánh giá tham khảo để học sinh tự đối chiếu, không thay thế điều kiện chính thức.</p>
+        <div style="display:flex;align-items:center;gap:10px;margin:6px 0 4px;">
+          <div class="sn-progress-track" style="flex:1;"><div class="sn-progress-fill" style="width:${hasEnough ? percent : 0}%"></div></div>
+          <span class="sn-elig-count" style="font-size:.78rem;color:var(--text-soft);white-space:nowrap;">${hasEnough ? `${met}/${total} mục` : '— / ' + total}</span>
+        </div>
+        <p class="score-disclaimer">💡 Kết quả tham khảo — kiểm tra tại website chính thức của trường trước khi quyết định.</p>
         <div class="sn-req-grid">${reqHtml}</div>
         <div class="sn-result-grid">${detailHtml}</div>
       </div>
@@ -3458,6 +3745,10 @@ function buildCard(uni) {
         <p><strong>🎓 Số suất học bổng/năm:</strong> ${uni.scholarshipCount || "Theo thông báo của trường"}</p>
         <p><strong>Ghi chú:</strong> ${uni.note}</p>
         <p><strong>Học phí:</strong> ${uni.tuitionRange}</p>
+      </div>
+      <div class="source-block">
+        <div class="source-block-label">📎 Nguồn đánh giá</div>
+        ${sourceText}
       </div>
     </div>
   </div>`;
