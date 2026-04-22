@@ -7645,8 +7645,8 @@ Bạn cần hỏi gì nào?</div>
 (function(){
   'use strict';
   // ══ CẤU HÌNH ══
-  // URL Vercel serverless function của bạn
-  const CHAT_ENDPOINT = 'https://aiyoungguru.vercel.app/api/chat';
+  // Đường dẫn tương đối vì frontend + backend cùng deploy trên Vercel (same origin)
+  const CHAT_ENDPOINT = '/api/chat';
   const MAX_HISTORY = 12;
 
   const launcher   = document.getElementById('bwChatLauncher');
