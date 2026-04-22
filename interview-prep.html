@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Luyện phỏng vấn học bổng – BrightWay Scholars</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:linear-gradient(145deg,#e8eeff 0%,#dde8ff 20%,#e5deff 50%,#d6e9ff 80%,#e0f0ff 100%);
+  --glass:rgba(255,255,255,0.62);
+  --grad:linear-gradient(135deg,#5b7cfa 0%,#7c5bf5 50%,#9f5bea 100%);
+  --grad-btn:linear-gradient(135deg,#6b8eff 0%,#8b6bff 100%);
+  --text-dark:#1a1a3e;
+  --text-mid:#3a3a6e;
+  --text-soft:#6b7aaa;
+  --accent:#6366f1;
+  --accent2:#a78bfa;
+  --white:#ffffff;
+  --shadow:0 8px 32px rgba(99,102,241,0.15);
+  --shadow-lg:0 16px 48px rgba(99,102,241,0.2);
+  --font:'Be Vietnam Pro',system-ui,sans-serif;
+  --font-display:'Nunito','Be Vietnam Pro',sans-serif;
+}
+body{font-family:var(--font);color:var(--text-dark);background:var(--bg);min-height:100vh;}
+
+/* ── PAGE HEADER ── */
+.iv-page-hero{
+  background:var(--grad);
+  padding:40px 24px 36px;
+  color:#fff;
+  position:relative;overflow:hidden;
+}
+.iv-page-hero::before{
+  content:'🎤';position:absolute;right:32px;top:20px;font-size:80px;opacity:.12;
+}
+.iv-page-hero-inner{max-width:960px;margin:0 auto;}
+.iv-page-hero .tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);
+  color:#e0e7ff;font-size:.75rem;font-weight:700;letter-spacing:.06em;
+  padding:4px 12px;border-radius:999px;margin-bottom:14px;
+}
+.iv-page-hero h1{font-family:var(--font-display);font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;line-height:1.2;margin-bottom:10px;}
+.iv-page-hero p{opacity:.88;font-size:.95rem;line-height:1.65;max-width:620px;}
+
+/* ── LAYOUT ── */
+.iv-wrap{max-width:960px;margin:0 auto;padding:32px 20px 60px;}
+
+/* ── TOPIC NAV ── */
+.iv-nav-scroll{
+  display:flex;gap:8px;overflow-x:auto;padding:0 0 4px;
+  scrollbar-width:none;margin-bottom:28px;flex-wrap:wrap;
+}
+.iv-nav-scroll::-webkit-scrollbar{display:none;}
+.iv-nav-btn{
+  flex-shrink:0;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 16px;border-radius:999px;border:1.5px solid rgba(99,102,241,0.22);
+  background:rgba(255,255,255,0.7);color:var(--text-mid);font-size:.82rem;font-weight:700;
+  cursor:pointer;transition:all .2s;white-space:nowrap;backdrop-filter:blur(8px);
+  font-family:var(--font);
+}
+.iv-nav-btn:hover{background:#fff;border-color:var(--accent);color:var(--accent);}
+.iv-nav-btn.active{background:var(--grad-btn);color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(99,102,241,0.32);}
+
+/* ── TOPIC CARD ── */
+.iv-topic{
+  background:rgba(255,255,255,0.72);
+  border:1.5px solid rgba(255,255,255,0.9);
+  border-radius:24px;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(12px);
+  margin-bottom:28px;
+  overflow:hidden;
+  display:none;
+}
+.iv-topic.active{display:block;}
+.iv-topic-head{
+  padding:24px 26px 20px;
+  border-bottom:1px solid rgba(99,102,241,0.1);
+  display:flex;align-items:flex-start;gap:14px;
+}
+.iv-topic-icon{
+  width:52px;height:52px;border-radius:16px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+  background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(167,139,250,0.12));
+}
+.iv-topic-meta{flex:1;}
+.iv-topic-title{font-family:var(--font-display);font-size:1.2rem;font-weight:800;color:var(--text-dark);margin-bottom:6px;}
+.iv-priority{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2px 10px;border-radius:999px;font-size:.72rem;font-weight:800;letter-spacing:.04em;
+}
+.iv-priority.high{background:rgba(239,68,68,0.1);color:#dc2626;border:1px solid rgba(239,68,68,0.2);}
+.iv-priority.med{background:rgba(245,158,11,0.1);color:#b45309;border:1px solid rgba(245,158,11,0.2);}
+.iv-topic-desc{font-size:.88rem;color:var(--text-soft);line-height:1.6;margin-top:6px;}
+
+.iv-topic-body{padding:22px 26px 26px;display:flex;flex-direction:column;gap:20px;}
+
+/* ── INFO BOXES ── */
+.iv-info-row{display:grid;gap:12px;}
+@media(min-width:640px){.iv-info-row{grid-template-columns:1fr 1fr;}}
+.iv-info-box{
+  border-radius:14px;padding:14px 16px;
+  border:1px solid rgba(99,102,241,0.15);background:rgba(248,248,255,0.7);
+}
+.iv-info-box h4{font-size:.82rem;font-weight:800;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.05em;}
+.iv-info-box ul{padding-left:14px;display:flex;flex-direction:column;gap:4px;}
+.iv-info-box li{font-size:.84rem;color:var(--text-soft);}
+.iv-info-box.intent{border-color:rgba(139,92,246,0.2);background:rgba(139,92,246,0.04);}
+.iv-info-box.intent h4{color:#7c3aed;}
+
+/* ── ANSWER TABS ── */
+.iv-ans-label{font-size:.92rem;font-weight:700;color:var(--text-dark);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.iv-ans-label svg{width:16px;height:16px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.iv-ans-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+.iv-ans-tab{
+  padding:6px 14px;border-radius:999px;border:1.5px solid rgba(99,102,241,0.22);
+  background:transparent;color:var(--text-soft);font-size:.78rem;font-weight:700;
+  cursor:pointer;transition:all .18s;font-family:var(--font);
+}
+.iv-ans-tab:hover{border-color:var(--accent);color:var(--accent);}
+.iv-ans-tab.active{background:var(--accent);color:#fff;border-color:transparent;}
+
+.iv-ans-panels .iv-ans-pane{display:none;}
+.iv-ans-panels .iv-ans-pane.active{display:block;}
+
+.iv-ans-card{
+  border-radius:16px;padding:18px 20px;
+  border:1.5px solid rgba(99,102,241,0.15);
+  background:rgba(255,255,255,0.85);
+  position:relative;
+}
+.iv-ans-card::before{
+  content:'';position:absolute;top:0;left:0;width:4px;height:100%;
+  background:var(--grad);border-radius:4px 0 0 4px;
+}
+.iv-ans-card p{font-size:.88rem;color:var(--text-mid);line-height:1.75;font-style:italic;}
+.iv-ans-card.star{border-color:rgba(16,185,129,0.2);background:rgba(16,185,129,0.03);}
+.iv-ans-card.star::before{background:linear-gradient(to bottom,#34d399,#059669);}
+.iv-ans-card.story{border-color:rgba(245,158,11,0.2);background:rgba(245,158,11,0.03);}
+.iv-ans-card.story::before{background:linear-gradient(to bottom,#fbbf24,#f59e0b);}
+
+/* ── KEY POINTS ── */
+.iv-keypoints{
+  border-radius:14px;padding:14px 16px;
+  border:1px solid rgba(52,211,153,0.3);background:rgba(52,211,153,0.05);
+}
+.iv-keypoints h4{font-size:.82rem;font-weight:800;color:#047857;margin-bottom:8px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.05em;}
+.iv-keypoints ul{padding-left:14px;display:flex;flex-direction:column;gap:3px;}
+.iv-keypoints li{font-size:.83rem;color:#065f46;}
+
+/* ── STAR EXPLAINER ── */
+.iv-star-tip{
+  border-radius:14px;padding:14px 16px;
+  border:1px solid rgba(99,102,241,0.2);background:rgba(99,102,241,0.04);
+  display:flex;align-items:flex-start;gap:10px;
+}
+.iv-star-tip svg{width:16px;height:16px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:2px;}
+.iv-star-tip p{font-size:.82rem;color:var(--text-mid);line-height:1.6;}
+.iv-star-tip strong{color:var(--accent);}
+
+/* ── PROGRESS BAR ── */
+.iv-progress-section{margin-bottom:28px;}
+.iv-progress-label{font-size:.82rem;font-weight:700;color:var(--text-soft);margin-bottom:6px;}
+.iv-progress-track{width:100%;height:6px;border-radius:999px;background:rgba(99,102,241,0.1);overflow:hidden;}
+.iv-progress-fill{height:100%;border-radius:999px;background:var(--grad);transition:width .5s ease;}
+
+/* ── FRAMEWORK BOX ── */
+.iv-framework{
+  background:var(--grad);border-radius:20px;padding:24px 26px;color:#fff;margin-bottom:8px;
+  position:relative;overflow:hidden;
+}
+.iv-framework::after{content:'🗺️';position:absolute;right:20px;top:12px;font-size:52px;opacity:.15;}
+.iv-framework h3{font-family:var(--font-display);font-size:1rem;font-weight:800;margin-bottom:10px;}
+.iv-framework-steps{display:flex;flex-wrap:wrap;gap:8px;}
+.iv-fw-step{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);
+  padding:6px 12px;border-radius:999px;font-size:.8rem;font-weight:700;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:rgba(99,102,241,0.05);}
+::-webkit-scrollbar-thumb{background:rgba(99,102,241,0.25);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<!-- PAGE HERO -->
+<div class="iv-page-hero">
+  <div class="iv-page-hero-inner">
+    <div class="tag">✦ INTERVIEW PREP</div>
+    <h1>Luyện phỏng vấn học bổng<br>theo từng chủ đề</h1>
+    <p>Tổng hợp 12 chủ đề phỏng vấn phổ biến nhất từ Chevening, Australia Awards, Fulbright, France Excellence — kèm mẫu trả lời ngắn, STAR và câu chuyện cá nhân.</p>
+  </div>
+</div>
+
+<div class="iv-wrap">
+
+  <!-- FRAMEWORK -->
+  <div class="iv-framework">
+    <h3>Khung trả lời chung cho hầu hết câu hỏi</h3>
+    <div class="iv-framework-steps">
+      <div class="iv-fw-step">📍 Bối cảnh</div>
+      <div class="iv-fw-step">→</div>
+      <div class="iv-fw-step">📊 Bằng chứng</div>
+      <div class="iv-fw-step">→</div>
+      <div class="iv-fw-step">📚 Lựa chọn học tập</div>
+      <div class="iv-fw-step">→</div>
+      <div class="iv-fw-step">🎯 Tác động</div>
+      <div class="iv-fw-step">→</div>
+      <div class="iv-fw-step">🏅 Vì sao học bổng này</div>
+    </div>
+  </div>
+
+  <!-- TOPIC NAV -->
+  <div class="iv-nav-scroll" id="topicNav">
+    <button class="iv-nav-btn active" onclick="showTopic('academic',this)">🎓 Nền tảng học thuật</button>
+    <button class="iv-nav-btn" onclick="showTopic('motivation',this)">💡 Động lực ứng tuyển</button>
+    <button class="iv-nav-btn" onclick="showTopic('career',this)">🚀 Mục tiêu nghề nghiệp</button>
+    <button class="iv-nav-btn" onclick="showTopic('leadership',this)">👥 Lãnh đạo & Ảnh hưởng</button>
+    <button class="iv-nav-btn" onclick="showTopic('community',this)">🤝 Phục vụ cộng đồng</button>
+    <button class="iv-nav-btn" onclick="showTopic('research',this)">🔬 Nghiên cứu học thuật</button>
+    <button class="iv-nav-btn" onclick="showTopic('finance',this)">💰 Nhu cầu tài chính</button>
+    <button class="iv-nav-btn" onclick="showTopic('ethics',this)">⚖️ Đạo đức & Chính trực</button>
+    <button class="iv-nav-btn" onclick="showTopic('diversity',this)">🌍 Đa dạng & Hòa nhập</button>
+    <button class="iv-nav-btn" onclick="showTopic('current',this)">📰 Bối cảnh hiện thời</button>
+    <button class="iv-nav-btn" onclick="showTopic('program',this)">🏫 Chương trình & Trường</button>
+    <button class="iv-nav-btn" onclick="showTopic('behavioral',this)">🧩 Câu hỏi tình huống</button>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="iv-progress-section">
+    <div class="iv-progress-label">Chủ đề đang xem: <span id="topicCount">1</span> / 12</div>
+    <div class="iv-progress-track"><div class="iv-progress-fill" id="progressFill" style="width:8.3%"></div></div>
+  </div>
+
+  <!-- ══════════════ TOPIC: ACADEMIC ══════════════ -->
+  <div class="iv-topic active" id="topic-academic">
+    <div class="iv-topic-head">
+      <div class="iv-topic-icon">🎓</div>
+      <div class="iv-topic-meta">
+        <div class="iv-topic-title">Nền tảng học thuật</div>
+        <span class="iv-priority high">● Ưu tiên rất cao</span>
+        <p class="iv-topic-desc">Gần như mặc định trong mọi buổi phỏng vấn. Hội đồng muốn thấy bạn có thể theo học thành công và biết đọc năng lực của mình bằng dữ liệu chứ không chỉ cảm xúc.</p>
+      </div>
+    </div>
+    <div class="iv-topic-body">
+      <div class="iv-info-row">
+        <div class="iv-info-box">
+          <h4>🎤 Câu hỏi thường gặp</h4>
+          <ul>
+            <li>Bạn tự đánh giá nền tảng học thuật của mình thế nào?</li>
+            <li>Vì sao bảng điểm của bạn phù hợp với ngành đã chọn?</li>
+            <li>Môn học hay dự án nào chuẩn bị tốt nhất cho bạn?</li>
+          </ul>
+        </div>
+        <div class="iv-info-box intent">
+          <h4>🔍 Ý đồ hội đồng</h4>
+          <ul>
+            <li>Kiểm tra khả năng theo học thành công</li>
+            <li>Mức phù hợp giữa năng lực và chương trình</li>
+            <li>Cách bạn đọc chính mình bằng dữ liệu</li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <div class="iv-ans-label">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Mẫu trả lời
+        </div>
+        <div class="iv-ans-tabs">
+          <button class="iv-ans-tab active" onclick="switchAns('academic','short',this)">⚡ Ngắn gọn</button>
+          <button class="iv-ans-tab" onclick="switchAns('academic','star',this)">🌟 STAR</button>
+          <button class="iv-ans-tab" onclick="switchAns('academic','story',this)">📖 Câu chuyện</button>
+        </div>
+        <div class="iv-ans-panels" id="ans-academic">
+          <div class="iv-ans-pane active" data-pane="short">
+            <div class="iv-ans-card">
+              <p>"Tôi có nền tảng học thuật phù hợp vì kết quả học của tôi ổn định ở các học phần lõi, đặc biệt là <strong>[môn/cụm môn]</strong>. Quan trọng hơn, tôi không chỉ học tốt mà còn đã dùng kiến thức đó vào <strong>[dự án/đề tài/công việc]</strong> nên tôi tin mình sẵn sàng cho bậc học tiếp theo."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="star">
+            <div class="iv-star-tip">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <p><strong>STAR:</strong> Situation → Task → Action → Result (+Reflection). Hãy kể một trải nghiệm học thuật có kết quả cụ thể.</p>
+            </div>
+            <div class="iv-ans-card star" style="margin-top:10px;">
+              <p>"Ở năm cuối đại học, tôi nhận ra mình cần chứng minh năng lực không chỉ bằng điểm số mà bằng đầu ra thực tế <strong>(S)</strong>. Tôi chọn làm đề tài về <strong>[chủ đề]</strong>, chịu trách nhiệm <strong>[nhiệm vụ] (T)</strong>, tự học thêm <strong>[công cụ/phương pháp] (A)</strong>, và kết quả là <strong>[kết quả cụ thể] (R)</strong>. Trải nghiệm đó cho tôi thấy năng lực học thuật của mình gắn được với giải quyết vấn đề thật."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="story">
+            <div class="iv-ans-card story">
+              <p>"Tôi đến với lĩnh vực này không phải vì nó dễ, mà vì càng học tôi càng thấy nó trả lời đúng những câu hỏi khiến tôi trăn trở lâu nhất. Từ những học phần đầu tiên đến đề tài tốt nghiệp, tôi dần xây được một nền tảng đủ sâu để không chỉ theo kịp chương trình mà còn biết mình muốn đi tiếp theo hướng nào."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="iv-keypoints">
+        <h4>✅ Điểm cần nhấn</h4>
+        <ul>
+          <li>Sự ổn định và học phần lõi</li>
+          <li>Bằng chứng ngoài bảng điểm (dự án, đề tài, ứng dụng thực tế)</li>
+          <li>Kỹ năng phương pháp và mức sẵn sàng học tiếp</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ TOPIC: MOTIVATION ══════════════ -->
+  <div class="iv-topic" id="topic-motivation">
+    <div class="iv-topic-head">
+      <div class="iv-topic-icon">💡</div>
+      <div class="iv-topic-meta">
+        <div class="iv-topic-title">Động lực ứng tuyển</div>
+        <span class="iv-priority high">● Ưu tiên rất cao</span>
+        <p class="iv-topic-desc">Hội đồng muốn biết động lực của bạn có sâu và cá nhân hóa hay chỉ là "săn học bổng". Chevening, France Excellence và Fulbright đều coi đây là tiêu chí cốt lõi.</p>
+      </div>
+    </div>
+    <div class="iv-topic-body">
+      <div class="iv-info-row">
+        <div class="iv-info-box">
+          <h4>🎤 Câu hỏi thường gặp</h4>
+          <ul>
+            <li>Vì sao bạn nộp học bổng này?</li>
+            <li>Vì sao bây giờ là thời điểm phù hợp?</li>
+            <li>Điều gì khiến bạn khác với các ứng viên khác?</li>
+          </ul>
+        </div>
+        <div class="iv-info-box intent">
+          <h4>🔍 Ý đồ hội đồng</h4>
+          <ul>
+            <li>Động lực có sâu, bền và cá nhân hóa không?</li>
+            <li>Hay chỉ là động lực "thấy danh giá thì muốn thử"?</li>
+            <li>Lý do chọn thời điểm này có logic không?</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="iv-ans-label"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Mẫu trả lời</div>
+        <div class="iv-ans-tabs">
+          <button class="iv-ans-tab active" onclick="switchAns('motivation','short',this)">⚡ Ngắn gọn</button>
+          <button class="iv-ans-tab" onclick="switchAns('motivation','star',this)">🌟 STAR</button>
+          <button class="iv-ans-tab" onclick="switchAns('motivation','story',this)">📖 Câu chuyện</button>
+        </div>
+        <div class="iv-ans-panels" id="ans-motivation">
+          <div class="iv-ans-pane active" data-pane="short">
+            <div class="iv-ans-card">
+              <p>"Tôi không nộp học bổng chỉ để đi học, mà để rút ngắn khoảng cách giữa năng lực hiện có và mục tiêu nghề nghiệp tôi đang theo đuổi. Thời điểm này phù hợp vì tôi đã tích lũy đủ trải nghiệm để học hiệu quả và cũng đủ rõ ràng về điều mình muốn tạo ra sau khi trở về."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="star">
+            <div class="iv-ans-card star">
+              <p>"Khi làm việc tại <strong>[đơn vị]</strong>, tôi nhiều lần gặp cùng một điểm nghẽn là <strong>[vấn đề] (S)</strong>. Tôi thử giải quyết trong phạm vi công việc hiện tại nhưng nhận ra mình thiếu <strong>[kiến thức/kỹ năng] (T+A)</strong>. Vì thế tôi xác định cần một chương trình đào tạo bài bản; học bổng này là phương án phù hợp nhất vì vừa có nội dung học thuật đúng nhu cầu, vừa tạo điều kiện để tôi chuyển kiến thức thành tác động thực tế <strong>(R)</strong>."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="story">
+            <div class="iv-ans-card story">
+              <p>"Động lực của tôi bắt đầu từ một trải nghiệm rất cụ thể: tôi từng chứng kiến <strong>[một vấn đề xã hội/chuyên môn]</strong> ảnh hưởng trực tiếp đến <strong>[con người/tổ chức/cộng đồng]</strong>. Từ đó, tôi không còn nhìn việc học là thành tích cá nhân nữa; với tôi, đây là con đường để có năng lực giải quyết một vấn đề mình thực sự quan tâm."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-keypoints">
+        <h4>✅ Điểm cần nhấn</h4>
+        <ul>
+          <li>Lý do cá nhân hóa, không nói kiểu "học bổng danh giá nên muốn thử"</li>
+          <li>Đúng thời điểm — đủ kinh nghiệm, đủ rõ về định hướng</li>
+          <li>Gắn với khoảng trống năng lực cụ thể</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ TOPIC: CAREER ══════════════ -->
+  <div class="iv-topic" id="topic-career">
+    <div class="iv-topic-head">
+      <div class="iv-topic-icon">🚀</div>
+      <div class="iv-topic-meta">
+        <div class="iv-topic-title">Mục tiêu nghề nghiệp & Tác động sau học</div>
+        <span class="iv-priority high">● Ưu tiên rất cao</span>
+        <p class="iv-topic-desc">Chevening yêu cầu kế hoạch ngắn–trung–dài hạn đo lường được. Australia Awards nhấn đóng góp cho phát triển sau học. France Excellence yêu cầu liên hệ với định hướng nghề nghiệp tương lai.</p>
+      </div>
+    </div>
+    <div class="iv-topic-body">
+      <div class="iv-info-row">
+        <div class="iv-info-box">
+          <h4>🎤 Câu hỏi thường gặp</h4>
+          <ul>
+            <li>Năm năm nữa bạn muốn ở đâu?</li>
+            <li>Sau khi học xong bạn sẽ làm gì?</li>
+            <li>Tác động cụ thể bạn muốn tạo ra là gì?</li>
+          </ul>
+        </div>
+        <div class="iv-info-box intent">
+          <h4>🔍 Ý đồ hội đồng</h4>
+          <ul>
+            <li>Bạn có tầm nhìn rõ và thực tế không?</li>
+            <li>Hiểu mối liên hệ giữa chương trình và con đường nghề nghiệp?</li>
+            <li>Có nhóm hưởng lợi cụ thể sau khi bạn hoàn thành?</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="iv-ans-label"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Mẫu trả lời</div>
+        <div class="iv-ans-tabs">
+          <button class="iv-ans-tab active" onclick="switchAns('career','short',this)">⚡ Ngắn gọn</button>
+          <button class="iv-ans-tab" onclick="switchAns('career','star',this)">🌟 STAR</button>
+          <button class="iv-ans-tab" onclick="switchAns('career','story',this)">📖 Câu chuyện</button>
+        </div>
+        <div class="iv-ans-panels" id="ans-career">
+          <div class="iv-ans-pane active" data-pane="short">
+            <div class="iv-ans-card">
+              <p>"Trong ngắn hạn, tôi muốn trở lại lĩnh vực <strong>[x]</strong> với vai trò có tính chuyên môn cao hơn. Trong trung hạn, tôi muốn dẫn dắt các dự án về <strong>[y]</strong>. Dài hạn hơn, mục tiêu của tôi là góp phần cải thiện <strong>[kết quả/chính sách/hệ sinh thái]</strong> trong lĩnh vực này."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="star">
+            <div class="iv-ans-card star">
+              <p>"Ba năm qua tôi làm việc ở vị trí <strong>[vị trí]</strong>, nhờ đó thấy rõ giới hạn của mình trong <strong>[nội dung] (S+T)</strong>. Tôi đặt mục tiêu sau khi học xong sẽ quay lại đảm nhiệm <strong>[vai trò]</strong>, trong 3–5 năm xây dựng <strong>[sáng kiến/chuyên môn] (A→R)</strong>, và dài hạn là mở rộng tác động ở cấp <strong>[tổ chức/ngành/chính sách]</strong>. Chương trình này giúp tôi đi từ kinh nghiệm thực hành sang năng lực thiết kế giải pháp."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="story">
+            <div class="iv-ans-card story">
+              <p>"Tôi không nhìn mục tiêu nghề nghiệp như một chức danh. Tôi nhìn nó như một lộ trình tạo ra thay đổi: trước hết làm tốt ở một vị trí cụ thể, sau đó tích lũy uy tín chuyên môn, rồi dùng uy tín đó để thúc đẩy thay đổi rộng hơn. Học bổng này là mắt xích giúp hành trình ấy đi nhanh hơn nhưng vẫn chắc."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-keypoints">
+        <h4>✅ Điểm cần nhấn</h4>
+        <ul>
+          <li>Mục tiêu theo mốc thời gian rõ: ngắn – trung – dài hạn</li>
+          <li>Có vai trò cụ thể và nhóm hưởng lợi cụ thể</li>
+          <li>Logic rõ: học xong → làm gì → tác động gì</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ TOPIC: LEADERSHIP ══════════════ -->
+  <div class="iv-topic" id="topic-leadership">
+    <div class="iv-topic-head">
+      <div class="iv-topic-icon">👥</div>
+      <div class="iv-topic-meta">
+        <div class="iv-topic-title">Lãnh đạo & Ảnh hưởng</div>
+        <span class="iv-priority high">● Ưu tiên rất cao</span>
+        <p class="iv-topic-desc">Australia Awards và Chevening đều kiểm tra rõ năng lực lãnh đạo bằng ví dụ có kết quả. Hội đồng phân biệt giữa "có chức danh" và "thực sự tạo ảnh hưởng".</p>
+      </div>
+    </div>
+    <div class="iv-topic-body">
+      <div class="iv-info-row">
+        <div class="iv-info-box">
+          <h4>🎤 Câu hỏi thường gặp</h4>
+          <ul>
+            <li>Hãy kể về một lần bạn dẫn dắt nhóm</li>
+            <li>Bạn đã thuyết phục người khác thế nào?</li>
+            <li>Bạn hiểu lãnh đạo là gì?</li>
+          </ul>
+        </div>
+        <div class="iv-info-box intent">
+          <h4>🔍 Ý đồ hội đồng</h4>
+          <ul>
+            <li>Phân biệt "có chức danh" vs "tạo ảnh hưởng thực"</li>
+            <li>Kết quả đo được của việc bạn dẫn dắt</li>
+            <li>Bài học bạn rút ra về lãnh đạo</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="iv-ans-label"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Mẫu trả lời</div>
+        <div class="iv-ans-tabs">
+          <button class="iv-ans-tab active" onclick="switchAns('leadership','short',this)">⚡ Ngắn gọn</button>
+          <button class="iv-ans-tab" onclick="switchAns('leadership','star',this)">🌟 STAR</button>
+          <button class="iv-ans-tab" onclick="switchAns('leadership','story',this)">📖 Câu chuyện</button>
+        </div>
+        <div class="iv-ans-panels" id="ans-leadership">
+          <div class="iv-ans-pane active" data-pane="short">
+            <div class="iv-ans-card">
+              <p>"Với tôi, lãnh đạo không chỉ là đứng đầu mà là tạo điều kiện để người khác cùng đạt kết quả tốt hơn. Tôi thường đo năng lực lãnh đạo của mình bằng việc tôi có thể làm rõ mục tiêu, giữ nhịp nhóm và giúp mọi người đi đến kết quả chung hay không."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="star">
+            <div class="iv-ans-card star">
+              <p>"Khi nhóm tôi thực hiện <strong>[dự án]</strong>, tiến độ bị chậm vì <strong>[vấn đề] (S)</strong>. Tôi nhận trách nhiệm điều phối lại công việc <strong>(T)</strong>, tổ chức các cuộc cập nhật ngắn hàng tuần, phân chia đầu việc rõ hơn và thống nhất tiêu chí hoàn thành <strong>(A)</strong>. Kết quả là dự án được hoàn thành đúng hạn và <strong>[chỉ số/kết quả] (R)</strong>. Điều tôi học được là lãnh đạo hiệu quả thường đến từ cấu trúc và lắng nghe, không phải chỉ từ quyền lực."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="story">
+            <div class="iv-ans-card story">
+              <p>"Tôi từng nghĩ lãnh đạo là phải nói hay và quyết đoán. Nhưng qua một dự án khó, tôi hiểu lãnh đạo thật sự là khi cả nhóm gặp áp lực mà vẫn tin nhau đủ để đi tiếp. Kể từ đó, tôi cố xây dựng ảnh hưởng của mình bằng sự đáng tin và khả năng đưa người khác cùng tham gia vào giải pháp."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-keypoints">
+        <h4>✅ Điểm cần nhấn</h4>
+        <ul>
+          <li>Ví dụ cụ thể, kết quả đo được</li>
+          <li>Vai trò của bạn và cách bạn ảnh hưởng người khác</li>
+          <li>Bài học lãnh đạo rút ra từ trải nghiệm</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ TOPIC: COMMUNITY ══════════════ -->
+  <div class="iv-topic" id="topic-community">
+    <div class="iv-topic-head">
+      <div class="iv-topic-icon">🤝</div>
+      <div class="iv-topic-meta">
+        <div class="iv-topic-title">Phục vụ cộng đồng</div>
+        <span class="iv-priority med">● Ưu tiên cao</span>
+        <p class="iv-topic-desc">Một số chương trình nhấn mạnh đóng góp cho cộng đồng và đất nước sau học. Hội đồng đánh giá động lực công ích, độ bền cam kết và khả năng biến thiện chí thành hành động.</p>
+      </div>
+    </div>
+    <div class="iv-topic-body">
+      <div class="iv-info-row">
+        <div class="iv-info-box">
+          <h4>🎤 Câu hỏi thường gặp</h4>
+          <ul>
+            <li>Bạn đã đóng góp gì cho cộng đồng?</li>
+            <li>Vì sao phục vụ cộng đồng quan trọng với bạn?</li>
+            <li>Bạn sẽ tiếp tục điều đó thế nào sau khi có học bổng?</li>
+          </ul>
+        </div>
+        <div class="iv-info-box intent">
+          <h4>🔍 Ý đồ hội đồng</h4>
+          <ul>
+            <li>Đánh giá động lực công ích thật sự</li>
+            <li>Độ bền của cam kết (không phải chỉ làm để ghi vào CV)</li>
+            <li>Khả năng biến thiện chí thành hành động cụ thể</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="iv-ans-label"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Mẫu trả lời</div>
+        <div class="iv-ans-tabs">
+          <button class="iv-ans-tab active" onclick="switchAns('community','short',this)">⚡ Ngắn gọn</button>
+          <button class="iv-ans-tab" onclick="switchAns('community','star',this)">🌟 STAR</button>
+          <button class="iv-ans-tab" onclick="switchAns('community','story',this)">📖 Câu chuyện</button>
+        </div>
+        <div class="iv-ans-panels" id="ans-community">
+          <div class="iv-ans-pane active" data-pane="short">
+            <div class="iv-ans-card">
+              <p>"Tôi xem phục vụ cộng đồng là cách kiểm tra giá trị thực của kiến thức. Nếu điều mình học chỉ giúp mình tiến xa hơn mà không giúp ai khác tốt hơn, thì với tôi nó vẫn chưa đủ."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="star">
+            <div class="iv-ans-card star">
+              <p>"Tại <strong>[tổ chức/câu lạc bộ]</strong>, tôi thấy nhóm <strong>[đối tượng]</strong> thiếu <strong>[nguồn lực/thông tin] (S)</strong>. Tôi cùng nhóm xây dựng <strong>[hoạt động]</strong>, phụ trách <strong>[phần việc] (T+A)</strong>, duy trì trong <strong>[thời gian]</strong>, và đạt <strong>[kết quả] (R)</strong>. Trải nghiệm đó cho tôi thấy những thay đổi nhỏ nhưng duy trì đều có thể tạo tác động dài hạn."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="story">
+            <div class="iv-ans-card story">
+              <p>"Tôi gắn bó với công việc cộng đồng vì chính tôi từng được người khác mở cho một cánh cửa đúng lúc. Điều đó khiến tôi tin rằng giáo dục, thông tin và sự hỗ trợ đúng cách có thể thay đổi quỹ đạo của một người. Tôi muốn mình là một phần của sự thay đổi ấy."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-keypoints">
+        <h4>✅ Điểm cần nhấn</h4>
+        <ul>
+          <li>Tính bền vững, không chỉ làm một lần</li>
+          <li>Nhóm hưởng lợi và vai trò thật của bạn</li>
+          <li>Số liệu hoặc kết quả cụ thể, liên hệ với định hướng nghề nghiệp</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ TOPIC: RESEARCH ══════════════ -->
+  <div class="iv-topic" id="topic-research">
+    <div class="iv-topic-head">
+      <div class="iv-topic-icon">🔬</div>
+      <div class="iv-topic-meta">
+        <div class="iv-topic-title">Nghiên cứu & Định hướng học thuật sâu</div>
+        <span class="iv-priority med">● Ưu tiên cao (chương trình nghiên cứu)</span>
+        <p class="iv-topic-desc">Đặc biệt quan trọng với học bổng có yêu cầu đề cương nghiên cứu, luận văn hoặc tiến sĩ. Hội đồng kiểm tra độ rõ của tư duy học thuật và tính khả thi.</p>
+      </div>
+    </div>
+    <div class="iv-topic-body">
+      <div class="iv-info-row">
+        <div class="iv-info-box">
+          <h4>🎤 Câu hỏi thường gặp</h4>
+          <ul>
+            <li>Bạn muốn nghiên cứu vấn đề gì?</li>
+            <li>Câu hỏi nghiên cứu của bạn là gì?</li>
+            <li>Phương pháp nào bạn dự định dùng?</li>
+            <li>Vì sao đề tài này đáng làm?</li>
+          </ul>
+        </div>
+        <div class="iv-info-box intent">
+          <h4>🔍 Ý đồ hội đồng</h4>
+          <ul>
+            <li>Độ rõ của tư duy học thuật</li>
+            <li>Tính khả thi của đề tài trong thời gian học</li>
+            <li>Giá trị ứng dụng của kết quả nghiên cứu</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="iv-ans-label"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Mẫu trả lời</div>
+        <div class="iv-ans-tabs">
+          <button class="iv-ans-tab active" onclick="switchAns('research','short',this)">⚡ Ngắn gọn</button>
+          <button class="iv-ans-tab" onclick="switchAns('research','star',this)">🌟 STAR</button>
+          <button class="iv-ans-tab" onclick="switchAns('research','story',this)">📖 Câu chuyện</button>
+        </div>
+        <div class="iv-ans-panels" id="ans-research">
+          <div class="iv-ans-pane active" data-pane="short">
+            <div class="iv-ans-card">
+              <p>"Tôi quan tâm đến <strong>[chủ đề]</strong> vì đây là điểm giao giữa ý nghĩa học thuật và nhu cầu thực tiễn. Câu hỏi tôi muốn theo đuổi là <strong>[câu hỏi]</strong>, và hiện tôi nghiêng về cách tiếp cận <strong>[định tính/định lượng/hỗn hợp]</strong> để tạo ra kết quả có thể áp dụng."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="star">
+            <div class="iv-ans-card star">
+              <p>"Trong quá trình học/làm việc, tôi nhận thấy <strong>[khoảng trống tri thức/vấn đề thực tiễn] (S)</strong>. Tôi bắt đầu đọc tài liệu, trao đổi với giảng viên/chuyên gia và thử phác thảo câu hỏi nghiên cứu <strong>(T+A)</strong>. Kết quả là tôi xác định được một đề tài vừa đủ hẹp để làm sâu, vừa đủ rộng để có giá trị ứng dụng <strong>(R)</strong>."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="story">
+            <div class="iv-ans-card story">
+              <p>"Đề tài tôi chọn không đến từ tò mò thuần túy, mà từ cảm giác rằng có một khoảng trống mà nếu không ai lấp thì những quyết định quan trọng vẫn sẽ được đưa ra trên cơ sở thiếu bằng chứng. Tôi muốn công việc nghiên cứu của mình góp phần làm cho các quyết định ấy tốt hơn."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-keypoints">
+        <h4>✅ Điểm cần nhấn</h4>
+        <ul>
+          <li>Khoảng trống tri thức rõ ràng, câu hỏi cụ thể</li>
+          <li>Tính khả thi và phương pháp phù hợp</li>
+          <li>Giá trị ứng dụng của kết quả</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ TOPIC: FINANCE ══════════════ -->
+  <div class="iv-topic" id="topic-finance">
+    <div class="iv-topic-head">
+      <div class="iv-topic-icon">💰</div>
+      <div class="iv-topic-meta">
+        <div class="iv-topic-title">Nhu cầu tài chính</div>
+        <span class="iv-priority med">● Phụ thuộc chương trình</span>
+        <p class="iv-topic-desc">Quan trọng với học bổng đại học/cứu trợ tài chính. Ít liên quan với học bổng nhà nước định hướng lãnh đạo/phát triển. Hội đồng đo mức cần thiết thực sự, không muốn nghe "bi kịch hóa".</p>
+      </div>
+    </div>
+    <div class="iv-topic-body">
+      <div class="iv-info-row">
+        <div class="iv-info-box">
+          <h4>🎤 Câu hỏi thường gặp</h4>
+          <ul>
+            <li>Bạn cần học bổng này ở mức nào?</li>
+            <li>Nếu không có học bổng, kế hoạch của bạn ra sao?</li>
+            <li>Tài chính ảnh hưởng đến hành trình học tập thế nào?</li>
+          </ul>
+        </div>
+        <div class="iv-info-box intent">
+          <h4>🔍 Ý đồ hội đồng</h4>
+          <ul>
+            <li>Mức cần thiết thực sự (không bi kịch hóa)</li>
+            <li>Năng lực lập kế hoạch tài chính</li>
+            <li>Tác dụng của học bổng với hiệu quả học tập</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="iv-ans-label"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Mẫu trả lời</div>
+        <div class="iv-ans-tabs">
+          <button class="iv-ans-tab active" onclick="switchAns('finance','short',this)">⚡ Ngắn gọn</button>
+          <button class="iv-ans-tab" onclick="switchAns('finance','star',this)">🌟 STAR</button>
+          <button class="iv-ans-tab" onclick="switchAns('finance','story',this)">📖 Câu chuyện</button>
+        </div>
+        <div class="iv-ans-panels" id="ans-finance">
+          <div class="iv-ans-pane active" data-pane="short">
+            <div class="iv-ans-card">
+              <p>"Học bổng này có ý nghĩa quyết định với tôi vì nó giúp tôi theo học toàn thời gian thay vì phải trì hoãn hoặc chia nhỏ kế hoạch học tập. Với tôi, hỗ trợ tài chính không chỉ là hỗ trợ chi phí, mà là hỗ trợ tốc độ phát triển nghề nghiệp."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="star">
+            <div class="iv-ans-card star">
+              <p>"Trong thời gian qua, tôi vừa <strong>[làm việc/học tập/chăm sóc gia đình]</strong> vừa chuẩn bị hồ sơ <strong>(S)</strong>. Tôi đã cố gắng tự chủ tài chính tối đa <strong>(T+A)</strong>, nhưng chi phí của chương trình vượt quá khả năng hiện tại. Nếu nhận được học bổng, tôi có thể tập trung toàn bộ vào việc học và tối đa hóa hiệu quả của cơ hội này <strong>(R)</strong>."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="story">
+            <div class="iv-ans-card story">
+              <p>"Tôi không xem hoàn cảnh tài chính là yếu tố định nghĩa mình, nhưng đó là một thực tế định hình lựa chọn của tôi. Chính vì thế, khi xin học bổng, tôi muốn thể hiện hai điều song song: tôi thật sự cần hỗ trợ, và tôi cũng đã làm mọi phần việc thuộc trách nhiệm của mình để xứng đáng với sự hỗ trợ đó."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-keypoints">
+        <h4>✅ Điểm cần nhấn</h4>
+        <ul>
+          <li>Thẳng thắn, có bối cảnh hợp lý, không bi kịch hóa</li>
+          <li>Nhấn vào tác dụng của học bổng đối với hiệu quả học tập</li>
+          <li>Chứng minh bạn đã cố gắng tự chủ trước khi xin hỗ trợ</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ TOPIC: ETHICS ══════════════ -->
+  <div class="iv-topic" id="topic-ethics">
+    <div class="iv-topic-head">
+      <div class="iv-topic-icon">⚖️</div>
+      <div class="iv-topic-meta">
+        <div class="iv-topic-title">Đạo đức & Chính trực</div>
+        <span class="iv-priority med">● Phụ thuộc chương trình, ngày càng phổ biến</span>
+        <p class="iv-topic-desc">Không phải học bổng nào cũng hỏi trực diện, nhưng đây thường là cách gián tiếp kiểm tra độ đáng tin của ứng viên. Các nguồn chính thức nhấn rất mạnh vào tính trung thực và tính xác thực.</p>
+      </div>
+    </div>
+    <div class="iv-topic-body">
+      <div class="iv-info-row">
+        <div class="iv-info-box">
+          <h4>🎤 Câu hỏi thường gặp</h4>
+          <ul>
+            <li>Nếu sếp yêu cầu "làm đẹp" số liệu, bạn làm gì?</li>
+            <li>Nếu lợi ích nhóm xung đột nguyên tắc nghề nghiệp?</li>
+            <li>Bạn có từng thừa nhận sai sót của mình chưa?</li>
+          </ul>
+        </div>
+        <div class="iv-info-box intent">
+          <h4>🔍 Ý đồ hội đồng</h4>
+          <ul>
+            <li>Đánh giá hệ giá trị và suy luận đạo đức</li>
+            <li>Độ can đảm nghề nghiệp khi đứng trước áp lực</li>
+            <li>Nhất quán giữa câu trả lời và hồ sơ đã nộp</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="iv-ans-label"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Mẫu trả lời</div>
+        <div class="iv-ans-tabs">
+          <button class="iv-ans-tab active" onclick="switchAns('ethics','short',this)">⚡ Ngắn gọn</button>
+          <button class="iv-ans-tab" onclick="switchAns('ethics','star',this)">🌟 STAR</button>
+          <button class="iv-ans-tab" onclick="switchAns('ethics','story',this)">📖 Câu chuyện</button>
+        </div>
+        <div class="iv-ans-panels" id="ans-ethics">
+          <div class="iv-ans-pane active" data-pane="short">
+            <div class="iv-ans-card">
+              <p>"Khi gặp xung đột đạo đức, tôi ưu tiên ba bước: xác minh sự thật, đối chiếu với quy định/nguyên tắc nghề nghiệp, và chọn phương án minh bạch nhất có thể. Với tôi, giữ uy tín dài hạn quan trọng hơn lợi ích ngắn hạn."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="star">
+            <div class="iv-ans-card star">
+              <p>"Tôi từng ở trong tình huống <strong>[x]</strong>, khi áp lực tiến độ khiến nhóm cân nhắc một lựa chọn thiếu chặt chẽ <strong>(S+T)</strong>. Tôi đề xuất kiểm tra lại dữ liệu, trao đổi thẳng với người phụ trách và thống nhất phương án chậm hơn nhưng đúng chuẩn <strong>(A)</strong>. Kết quả là tiến độ có bị ảnh hưởng nhẹ, nhưng chúng tôi tránh được rủi ro nghiêm trọng về sau <strong>(R)</strong>."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="story">
+            <div class="iv-ans-card story">
+              <p>"Tôi nghĩ chính trực không thể chỉ là khẩu hiệu dùng trong phỏng vấn. Nó thường được kiểm tra ở những lúc rất bất tiện, khi nói thật khiến mình mất thời gian hơn hoặc phải chịu một cuộc trao đổi khó. Tôi muốn xây dựng sự nghiệp trên nền tảng mà về lâu dài tôi vẫn có thể tự tin đứng tên."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-keypoints">
+        <h4>✅ Điểm cần nhấn</h4>
+        <ul>
+          <li>Nguyên tắc ra quyết định rõ ràng</li>
+          <li>Minh bạch, bảo vệ người bị ảnh hưởng</li>
+          <li>Chấp nhận cái giá ngắn hạn để giữ chuẩn dài hạn</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ TOPIC: DIVERSITY ══════════════ -->
+  <div class="iv-topic" id="topic-diversity">
+    <div class="iv-topic-head">
+      <div class="iv-topic-icon">🌍</div>
+      <div class="iv-topic-meta">
+        <div class="iv-topic-title">Đa dạng, Công bằng & Hòa nhập</div>
+        <span class="iv-priority med">● Trung bình đến cao tùy chương trình</span>
+        <p class="iv-topic-desc">Một số chương trình nhà nước nêu rõ yếu tố công bằng tiếp cận, hỗ trợ nhóm yếu thế và phụ nữ. Hội đồng kiểm tra hành động cụ thể chứ không chỉ khẩu hiệu.</p>
+      </div>
+    </div>
+    <div class="iv-topic-body">
+      <div class="iv-info-row">
+        <div class="iv-info-box">
+          <h4>🎤 Câu hỏi thường gặp</h4>
+          <ul>
+            <li>Bạn hiểu thế nào về đa dạng và hòa nhập?</li>
+            <li>Bạn đã làm gì để tạo môi trường công bằng hơn?</li>
+            <li>Bạn sẽ đóng góp gì cho cộng đồng học bổng đa dạng?</li>
+          </ul>
+        </div>
+        <div class="iv-info-box intent">
+          <h4>🔍 Ý đồ hội đồng</h4>
+          <ul>
+            <li>Hòa nhập là hành động cụ thể hay chỉ là khẩu hiệu?</li>
+            <li>Bạn có nhận thức về rào cản tiếp cận không?</li>
+            <li>Đóng góp thực tế cho cộng đồng đa dạng</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="iv-ans-label"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Mẫu trả lời</div>
+        <div class="iv-ans-tabs">
+          <button class="iv-ans-tab active" onclick="switchAns('diversity','short',this)">⚡ Ngắn gọn</button>
+          <button class="iv-ans-tab" onclick="switchAns('diversity','star',this)">🌟 STAR</button>
+          <button class="iv-ans-tab" onclick="switchAns('diversity','story',this)">📖 Câu chuyện</button>
+        </div>
+        <div class="iv-ans-panels" id="ans-diversity">
+          <div class="iv-ans-pane active" data-pane="short">
+            <div class="iv-ans-card">
+              <p>"Với tôi, hòa nhập không chỉ là 'có mặt đủ nhiều nhóm người', mà là tạo điều kiện để nhiều nhóm người thực sự được lắng nghe và tham gia quyết định. Trong công việc, tôi cố gắng biến điều đó thành cách thiết kế hoạt động và cách phân phối cơ hội."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="star">
+            <div class="iv-ans-card star">
+              <p>"Khi tham gia <strong>[dự án/CLB]</strong>, tôi nhận ra nhóm <strong>[đối tượng]</strong> ít lên tiếng vì <strong>[rào cản] (S)</strong>. Tôi đề xuất thay đổi cách tổ chức thảo luận, bổ sung kênh phản hồi riêng và phân công hỗ trợ rõ hơn <strong>(T+A)</strong>. Kết quả là mức tham gia tăng lên và chất lượng đầu ra cũng tốt hơn <strong>(R)</strong>."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="story">
+            <div class="iv-ans-card story">
+              <p>"Tôi quan tâm đến chủ đề này vì tôi đã từng ở cả hai phía: từng thấy cảm giác bị bỏ quên, và cũng từng vô tình thiết kế công việc theo cách chưa đủ công bằng cho người khác. Điều đó khiến tôi nghiêm túc hơn với câu hỏi: ai đang được hưởng lợi, và ai đang bị bỏ lại phía sau?"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-keypoints">
+        <h4>✅ Điểm cần nhấn</h4>
+        <ul>
+          <li>Hành động cụ thể, không chỉ nhận thức lý thuyết</li>
+          <li>Nhận ra rào cản và chủ động tháo gỡ</li>
+          <li>Thái độ học hỏi và cải thiện liên tục</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ TOPIC: CURRENT ══════════════ -->
+  <div class="iv-topic" id="topic-current">
+    <div class="iv-topic-head">
+      <div class="iv-topic-icon">📰</div>
+      <div class="iv-topic-meta">
+        <div class="iv-topic-title">Bối cảnh hiện thời & Vấn đề nóng trong lĩnh vực</div>
+        <span class="iv-priority med">● Trung bình đến cao</span>
+        <p class="iv-topic-desc">Hội đồng không đặt câu hỏi kiểu "thi kiến thức" mà muốn thấy bạn hiểu thách thức cấp bách trong ngành và khu vực quan tâm của học bổng.</p>
+      </div>
+    </div>
+    <div class="iv-topic-body">
+      <div class="iv-info-row">
+        <div class="iv-info-box">
+          <h4>🎤 Câu hỏi thường gặp</h4>
+          <ul>
+            <li>Vấn đề lớn nhất của lĩnh vực này hiện nay là gì?</li>
+            <li>Xu hướng gần đây nào ảnh hưởng mạnh nhất đến lĩnh vực bạn theo đuổi?</li>
+            <li>Bạn nhìn nhận thách thức [x] ra sao?</li>
+          </ul>
+        </div>
+        <div class="iv-info-box intent">
+          <h4>🔍 Ý đồ hội đồng</h4>
+          <ul>
+            <li>Độ cập nhật và theo dõi ngành</li>
+            <li>Khả năng nối ngành học với thực tiễn</li>
+            <li>Tư duy phân tích về nguyên nhân và giải pháp</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="iv-ans-label"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Mẫu trả lời</div>
+        <div class="iv-ans-tabs">
+          <button class="iv-ans-tab active" onclick="switchAns('current','short',this)">⚡ Ngắn gọn</button>
+          <button class="iv-ans-tab" onclick="switchAns('current','star',this)">🌟 STAR</button>
+          <button class="iv-ans-tab" onclick="switchAns('current','story',this)">📖 Câu chuyện</button>
+        </div>
+        <div class="iv-ans-panels" id="ans-current">
+          <div class="iv-ans-pane active" data-pane="short">
+            <div class="iv-ans-card">
+              <p>"Tôi cho rằng thách thức lớn nhất hiện nay trong lĩnh vực <strong>[x]</strong> là <strong>[vấn đề]</strong>. Điều quan trọng không chỉ là nêu vấn đề, mà là hiểu vì sao nó kéo dài và đâu là điểm can thiệp khả thi nhất ở cấp chính sách/tổ chức/thực hành."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="star">
+            <div class="iv-ans-card star">
+              <p>"Trong công việc gần đây, tôi liên tục gặp tác động của <strong>[xu hướng/thay đổi] (S)</strong>. Điều đó khiến tôi phải cập nhật tài liệu, trao đổi với đồng nghiệp và điều chỉnh cách làm việc <strong>(T+A)</strong>. Từ trải nghiệm đó, tôi thấy nhu cầu cấp thiết nhất hiện nay là <strong>[giải pháp/hướng tiếp cận] (R)</strong>."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="story">
+            <div class="iv-ans-card story">
+              <p>"Tôi không theo dõi các vấn đề của ngành như một người đứng ngoài quan sát, vì chúng đi thẳng vào công việc hằng ngày của tôi. Mỗi thay đổi chính sách, công nghệ hoặc nguồn lực đều tác động đến cách con người tiếp cận cơ hội. Đó là lý do tôi muốn học sâu hơn để không chỉ phản ứng với thay đổi, mà còn góp phần định hình nó."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-keypoints">
+        <h4>✅ Điểm cần nhấn</h4>
+        <ul>
+          <li>Một vấn đề chính, nguyên nhân và tác động rõ</li>
+          <li>Quan điểm có căn cứ từ thực tiễn công việc</li>
+          <li>Liên hệ trực tiếp với hướng học tập bạn chọn</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ TOPIC: PROGRAM ══════════════ -->
+  <div class="iv-topic" id="topic-program">
+    <div class="iv-topic-head">
+      <div class="iv-topic-icon">🏫</div>
+      <div class="iv-topic-meta">
+        <div class="iv-topic-title">Câu hỏi về chương trình, ngành, trường & quốc gia học tập</div>
+        <span class="iv-priority high">● Ưu tiên rất cao</span>
+        <p class="iv-topic-desc">Tất cả các nguồn chính thức đều nhấn mạnh phải nghiên cứu kỹ khóa học, trường, và giải thích được vì sao chương trình đó giúp bạn đạt mục tiêu.</p>
+      </div>
+    </div>
+    <div class="iv-topic-body">
+      <div class="iv-info-row">
+        <div class="iv-info-box">
+          <h4>🎤 Câu hỏi thường gặp</h4>
+          <ul>
+            <li>Vì sao bạn chọn chương trình này?</li>
+            <li>Vì sao trường này? Vì sao điểm đến học tập này?</li>
+            <li>Môn học nào bạn muốn học nhất?</li>
+            <li>Mạng lưới của học bổng giúp gì cho bạn?</li>
+          </ul>
+        </div>
+        <div class="iv-info-box intent">
+          <h4>🔍 Ý đồ hội đồng</h4>
+          <ul>
+            <li>Phân biệt ứng viên nghiên cứu kỹ vs trả lời chung chung</li>
+            <li>Lý do chọn trường/ngành có logic hay chỉ vì danh tiếng</li>
+            <li>Hiểu cấu trúc chương trình và phù hợp với mục tiêu</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="iv-ans-label"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Mẫu trả lời</div>
+        <div class="iv-ans-tabs">
+          <button class="iv-ans-tab active" onclick="switchAns('program','short',this)">⚡ Ngắn gọn</button>
+          <button class="iv-ans-tab" onclick="switchAns('program','star',this)">🌟 STAR</button>
+          <button class="iv-ans-tab" onclick="switchAns('program','story',this)">📖 Câu chuyện</button>
+        </div>
+        <div class="iv-ans-panels" id="ans-program">
+          <div class="iv-ans-pane active" data-pane="short">
+            <div class="iv-ans-card">
+              <p>"Tôi chọn chương trình này vì nó giải đúng khoảng trống năng lực của tôi ở <strong>[nội dung]</strong>. Tôi chọn trường này vì <strong>[môn học/giảng viên/cách đào tạo/hệ sinh thái]</strong>, chứ không chỉ vì danh tiếng."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="star">
+            <div class="iv-ans-card star">
+              <p>"Khi so sánh các lựa chọn, tôi đặt ba tiêu chí: nội dung học, mức liên quan với kinh nghiệm hiện tại, và khả năng hỗ trợ mục tiêu nghề nghiệp sau học <strong>(T)</strong>. Sau quá trình đối chiếu <strong>(A)</strong>, chương trình này nổi bật vì <strong>[điểm 1]</strong>, <strong>[điểm 2]</strong>, và <strong>[điểm 3] (R)</strong>. Đó là lý do tôi tin đây là lựa chọn hợp lý nhất thay vì chỉ là lựa chọn hấp dẫn nhất."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="story">
+            <div class="iv-ans-card story">
+              <p>"Tôi muốn học ở một môi trường nơi việc học không dừng ở lớp học mà gắn với mạng lưới, thực hành và đối thoại liên ngành. Khi tìm hiểu kỹ chương trình này, tôi thấy nó nói cùng một ngôn ngữ với định hướng nghề nghiệp của mình, nên lựa chọn đó đối với tôi là một quyết định chiến lược chứ không phải cảm tính."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-keypoints">
+        <h4>✅ Điểm cần nhấn</h4>
+        <ul>
+          <li>Môn học và cấu trúc chương trình cụ thể</li>
+          <li>Giảng viên hoặc hướng nghiên cứu liên quan</li>
+          <li>Hệ sinh thái nghề nghiệp, liên hệ chặt với mục tiêu sau học</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ TOPIC: BEHAVIORAL ══════════════ -->
+  <div class="iv-topic" id="topic-behavioral">
+    <div class="iv-topic-head">
+      <div class="iv-topic-icon">🧩</div>
+      <div class="iv-topic-meta">
+        <div class="iv-topic-title">Câu hỏi tình huống & Hành vi</div>
+        <span class="iv-priority high">● Ưu tiên cao</span>
+        <p class="iv-topic-desc">Australia Awards nhấn mạnh câu hỏi mở và cần luyện ví dụ thực tế. Chevening lặp lại yêu cầu về ví dụ cụ thể và STAR. Hội đồng đánh giá khả năng phản tỉnh và trưởng thành nghề nghiệp.</p>
+      </div>
+    </div>
+    <div class="iv-topic-body">
+      <div class="iv-info-row">
+        <div class="iv-info-box">
+          <h4>🎤 Câu hỏi thường gặp</h4>
+          <ul>
+            <li>Kể về một lần bạn thất bại</li>
+            <li>Một lần bạn xử lý xung đột trong nhóm</li>
+            <li>Một lần bạn buộc phải thích nghi nhanh</li>
+            <li>Nếu dự án đổ vỡ giữa chừng, bạn xử lý ra sao?</li>
+          </ul>
+        </div>
+        <div class="iv-info-box intent">
+          <h4>🔍 Ý đồ hội đồng</h4>
+          <ul>
+            <li>Đánh giá khả năng phản tỉnh và học hỏi từ thất bại</li>
+            <li>Xử lý áp lực và trưởng thành nghề nghiệp</li>
+            <li>Tìm người biết cải thiện, không phải người hoàn hảo</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="iv-star-tip">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <p><strong>Gợi nhớ STAR+R:</strong> <strong>S</strong>ituation (bối cảnh) → <strong>T</strong>ask (nhiệm vụ) → <strong>A</strong>ction (hành động) → <strong>R</strong>esult (kết quả) → <strong>R</strong>eflection (bài học). Đừng bỏ qua phần Reflection — đây là điểm phân biệt câu trả lời thường với câu trả lời xuất sắc.</p>
+      </div>
+
+      <div>
+        <div class="iv-ans-label"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Mẫu trả lời</div>
+        <div class="iv-ans-tabs">
+          <button class="iv-ans-tab active" onclick="switchAns('behavioral','short',this)">⚡ Ngắn gọn</button>
+          <button class="iv-ans-tab" onclick="switchAns('behavioral','star',this)">🌟 STAR+R</button>
+          <button class="iv-ans-tab" onclick="switchAns('behavioral','story',this)">📖 Câu chuyện</button>
+        </div>
+        <div class="iv-ans-panels" id="ans-behavioral">
+          <div class="iv-ans-pane active" data-pane="short">
+            <div class="iv-ans-card">
+              <p>"Khi trả lời nhóm câu hỏi này, tôi luôn tập trung vào điều tôi đã làm và tôi đã học được gì. Với tôi, câu hỏi về khó khăn không nhằm tìm người hoàn hảo, mà nhằm tìm người biết cải thiện."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="star">
+            <div class="iv-ans-card star">
+              <p>"Trong dự án <strong>[x]</strong>, tôi gặp thất bại vì <strong>[nguyên nhân] (S+T)</strong>. Tôi nhìn lại, xác định phần trách nhiệm của mình, điều chỉnh <strong>[cách làm] (A)</strong>, và lần sau đạt <strong>[kết quả tốt hơn] (R)</strong>. Điều quan trọng nhất tôi rút ra là <strong>[bài học — Reflection]</strong>."</p>
+            </div>
+          </div>
+          <div class="iv-ans-pane" data-pane="story">
+            <div class="iv-ans-card story">
+              <p>"Tôi nghĩ những thời điểm định hình con người mình không phải lúc mọi việc suôn sẻ, mà là lúc mình làm chưa tốt như mong muốn. Một trải nghiệm cụ thể đã dạy tôi rằng năng lực không chỉ nằm ở việc giải quyết vấn đề, mà còn ở việc dám nhìn thẳng vào thiếu sót của chính mình."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-keypoints">
+        <h4>✅ Điểm cần nhấn</h4>
+        <ul>
+          <li>Bối cảnh rõ, trách nhiệm của bạn được nêu cụ thể</li>
+          <li>Hành động cụ thể bạn đã thực hiện</li>
+          <li>Bài học sâu nhưng gọn — đây là phần quan trọng nhất</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /iv-wrap -->
+
+<script>
+var seenTopics = new Set(['academic']);
+
+function showTopic(id, btn) {
+  // Hide all topics
+  document.querySelectorAll('.iv-topic').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.iv-nav-btn').forEach(function(b){ b.classList.remove('active'); });
+
+  // Show selected
+  var topic = document.getElementById('topic-' + id);
+  if(topic) topic.classList.add('active');
+  if(btn) btn.classList.add('active');
+
+  seenTopics.add(id);
+  var pct = Math.round(seenTopics.size / 12 * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('topicCount').textContent = seenTopics.size;
+
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function switchAns(topicId, pane, btn) {
+  var container = document.getElementById('ans-' + topicId);
+  if(!container) return;
+
+  // Reset panes
+  container.querySelectorAll('.iv-ans-pane').forEach(function(p){ p.classList.remove('active'); });
+  // Show selected pane
+  var target = container.querySelector('[data-pane="' + pane + '"]');
+  if(target) target.classList.add('active');
+
+  // Reset tabs within this topic only
+  var topic = document.getElementById('topic-' + topicId);
+  topic.querySelectorAll('.iv-ans-tab').forEach(function(t){ t.classList.remove('active'); });
+  if(btn) btn.classList.add('active');
+}
+</script>
+</body>
+</html>
