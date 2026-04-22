@@ -449,18 +449,38 @@ body::after-disabled{
 .sn-toggle-btn:not(.active) .sn-count-badge.show{background:rgba(99,102,241,0.14);color:var(--accent);}
 
 /* ═══ Multi-select picker modal ═══ */
+/* Hardened against browser extensions (Dark Reader, Translate, AdBlock...)
+   - !important + max z-index để chống CSS injection
+   - isolation:isolate tạo stacking context riêng
+   - color-scheme:light + filter:none để chống Dark Reader đảo màu */
 .sn-mp-overlay{
-  position:fixed;inset:0;background:rgba(20,20,40,0.55);backdrop-filter:blur(4px);
-  display:none;align-items:center;justify-content:center;z-index:9999;padding:16px;
+  position:fixed !important;
+  inset:0 !important;
+  top:0 !important;left:0 !important;right:0 !important;bottom:0 !important;
+  width:100vw !important;height:100vh !important;
+  background:rgba(20,20,40,0.55) !important;
+  backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;
+  z-index:2147483647 !important; /* max int32 */
+  padding:16px;
   animation:mpFadeIn .18s ease;
+  isolation:isolate;
+  color-scheme:light;
+  margin:0 !important;transform:none !important;
 }
-.sn-mp-overlay.open{display:flex;}
+.sn-mp-overlay.open{display:flex !important;}
 @keyframes mpFadeIn{from{opacity:0}to{opacity:1}}
 .sn-mp-modal{
-  background:#fff;border-radius:18px;width:100%;max-width:560px;max-height:85vh;
-  display:flex;flex-direction:column;box-shadow:0 25px 60px rgba(20,20,60,0.35);
+  background:#fff !important;
+  color:#1a1a3e !important;
+  border-radius:18px;width:100%;max-width:560px;max-height:85vh;
+  display:flex !important;flex-direction:column;
+  box-shadow:0 25px 60px rgba(20,20,60,0.35);
   animation:mpSlide .22s cubic-bezier(.2,.9,.3,1.2);overflow:hidden;
   font-family:var(--font);
+  position:relative !important;z-index:1 !important;
+  visibility:visible !important;opacity:1 !important;
+  filter:none !important; /* chống Dark Reader */
 }
 @keyframes mpSlide{from{transform:translateY(20px) scale(.96);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
 .sn-mp-header{
@@ -2552,8 +2572,8 @@ body.spa-active #spa-topbar { display: flex; }
     </div>
 
     <!-- ═══ MULTI-SELECT PICKER MODAL (giải thưởng / ngoại khóa) ═══ -->
-    <div class="sn-mp-overlay" id="mpOverlay" onclick="closeMultiPicker(event)">
-      <div class="sn-mp-modal" onclick="event.stopPropagation()">
+    <div class="sn-mp-overlay notranslate" id="mpOverlay" translate="no" onclick="closeMultiPicker(event)">
+      <div class="sn-mp-modal notranslate" translate="no" onclick="event.stopPropagation()">
         <div class="sn-mp-header">
           <div>
             <div class="sn-mp-title" id="mpTitle">Chọn mục</div>
@@ -2570,8 +2590,8 @@ body.spa-active #spa-topbar { display: flex; }
     </div>
 
     <!-- ═══ HOLLAND QUIZ MODAL (sở thích / tính cách theo RIASEC) ═══ -->
-    <div class="sn-mp-overlay" id="hollandOverlay" onclick="closeHollandQuiz(event)">
-      <div class="sn-mp-modal" onclick="event.stopPropagation()" style="max-width:620px;">
+    <div class="sn-mp-overlay notranslate" id="hollandOverlay" translate="no" onclick="closeHollandQuiz(event)">
+      <div class="sn-mp-modal notranslate" translate="no" onclick="event.stopPropagation()" style="max-width:620px;">
         <div class="sn-mp-header" style="background:linear-gradient(180deg,rgba(139,92,246,0.08),transparent);">
           <div>
             <div class="sn-mp-title">🎯 Trắc nghiệm Holland RIASEC</div>
@@ -5022,11 +5042,21 @@ function openMultiPicker(key) {
   _mpCurrentKey = key;
   if (!Array.isArray(student[key])) student[key] = [];
 
-  // FIX: Teleport overlay ra <body> để thoát khỏi containing block
+  // FIX 1: Teleport overlay ra <body> để thoát khỏi containing block
   // do `.tool-section { contain: layout style }` tạo ra (làm hỏng position:fixed).
   const _mpOv = document.getElementById("mpOverlay");
   if (_mpOv && _mpOv.parentElement !== document.body) {
     document.body.appendChild(_mpOv);
+  }
+
+  // FIX 2: Force inline styles để chống browser extensions
+  // (Dark Reader, AdBlock, Translate có thể inject CSS đè class styles)
+  if (_mpOv) {
+    _mpOv.style.cssText = "position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100vh!important;z-index:2147483647!important;display:flex!important;align-items:center!important;justify-content:center!important;background:rgba(20,20,40,0.55)!important;padding:16px!important;margin:0!important;visibility:visible!important;opacity:1!important;filter:none!important;transform:none!important;isolation:isolate!important;";
+    const _mpModal = _mpOv.querySelector(".sn-mp-modal");
+    if (_mpModal) {
+      _mpModal.style.cssText = "background:#fff!important;color:#1a1a3e!important;border-radius:18px;width:100%;max-width:560px;max-height:85vh;display:flex!important;flex-direction:column;box-shadow:0 25px 60px rgba(20,20,60,0.35);overflow:hidden;position:relative!important;z-index:1!important;visibility:visible!important;opacity:1!important;filter:none!important;";
+    }
   }
 
   document.getElementById("mpTitle").textContent = cfg.title;
@@ -5097,7 +5127,12 @@ function clearMultiPicker() {
 function closeMultiPicker(ev) {
   // Nếu bấm overlay ngoài modal thì ev.target === overlay; không có ev nghĩa là gọi trực tiếp
   if (ev && ev.target && ev.target.id !== "mpOverlay") return;
-  document.getElementById("mpOverlay").classList.remove("open");
+  const ov = document.getElementById("mpOverlay");
+  if (ov) {
+    ov.classList.remove("open");
+    // Xoá display:flex inline, giữ các style khác để giữ vị trí khi mở lại
+    ov.style.display = "none";
+  }
   document.body.style.overflow = "";
   _mpCurrentKey = null;
 }
@@ -5274,12 +5309,22 @@ function computeHollandScores() {
 }
 
 function openHollandQuiz() {
-  // FIX: Teleport overlay ra <body> để thoát khỏi containing block
+  // FIX 1: Teleport overlay ra <body> để thoát khỏi containing block
   // do `.tool-section { contain: layout style }` tạo ra (làm hỏng position:fixed).
   const _hOv = document.getElementById("hollandOverlay");
   if (_hOv && _hOv.parentElement !== document.body) {
     document.body.appendChild(_hOv);
   }
+
+  // FIX 2: Force inline styles để chống browser extensions
+  if (_hOv) {
+    _hOv.style.cssText = "position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100vh!important;z-index:2147483647!important;display:flex!important;align-items:center!important;justify-content:center!important;background:rgba(20,20,40,0.55)!important;padding:16px!important;margin:0!important;visibility:visible!important;opacity:1!important;filter:none!important;transform:none!important;isolation:isolate!important;";
+    const _hModal = _hOv.querySelector(".sn-mp-modal");
+    if (_hModal) {
+      _hModal.style.cssText = "background:#fff!important;color:#1a1a3e!important;border-radius:18px;width:100%;max-width:620px;max-height:85vh;display:flex!important;flex-direction:column;box-shadow:0 25px 60px rgba(20,20,60,0.35);overflow:hidden;position:relative!important;z-index:1!important;visibility:visible!important;opacity:1!important;filter:none!important;";
+    }
+  }
+
   renderHollandQuiz();
   document.getElementById("hollandOverlay").classList.add("open");
   document.body.style.overflow = "hidden";
@@ -5287,7 +5332,11 @@ function openHollandQuiz() {
 
 function closeHollandQuiz(ev) {
   if (ev && ev.target && ev.target.id !== "hollandOverlay") return;
-  document.getElementById("hollandOverlay").classList.remove("open");
+  const ov = document.getElementById("hollandOverlay");
+  if (ov) {
+    ov.classList.remove("open");
+    ov.style.display = "none";
+  }
   document.body.style.overflow = "";
 }
 
