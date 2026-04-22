@@ -3160,6 +3160,222 @@ const scholarshipData_2023 = {
 };
 
 
+/* ════════════════════════════════════════════════
+   DỮ LIỆU NĂM 2024
+   Đặc điểm: cạnh tranh cao, xét toàn diện hồ sơ.
+   Bắt đầu yêu cầu portfolio, essay, phỏng vấn.
+   Học bổng gắn chặt với doanh nghiệp và ngành "hot"
+   (AI, Data, Bán dẫn, Y, Kinh tế quốc tế).
+   GPA + IELTS + hoạt động + dự án thực tế.
+════════════════════════════════════════════════ */
+const scholarshipData_2024 = {
+  cntt: [
+    {
+      name:"Đại học Bách khoa - ĐHQG TP.HCM", short:"HCMUT", city:"TP.HCM",
+      applyStart:"01/03/2024", applyEnd:"30/04/2024",
+      scholarshipMethods:["Học bổng thu hút nhân tài / thành tích cao","Học bổng khuyến khích học tập (HBKK)","Học bổng doanh nghiệp công nghệ (mở rộng mạnh 2024)","Học bổng toàn phần cho thủ khoa và nhóm điểm cao"],
+      admissionMethods:["THPT","ĐGNL","Xét tuyển thẳng","Xét hồ sơ kết hợp"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ lớp 12",type:"number",min:8.5,note:"Mốc 2024"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:24.5,note:"Mốc 2024"},
+        {id:"dgnl",label:"Điểm ĐGNL",type:"number",min:810,note:"Mốc 2024"},
+        {id:"award",label:"Có giải HSG / dự án thực tế",type:"boolean"},
+        {id:"english",label:"Có chứng chỉ tiếng Anh (IELTS/TOEFL)",type:"boolean"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2024: cạnh tranh tăng rõ rệt, hồ sơ xét toàn diện. Học bổng doanh nghiệp công nghệ tăng số lượng đáng kể."
+    },
+    {
+      name:"Đại học Công nghệ Thông tin - ĐHQG TP.HCM", short:"UIT", city:"TP.HCM",
+      applyStart:"01/03/2024", applyEnd:"15/05/2024",
+      scholarshipMethods:["Học bổng khuyến khích học tập","Học bổng tài năng AI/Data/An toàn thông tin","Học bổng doanh nghiệp công nghệ (FPT, VNG, Samsung...)","Học bổng nghiên cứu khoa học sinh viên"],
+      admissionMethods:["THPT","ĐGNL","Xét tuyển theo đề án","Xét chứng chỉ quốc tế"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ lớp 12",type:"number",min:8.2,note:"Mốc 2024"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:23.5,note:"Mốc 2024"},
+        {id:"dgnl",label:"Điểm ĐGNL",type:"number",min:780,note:"Mốc 2024"},
+        {id:"award",label:"Có giải HSG / dự án AI-Data",type:"boolean"},
+        {id:"english",label:"Tiếng Anh tốt (IELTS 6.0+)",type:"boolean"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2024: UIT tập trung mạnh vào AI, Data Science, An toàn thông tin. Doanh nghiệp tham gia tài trợ rõ rệt."
+    },
+    {
+      name:"Đại học FPT", short:"FPTU", city:"TP.HCM/Cần Thơ/...",
+      applyStart:"15/01/2024", applyEnd:"30/06/2024",
+      scholarshipMethods:["Học bổng toàn phần / bán phần (mở rộng quỹ)","Học bổng tài năng Global Expert","Kỳ thi học bổng riêng + phỏng vấn","Học bổng doanh nghiệp FPT cho ngành AI"],
+      admissionMethods:["Xét học bạ","THPT","ĐGNL","Thi học bổng / phỏng vấn"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.5,note:"Mốc 2024"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:22,note:"Mốc 2024"},
+        {id:"english",label:"IELTS / tiếng Anh tốt",type:"boolean"},
+        {id:"award",label:"Có giải cấp tỉnh/quốc gia",type:"boolean"},
+        {id:"essay",label:"Bài luận / phỏng vấn cá nhân",type:"boolean"}
+      ],
+      tuitionRange:"Theo campus/chương trình",
+      note:"Năm 2024: FPT mở rộng quỹ học bổng, đề cao phỏng vấn và bài luận. Hồ sơ ngày càng giống ứng tuyển việc làm."
+    }
+  ],
+  yte: [
+    {
+      name:"Đại học Y Dược TP.HCM", short:"UMP", city:"TP.HCM",
+      applyStart:"01/03/2024", applyEnd:"10/05/2024",
+      scholarshipMethods:["Học bổng khuyến khích học tập","Học bổng thành tích cao","Phỏng vấn cho học bổng tài năng","Quỹ hỗ trợ sinh viên hoàn cảnh khó khăn"],
+      admissionMethods:["THPT","Theo đề án năm","Xét tuyển kết hợp"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT (B00)",type:"number",min:25.5,note:"Mốc 2024 – cạnh tranh rất cao"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.8,note:"Mốc 2024"},
+        {id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"},
+        {id:"activities",label:"Hoạt động tình nguyện y tế",type:"boolean"}
+      ],
+      tuitionRange:"Theo ngành/chương trình",
+      note:"Năm 2024: điểm chuẩn Y tăng, học bổng tài năng yêu cầu phỏng vấn. Hoạt động tình nguyện y tế là điểm cộng."
+    },
+    {
+      name:"Đại học Y khoa Phạm Ngọc Thạch", short:"PNTU", city:"TP.HCM",
+      applyStart:"01/03/2024", applyEnd:"30/04/2024",
+      scholarshipMethods:["Học bổng khuyến khích học tập","Học bổng tân sinh viên","Quỹ hỗ trợ sinh viên","Học bổng doanh nghiệp dược phẩm (mới 2024)"],
+      admissionMethods:["THPT","Theo đề án tuyển sinh"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT (B00)",type:"number",min:24.7,note:"Mốc 2024"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.5,note:"Mốc 2024"},
+        {id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"}
+      ],
+      tuitionRange:"Theo chính sách từng năm",
+      note:"Năm 2024: doanh nghiệp dược bắt đầu tham gia tài trợ học bổng. Điểm tăng nhẹ."
+    }
+  ],
+  tt: [
+    {
+      name:"Đại học KHXH & NV - ĐHQG TP.HCM", short:"USSH", city:"TP.HCM",
+      applyStart:"01/03/2024", applyEnd:"20/05/2024",
+      scholarshipMethods:["Học bổng khuyến khích học tập","Học bổng tài trợ doanh nghiệp truyền thông","Học bổng portfolio sáng tạo","Học bổng nghiên cứu xã hội học"],
+      admissionMethods:["THPT","ĐGNL","Xét tuyển theo đề án","Xét hồ sơ năng khiếu"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT",type:"number",min:22,note:"Mốc 2024"},
+        {id:"dgnl",label:"Điểm ĐGNL",type:"number",min:710,note:"Mốc 2024"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.0,note:"Mốc 2024"},
+        {id:"portfolio",label:"Có portfolio truyền thông / dự án",type:"boolean"},
+        {id:"activities",label:"Hoạt động ngoại khóa nổi bật",type:"boolean"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2024: portfolio trở thành tiêu chí quan trọng. Ngành Báo chí - Truyền thông cạnh tranh cao."
+    },
+    {
+      name:"RMIT University Vietnam", short:"RMIT", city:"TP.HCM / Hà Nội",
+      applyStart:"01/11/2023", applyEnd:"31/03/2024",
+      scholarshipMethods:["Opportunity Scholarship (mở rộng quỹ 2024)","Academic Merit / Achievement Scholarships","Học bổng có vòng phỏng vấn cuối","Học bổng dành cho nữ sinh ngành STEM"],
+      admissionMethods:["Xét hồ sơ + tiếng Anh","Phỏng vấn","Bài luận cá nhân"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.5,note:"Mốc 2024"},
+        {id:"ielts",label:"IELTS",type:"number",min:6.5,note:"Mốc 2024"},
+        {id:"essay",label:"Có bài luận cá nhân",type:"boolean"},
+        {id:"activities",label:"Hoạt động ngoại khóa nổi bật",type:"boolean"},
+        {id:"award",label:"Có giải/thành tích nổi bật",type:"boolean"}
+      ],
+      tuitionRange:"Học phí cao, học bổng cạnh tranh",
+      note:"Năm 2024: RMIT có thêm vòng phỏng vấn cho học bổng cao. Hồ sơ rất giống CV tuyển dụng."
+    }
+  ],
+  tc: [
+    {
+      name:"Đại học Kinh tế TP.HCM", short:"UEH", city:"TP.HCM",
+      applyStart:"01/03/2024", applyEnd:"25/04/2024",
+      scholarshipMethods:["Học bổng tân sinh viên theo thành tích","Học bổng khuyến khích học tập","Học bổng doanh nghiệp tài chính (BIDV, VCB, ACB...)","Học bổng toàn phần cho nhóm điểm 27+"],
+      admissionMethods:["THPT","ĐGNL","Phương thức riêng","Xét chứng chỉ quốc tế"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT",type:"number",min:24.2,note:"Mốc 2024"},
+        {id:"dgnl",label:"Điểm ĐGNL",type:"number",min:860,note:"Mốc 2024"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.3,note:"Mốc 2024"},
+        {id:"english",label:"Có chứng chỉ tiếng Anh",type:"boolean"},
+        {id:"activities",label:"Hoạt động leadership / câu lạc bộ",type:"boolean"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2024: UEH yêu cầu rõ tiếng Anh, ưu tiên ứng viên có hoạt động leadership. Doanh nghiệp tài chính tài trợ mạnh."
+    },
+    {
+      name:"Đại học Ngoại thương - Cơ sở II TP.HCM", short:"FTU2", city:"TP.HCM",
+      applyStart:"01/03/2024", applyEnd:"30/04/2024",
+      scholarshipMethods:["Học bổng đầu vào thành tích cao","Học bổng chương trình GENIE","Học bổng nghiên cứu / NCKH sinh viên","Học bổng trao đổi quốc tế"],
+      admissionMethods:["THPT","ĐGNL","Xét chứng chỉ quốc tế","Xét tuyển kết hợp"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT",type:"number",min:25.2,note:"Mốc 2024"},
+        {id:"dgnl",label:"Điểm ĐGNL",type:"number",min:900,note:"Mốc 2024"},
+        {id:"ielts",label:"IELTS",type:"number",min:6.5,note:"Cần thiết 2024"},
+        {id:"activities",label:"Hoạt động ngoại khóa/leadership",type:"boolean"},
+        {id:"award",label:"Có giải HSG / cuộc thi quốc tế",type:"boolean"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2024: FTU2 yêu cầu IELTS rõ ràng, ưu tiên ứng viên có thành tích quốc tế và leadership."
+    }
+  ],
+  sp: [
+    {
+      name:"Đại học Sư phạm TP.HCM", short:"HCMUE", city:"TP.HCM",
+      applyStart:"01/03/2024", applyEnd:"10/05/2024",
+      scholarshipMethods:["Miễn/giảm học phí theo Nghị định 116","Học bổng khuyến khích học tập","Học bổng hỗ trợ sinh hoạt phí sinh viên sư phạm","Học bổng tân sinh viên xuất sắc"],
+      admissionMethods:["THPT","Theo đề án năm","Xét tuyển kết hợp"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT",type:"number",min:20.5,note:"Mốc 2024"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:7.6,note:"Mốc 2024"},
+        {id:"conduct",label:"Hạnh kiểm tốt",type:"boolean"},
+        {id:"commitment",label:"Sẵn sàng cam kết sư phạm",type:"boolean"}
+      ],
+      tuitionRange:"Hỗ trợ học phí + sinh hoạt phí theo NĐ116",
+      note:"Năm 2024: chính sách hỗ trợ sinh hoạt phí 3,63 triệu/tháng theo NĐ116 thu hút nhiều thí sinh giỏi vào sư phạm."
+    }
+  ],
+  env: [
+    {
+      name:"Đại học Khoa học Tự nhiên - ĐHQG TP.HCM", short:"HCMUS", city:"TP.HCM",
+      applyStart:"01/03/2024", applyEnd:"30/04/2024",
+      scholarshipMethods:["Học bổng khuyến khích học tập","Học bổng NCKH sinh viên","Học bổng xanh / phát triển bền vững (mở rộng 2024)","Học bổng từ tổ chức quốc tế (UNDP, GIZ...)"],
+      admissionMethods:["THPT","ĐGNL","Xét tuyển thẳng","Xét hồ sơ NCKH"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.2,note:"Mốc 2024"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:23.5,note:"Mốc 2024"},
+        {id:"activities",label:"Có hoạt động môi trường / NCKH",type:"boolean"},
+        {id:"award",label:"Giải khoa học / dự án bền vững",type:"boolean"}
+      ],
+      tuitionRange:"Theo ngành",
+      note:"Năm 2024: học bổng xanh mở rộng nhờ tài trợ quốc tế. Ưu tiên sinh viên có dự án môi trường thực tế."
+    }
+  ],
+  ai: [
+    {
+      name:"Đại học Bách khoa Hà Nội", short:"HUST", city:"Hà Nội",
+      applyStart:"01/03/2024", applyEnd:"20/04/2024",
+      scholarshipMethods:["Học bổng Trần Đại Nghĩa","Học bổng HBKK","Học bổng AI/Bán dẫn từ doanh nghiệp (Samsung, NVIDIA, FPT)","Học bổng tài năng Talent Program"],
+      admissionMethods:["THPT","Thi đánh giá tư duy (TSA)","Xét tuyển thẳng","Xét chứng chỉ quốc tế"],
+      requirements:[
+        {id:"thpt",label:"Điểm THPT",type:"number",min:26,note:"Mốc 2024 – AI/Bán dẫn cực hot"},
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.7,note:"Mốc 2024"},
+        {id:"award",label:"Có giải HSG quốc gia / dự án AI",type:"boolean"},
+        {id:"english",label:"Tiếng Anh tốt (IELTS 6.5+)",type:"boolean"}
+      ],
+      tuitionRange:"Theo chương trình",
+      note:"Năm 2024: AI và Bán dẫn cực kỳ cạnh tranh. Doanh nghiệp công nghệ lớn tài trợ học bổng có cam kết làm việc."
+    }
+  ],
+  bio: [
+    {
+      name:"Đại học Khoa học Tự nhiên - ĐHQG TP.HCM", short:"HCMUS", city:"TP.HCM",
+      applyStart:"01/03/2024", applyEnd:"30/04/2024",
+      scholarshipMethods:["Học bổng NCKH sinh học","Học bổng khuyến khích học tập","Học bổng biotech doanh nghiệp (mở rộng 2024)","Học bổng nghiên cứu công nghệ sinh học y dược"],
+      admissionMethods:["THPT","ĐGNL","Xét tuyển thẳng"],
+      requirements:[
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.3,note:"Mốc 2024"},
+        {id:"thpt",label:"Điểm THPT",type:"number",min:23,note:"Mốc 2024"},
+        {id:"activities",label:"Định hướng NCKH / dự án biotech",type:"boolean"},
+        {id:"award",label:"Giải khoa học / Olympic Sinh học",type:"boolean"}
+      ],
+      tuitionRange:"Theo ngành",
+      note:"Năm 2024: biotech gắn chặt doanh nghiệp y dược. Yêu cầu định hướng nghiên cứu rõ ràng từ vòng hồ sơ."
+    }
+  ]
+};
+
+
 const scholarshipData_2025_raw = {
   cntt: [
     {
@@ -3707,6 +3923,7 @@ scholarshipData_2025_raw.ai.push(
 const scholarshipByYear = {
   "2022": scholarshipData_2022,
   "2023": scholarshipData_2023,
+  "2024": scholarshipData_2024,
   "2025": scholarshipData_2025_raw  /* được gán ngay sau khi parse xong */
 };
 
@@ -3739,22 +3956,36 @@ function getScholarshipDataForYear(year) {
           _isFallback: false
         }));
       } else {
-        // Fallback: tìm năm gần nhất trước targetYear có dữ liệu
+        // Fallback ưu tiên: năm gần nhất TRƯỚC target (chính xác hơn về thời gian)
+        var fallback = null;
+        var fallbackYear = null;
         for (var i = 0; i < years.length; i++) {
           var y = years[i];
           if (y >= targetYear) continue;
           var d = scholarshipByYear[String(y)];
           if (!d || !d[tab]) continue;
           var fb = d[tab].find(function(u){ return u.short === short; });
-          if (fb) {
-            result[tab].push(Object.assign({}, fb, {
-              _dataYear: String(y),
-              _isFallback: true,
-              applyStart: "Chưa công bố " + targetYear,
-              applyEnd:   "Chưa công bố " + targetYear
-            }));
-            break;
+          if (fb) { fallback = fb; fallbackYear = y; break; }
+        }
+        // Nếu không có năm trước → tìm năm gần nhất SAU target (để không mất trường)
+        if (!fallback) {
+          var yearsAsc = years.slice().sort(function(a,b){return a-b;});
+          for (var k = 0; k < yearsAsc.length; k++) {
+            var y2 = yearsAsc[k];
+            if (y2 <= targetYear) continue;
+            var d2 = scholarshipByYear[String(y2)];
+            if (!d2 || !d2[tab]) continue;
+            var fb2 = d2[tab].find(function(u){ return u.short === short; });
+            if (fb2) { fallback = fb2; fallbackYear = y2; break; }
           }
+        }
+        if (fallback) {
+          result[tab].push(Object.assign({}, fallback, {
+            _dataYear: String(fallbackYear),
+            _isFallback: true,
+            applyStart: "Chưa công bố " + targetYear,
+            applyEnd:   "Chưa công bố " + targetYear
+          }));
         }
       }
     });
