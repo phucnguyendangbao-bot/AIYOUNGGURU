@@ -636,20 +636,6 @@ body::after-disabled{
 .sn-hq-result-bar-val{flex:0 0 34px;text-align:right;color:var(--text-mid);font-weight:700;}
 
 /* ═══ Huy hiệu Khuyến nghị #N ═══ */
-.sn-rec-ribbon{
-  position:absolute;top:10px;right:-6px;z-index:5;
-  padding:5px 12px 5px 14px;border-radius:6px 2px 2px 6px;
-  font-size:.72rem;font-weight:800;color:#fff;letter-spacing:.3px;
-  display:flex;align-items:center;gap:5px;font-family:var(--font);
-  box-shadow:0 6px 16px rgba(0,0,0,0.18);
-}
-.sn-rec-ribbon::after{
-  content:"";position:absolute;top:100%;right:0;
-  border:3px solid transparent;border-top-color:rgba(0,0,0,0.35);border-right-color:transparent;
-}
-.sn-rec-ribbon.rec-1{background:linear-gradient(135deg,#f59e0b,#ef4444);}
-.sn-rec-ribbon.rec-2{background:linear-gradient(135deg,#8b5cf6,#6366f1);}
-.sn-rec-ribbon.rec-3{background:linear-gradient(135deg,#14b8a6,#0891b2);}
 .sn-card{position:relative;}
 
 /* ═══ Badge giá trị HB & Holland-fit trên card ═══ */
@@ -4818,11 +4804,8 @@ function buildCard(uni, meta) {
   const fallbackCardClass = "";
 
   // ═ Huy hiệu Khuyến nghị & chip giá trị / Holland-fit ═
-  const recRank = meta.recRank || 0;
+  const recRank = 0; // school rank removed
   let recRibbon = "";
-  if (recRank === 1) recRibbon = `<div class="sn-rec-ribbon rec-1">⭐ Khuyến nghị #1</div>`;
-  else if (recRank === 2) recRibbon = `<div class="sn-rec-ribbon rec-2">🥈 Khuyến nghị #2</div>`;
-  else if (recRank === 3) recRibbon = `<div class="sn-rec-ribbon rec-3">🥉 Khuyến nghị #3</div>`;
 
   const valLabel = (typeof meta.schValue === "number") ? scholarshipValueLabel(meta.schValue) : null;
   const valChip  = valLabel ? `<span class="sn-meta-chip ${valLabel.cls}">${valLabel.text}</span>` : "";
@@ -6133,25 +6116,34 @@ window.addEventListener('load', function(){
     .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
     .replace(/đ/g,'d').replace(/Đ/g,'d');
 
-  // Override onSearch to filter university cards by search query
-  const origOnSearch = window.onSearch;
+  // Override onSearch: filter cards by text when user types; show all when empty
   window.onSearch = function(val) {
     const q = noDiacritics(val.trim());
-    // Get all university cards across all panels
-    document.querySelectorAll('.sn-uni-card, .sn-uni-grid > *').forEach(card => {
-      if (!q) {
-        card.style.display = 'none'; // Hide when no search
-        return;
-      }
-      const text = noDiacritics(card.textContent || '');
-      card.style.display = text.includes(q) ? '' : 'none';
-    });
+    // Update global search state and re-render via original renderGrid
+    window.currentSearch = val.toLowerCase();
+    if (typeof window.renderGrid === 'function') {
+      window.renderGrid(window.currentTab || 'cntt');
+    }
+    if (!q) {
+      // Show all cards in active panel, hide nothing
+      document.querySelectorAll('.sn-uni-card, .sn-uni-grid > *').forEach(card => {
+        if (!card.classList.contains('search-empty-msg') && !card.classList.contains('search-prompt-msg')) {
+          card.style.display = '';
+        }
+      });
+    } else {
+      document.querySelectorAll('.sn-uni-card, .sn-uni-grid > *').forEach(card => {
+        if (card.classList.contains('search-empty-msg') || card.classList.contains('search-prompt-msg')) return;
+        const text = noDiacritics(card.textContent || '');
+        card.style.display = text.includes(q) ? '' : 'none';
+      });
+    }
     // Show/hide empty message
     document.querySelectorAll('.sn-tab-panel').forEach(panel => {
       const grid = panel.querySelector('.sn-uni-grid');
       if (!grid) return;
       let msg = panel.querySelector('.search-empty-msg');
-      const visibleCards = grid.querySelectorAll(':scope > *:not([style*="display: none"]):not(.search-empty-msg)');
+      const visibleCards = grid.querySelectorAll(':scope > *:not([style*="display: none"]):not(.search-empty-msg):not(.search-prompt-msg)');
       if (q && visibleCards.length === 0) {
         if (!msg) {
           msg = document.createElement('div');
@@ -6165,35 +6157,15 @@ window.addEventListener('load', function(){
         msg.style.display = 'none';
       }
     });
-    // Show prompt when empty
-    document.querySelectorAll('.sn-tab-panel').forEach(panel => {
-      const grid = panel.querySelector('.sn-uni-grid');
-      if (!grid) return;
-      let prompt = panel.querySelector('.search-prompt-msg');
-      if (!q) {
-        if (!prompt) {
-          prompt = document.createElement('div');
-          prompt.className = 'search-prompt-msg';
-          prompt.style.cssText = 'grid-column:1/-1;text-align:center;color:#6366f1;padding:40px 20px;font-size:.95rem;';
-          prompt.innerHTML = '🔍 Nhập tên trường vào ô tìm kiếm phía trên để xem thông tin';
-          grid.appendChild(prompt);
-        }
-        prompt.style.display = '';
-      } else if (prompt) {
-        prompt.style.display = 'none';
-      }
-    });
   };
 
   // Inject logos into cards after they render
   function injectLogos() {
     document.querySelectorAll('.sn-uni-grid > *').forEach(card => {
       if (card.dataset.logoInjected) return;
-      // Find the short code from card content
       const codeEl = card.querySelector('.sn-uni-short, [data-short]');
       let code = codeEl ? (codeEl.dataset.short || codeEl.textContent.trim()) : null;
       if (!code) {
-        // Try to extract from text content
         const h = card.querySelector('h3, h4, .sn-uni-name');
         if (h) {
           const m = h.textContent.match(/^([A-Z][A-Z0-9-]+)/);
@@ -6203,12 +6175,11 @@ window.addEventListener('load', function(){
       if (code) {
         const logoData = getLogo(code);
         if (logoData) {
-          // Find or create logo container
           let logoEl = card.querySelector('.sn-uni-logo img, .sn-uni-logo');
           if (logoEl && logoEl.tagName === 'IMG') {
             logoEl.src = logoData;
           } else if (logoEl) {
-            logoEl.innerHTML = '<img src="'+logoData+'" style="width:48px;height:48px;object-fit:contain;border-radius:8px;" / loading="lazy" decoding="async">';
+            logoEl.innerHTML = '<img src="'+logoData+'" style="width:48px;height:48px;object-fit:contain;border-radius:8px;" loading="lazy" decoding="async">';
           }
         }
       }
@@ -6216,40 +6187,14 @@ window.addEventListener('load', function(){
     });
   }
 
-  // Initially hide all cards (search-only mode)
-  function hideAllCards() {
-    document.querySelectorAll('.sn-uni-card, .sn-uni-grid > *').forEach(card => {
-      card.style.display = 'none';
-    });
-    // Add search prompt
-    document.querySelectorAll('.sn-tab-panel').forEach(panel => {
-      const grid = panel.querySelector('.sn-uni-grid');
-      if (!grid) return;
-      let prompt = grid.querySelector('.search-prompt-msg');
-      if (!prompt) {
-        prompt = document.createElement('div');
-        prompt.className = 'search-prompt-msg';
-        prompt.style.cssText = 'grid-column:1/-1;text-align:center;color:#6366f1;padding:40px 20px;font-size:.95rem;';
-        prompt.innerHTML = '🔍 Nhập tên trường vào ô tìm kiếm phía trên để xem thông tin';
-        grid.appendChild(prompt);
-      }
-    });
-  }
-
-  // Wait for original script to render cards, then hide + inject logos
+  // Wait for original script to render cards, then inject logos (do NOT hide cards)
   function init() {
     setTimeout(() => {
       injectLogos();
-      hideAllCards();
     }, 500);
-    // Also observe for dynamic renders
+    // Observe dynamic renders to inject logos
     const observer = new MutationObserver(() => {
       injectLogos();
-      // If search is empty, re-hide new cards
-      const searchInput = document.getElementById('searchInput');
-      if (searchInput && !searchInput.value.trim()) {
-        hideAllCards();
-      }
     });
     document.querySelectorAll('.sn-uni-grid').forEach(grid => {
       observer.observe(grid, { childList: true });
