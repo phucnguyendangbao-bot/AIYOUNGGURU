@@ -2556,10 +2556,13 @@ body.spa-active #spa-topbar { display: flex; }
   <div class="tool-section-hd">
     <h2>🔍 Công cụ tra cứu học bổng</h2>
     <p>Nhập thông tin hồ sơ của bạn để hệ thống tự đối chiếu điều kiện với từng trường trong 8 nhóm ngành lớn.</p>
-    <div class="year-selector-wrap">
+    <div class="year-selector-wrap" style="display:none;" aria-hidden="true">
       <span class="year-selector-label">📅 Năm học:</span>
       <div id="yearSelectorWrap" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
-      <span style="font-size:.7rem;color:rgba(255,255,255,0.55);margin-left:4px;">⚡ Tự động dùng dữ liệu năm gần nhất nếu chưa có</span>
+    </div>
+    <div style="margin-top:10px;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:12px;padding:8px 14px;font-size:.75rem;color:rgba(255,255,255,0.9);font-weight:600;">
+      <span>📊</span>
+      <span>Dữ liệu <strong>tổng hợp 2010–2026</strong> — mỗi trường hiển thị nguồn năm chính xác & xu hướng dự đoán từ dữ liệu lịch sử</span>
     </div>
   </div>
 
@@ -3050,6 +3053,8 @@ UNI_LOGOS["FPT-AI"] = UNI_LOGOS["FPT-AI"] || UNI_LOGOS["FPTU"] || "";
 UNI_LOGOS["FPT"] = UNI_LOGOS["FPT"] || UNI_LOGOS["FPTU"] || UNI_LOGOS["FPT-AI"] || "";
 UNI_LOGOS["HUS"] = UNI_LOGOS["HUS"] || "images/img-8f48248bb251.png";
 UNI_LOGOS["HCMIU"] = UNI_LOGOS["HCMIU"] || "images/img-6451e917ebd4.png";
+UNI_LOGOS["VIVU"] = "https://vinuniversity.edu.vn/wp-content/uploads/2021/03/vin-university-logo.png";
+UNI_LOGOS["FUV"] = "https://fulbright.edu.vn/wp-content/uploads/2022/03/fulbright-logo.png";
 const SLUG_MAP = {
   "HCMUT":"hcmut-oisp","UIT":"uit","FPTU":"fpt",
   "UMP":"ump","PNTU":"pnt","CTUMP":"ctump",
@@ -4291,104 +4296,198 @@ const scholarshipByYear = {
   "2025": scholarshipData_2025_raw  /* được gán ngay sau khi parse xong */
 };
 
-/* ── Logic fallback: lấy dữ liệu trường từ năm gần nhất ── */
-function getScholarshipDataForYear(year) {
-  const years = Object.keys(scholarshipByYear).map(Number).sort((a,b) => b-a);
-  const targetYear = parseInt(year);
+/* ── Dữ liệu bổ sung từ tổng hợp 2010-2026 (docx upload) ──
+   Các trường mới & xu hướng lịch sử sâu hơn từ file hoc_bong_2010_2026.docx
+   Nguồn: BrightWay tổng hợp + phân tích xu hướng 2010-2026
+*/
+const scholarshipData_extended = {
+  cntt: [
+    {
+      name: "VinUniversity", short: "VIVU", city: "Hà Nội",
+      applyStart: "01/10/2024", applyEnd: "31/03/2025",
+      scholarshipMethods: [
+        "Học bổng Merit-Based (toàn phần + sinh hoạt phí)",
+        "Học bổng nghiên cứu (Research scholarship)",
+        "Học bổng tài năng đặc biệt"
+      ],
+      admissionMethods: ["Xét hồ sơ toàn diện", "Phỏng vấn nhiều vòng", "Portfolio / dự án nghiên cứu"],
+      requirements: [
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.5,note:"Mốc 2024-2025"},
+        {id:"ielts",label:"IELTS",type:"number",min:6.5,note:"Hoặc SAT/ACT tương đương"},
+        {id:"portfolio",label:"Có portfolio / dự án nghiên cứu",type:"boolean"},
+        {id:"essay",label:"Bài luận cá nhân",type:"boolean"}
+      ],
+      tuitionRange: "Học bổng toàn phần + sinh hoạt phí (cạnh tranh rất cao)",
+      note: "Tổng hợp 2020-2026: VinUniversity thành lập 2020 với học bổng merit-based. Từ 2021 thêm sinh hoạt phí. Từ 2024 yêu cầu portfolio và phỏng vấn nhiều vòng. Xu hướng: tiêu chí ngày càng toàn diện, chú trọng tư duy research.",
+      _historyNote: "2020: Merit-based · 2021-2023: 100% + sinh hoạt phí · 2024-2026: Portfolio + research + nhiều vòng phỏng vấn"
+    }
+  ],
+  tc: [
+    {
+      name: "Đại học Fulbright Việt Nam", short: "FUV", city: "TP.HCM",
+      applyStart: "01/11/2024", applyEnd: "15/02/2025",
+      scholarshipMethods: [
+        "Financial Aid (hỗ trợ tài chính theo nhu cầu)",
+        "Need-based scholarship",
+        "Học bổng tài năng lãnh đạo"
+      ],
+      admissionMethods: ["Hồ sơ toàn diện + bài luận", "Phỏng vấn đánh giá tư duy phản biện"],
+      requirements: [
+        {id:"gpa",label:"GPA học bạ",type:"number",min:8.0,note:"Mốc 2024"},
+        {id:"essay",label:"Bài luận phân tích / tư duy phản biện",type:"boolean"},
+        {id:"activities_list",label:"Hoạt động ngoại khóa & lãnh đạo",type:"multi_select",source:"activities",minPick:1},
+        {id:"ielts",label:"IELTS hoặc SAT/ACT",type:"number",min:6.0}
+      ],
+      tuitionRange: "Financial aid linh hoạt theo năng lực tài chính gia đình",
+      note: "Tổng hợp 2018-2026: Fulbright khai giảng 2018 với Financial Aid thuần túy. Từ 2021 thêm tiêu chí tư duy phản biện và phỏng vấn chuyên sâu. Đây là mô hình liberal arts duy nhất tại VN — tiêu chí học bổng đặc thù, không chỉ xét điểm.",
+      _historyNote: "2018-2020: Financial aid · 2021-2026: Essay + tư duy phản biện + phỏng vấn chuyên sâu"
+    }
+  ],
+  ai: [],
+  tt: [],
+  yte: [],
+  sp: [],
+  env: [],
+  bio: []
+};
+
+// Merge extended data into scholarshipByYear as a supplemental source
+(function() {
+  Object.keys(scholarshipData_extended).forEach(function(tab) {
+    if (!scholarshipData_extended[tab] || !scholarshipData_extended[tab].length) return;
+    // Add to 2025 data if school not already present
+    var existing = scholarshipData_2025_raw[tab] || [];
+    scholarshipData_extended[tab].forEach(function(school) {
+      var alreadyExists = existing.some(function(u){ return u.short === school.short; });
+      if (!alreadyExists) {
+        existing.push(school);
+      }
+    });
+    scholarshipData_2025_raw[tab] = existing;
+  });
+})();
+
+/* ── Tổng hợp dữ liệu đa năm (2010–2026): lấy bản ghi MỚI NHẤT cho mỗi trường,
+      kèm metadata về lịch sử và xu hướng tổng hợp từ các năm trước ── */
+function getMergedScholarshipData() {
+  const years = Object.keys(scholarshipByYear).map(Number).sort(function(a,b){return b-a;});
   const result = {};
   const tabs = ["cntt","yte","tt","tc","sp","env","ai","bio"];
 
   tabs.forEach(function(tab) {
-    // Gom tất cả short codes từ mọi năm trong tab này
     const allShorts = new Set();
     years.forEach(function(y) {
-      const d = scholarshipByYear[String(y)];
+      var d = scholarshipByYear[String(y)];
       if (d && d[tab]) d[tab].forEach(function(u){ allShorts.add(u.short); });
     });
 
     result[tab] = [];
     allShorts.forEach(function(short) {
-      // Tìm bản ghi năm target
-      const targetData = scholarshipByYear[String(targetYear)];
-      const found = targetData && targetData[tab]
-        ? targetData[tab].find(function(u){ return u.short === short; })
-        : null;
+      // Tìm bản ghi MỚI NHẤT cho trường này
+      var latestEntry = null, latestYear = null;
+      for (var i = 0; i < years.length; i++) {
+        var y = years[i];
+        var d = scholarshipByYear[String(y)];
+        if (!d || !d[tab]) continue;
+        var found = d[tab].find(function(u){ return u.short === short; });
+        if (found) { latestEntry = found; latestYear = y; break; }
+      }
+      if (!latestEntry) return;
 
-      if (found) {
-        result[tab].push(Object.assign({}, found, {
-          _dataYear: String(targetYear),
-          _isFallback: false
-        }));
-      } else {
-        // Fallback ưu tiên: năm gần nhất TRƯỚC target (chính xác hơn về thời gian)
-        var fallback = null;
-        var fallbackYear = null;
-        for (var i = 0; i < years.length; i++) {
-          var y = years[i];
-          if (y >= targetYear) continue;
-          var d = scholarshipByYear[String(y)];
-          if (!d || !d[tab]) continue;
-          var fb = d[tab].find(function(u){ return u.short === short; });
-          if (fb) { fallback = fb; fallbackYear = y; break; }
-        }
-        // Nếu không có năm trước → tìm năm gần nhất SAU target (để không mất trường)
-        if (!fallback) {
-          var yearsAsc = years.slice().sort(function(a,b){return a-b;});
-          for (var k = 0; k < yearsAsc.length; k++) {
-            var y2 = yearsAsc[k];
-            if (y2 <= targetYear) continue;
-            var d2 = scholarshipByYear[String(y2)];
-            if (!d2 || !d2[tab]) continue;
-            var fb2 = d2[tab].find(function(u){ return u.short === short; });
-            if (fb2) { fallback = fb2; fallbackYear = y2; break; }
-          }
-        }
-        if (fallback) {
-          result[tab].push(Object.assign({}, fallback, {
-            _dataYear: String(fallbackYear),
-            _isFallback: true,
-            applyStart: "Chưa công bố " + targetYear,
-            applyEnd:   "Chưa công bố " + targetYear
-          }));
+      // Gom lịch sử tất cả các năm có dữ liệu
+      var history = [];
+      years.slice().sort(function(a,b){return a-b;}).forEach(function(y) {
+        var d = scholarshipByYear[String(y)];
+        if (!d || !d[tab]) return;
+        var rec = d[tab].find(function(u){ return u.short === short; });
+        if (rec) history.push({ year: y, data: rec });
+      });
+
+      // Phân tích xu hướng điểm chuẩn
+      var trendLines = [];
+      var thptHistory = history.filter(function(h){
+        return h.data.requirements && h.data.requirements.some(function(r){ return r.id==="thpt" && r.min; });
+      });
+      if (thptHistory.length >= 2) {
+        var first = thptHistory[0], last = thptHistory[thptHistory.length-1];
+        var firstMin = first.data.requirements.find(function(r){return r.id==="thpt";}).min;
+        var lastMin  = last.data.requirements.find(function(r){return r.id==="thpt";}).min;
+        var diff = lastMin - firstMin;
+        if (Math.abs(diff) >= 0.5) {
+          trendLines.push("Điểm THPT " + (diff > 0 ? "📈 tăng " + diff.toFixed(1) + " điểm" : "📉 giảm " + Math.abs(diff).toFixed(1) + " điểm") +
+            " so với " + first.year + " → " + last.year);
+        } else {
+          trendLines.push("Điểm THPT ổn định qua các năm (" + firstMin + " → " + lastMin + ")");
         }
       }
+      var gpaHistory = history.filter(function(h){
+        return h.data.requirements && h.data.requirements.some(function(r){ return r.id==="gpa" && r.min; });
+      });
+      if (gpaHistory.length >= 2) {
+        var fg = gpaHistory[0], lg = gpaHistory[gpaHistory.length-1];
+        var fgMin = fg.data.requirements.find(function(r){return r.id==="gpa";}).min;
+        var lgMin = lg.data.requirements.find(function(r){return r.id==="gpa";}).min;
+        var gd = lgMin - fgMin;
+        if (Math.abs(gd) >= 0.1) {
+          trendLines.push("GPA học bạ " + (gd > 0 ? "📈 tăng " + gd.toFixed(1) : "📉 giảm " + Math.abs(gd).toFixed(1)) +
+            " (" + fg.year + ": " + fgMin + " → " + lg.year + ": " + lgMin + ")");
+        }
+      }
+
+      // Dự đoán đơn giản: ngoại suy xu hướng thêm 1 bước
+      var predictions = [];
+      if (thptHistory.length >= 2) {
+        var vals = thptHistory.map(function(h){
+          return h.data.requirements.find(function(r){return r.id==="thpt";}).min;
+        });
+        var avgInc = (vals[vals.length-1] - vals[0]) / (thptHistory.length - 1);
+        var pred = (vals[vals.length-1] + avgInc).toFixed(1);
+        if (avgInc > 0.1) predictions.push("Dự đoán THPT 2026: ~" + pred + " (xu hướng tăng)");
+        else if (avgInc < -0.1) predictions.push("Dự đoán THPT 2026: ~" + pred + " (xu hướng giảm)");
+        else predictions.push("THPT 2026 dự kiến ổn định quanh " + vals[vals.length-1]);
+      }
+
+      var yearsWithData = history.map(function(h){return h.year;}).join(", ");
+      var dataSourceNote = "✅ Dữ liệu chính xác từ năm <strong>" + latestYear + "</strong>" +
+        (history.length > 1 ? " · Tổng hợp từ các năm: " + yearsWithData : "") +
+        (trendLines.length ? " · " + trendLines.join(" · ") : "") +
+        (predictions.length ? " · " + predictions.join(" · ") : "");
+
+      result[tab].push(Object.assign({}, latestEntry, {
+        _dataYear: String(latestYear),
+        _isFallback: false,
+        _mergedHistory: history,
+        _trendLines: trendLines,
+        _predictions: predictions,
+        _dataSourceNote: dataSourceNote,
+        _yearsWithData: yearsWithData
+      }));
     });
   });
 
   return result;
 }
 
-/* ── Năm selector UI ── */
-function buildYearSelector() {
-  const years = Object.keys(scholarshipByYear).sort((a,b) => b-a);
-  const wrap = document.getElementById("yearSelectorWrap");
-  if (!wrap) return;
-  wrap.innerHTML = years.map(function(y) {
-    const isCurrent = y === activeYear;
-    return '<button class="year-btn' + (isCurrent ? ' active' : '') + '" onclick="switchYear(\'' + y + '\')" style="' +
-      (isCurrent
-        ? 'background:linear-gradient(135deg,#5b7cfa,#7c5bf5);color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(99,102,241,0.35);'
-        : 'background:rgba(255,255,255,0.7);color:#3a3a6e;border:1.5px solid rgba(99,102,241,0.2);') +
-      'padding:6px 18px;border-radius:999px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;">' +
-      y + (y === String(new Date().getFullYear()) ? ' <span style="font-size:.65rem;opacity:.75;">(hiện tại)</span>' : '') +
-    '</button>';
-  }).join('');
+/* ── Logic fallback: lấy dữ liệu trường từ năm gần nhất (giữ tương thích) ── */
+function getScholarshipDataForYear(year) {
+  return getMergedScholarshipData();
 }
+
+/* ── Năm selector UI — ẩn, giữ hàm để tránh lỗi ── */
+function buildYearSelector() { /* đã ẩn */ }
 
 function switchYear(year) {
   activeYear = year;
-  // Cập nhật scholarshipData để toàn bộ logic cũ vẫn hoạt động
-  const data = getScholarshipDataForYear(year);
+  // Luôn dùng dữ liệu đa-năm tổng hợp
+  const data = getMergedScholarshipData();
   Object.keys(data).forEach(function(tab) {
     scholarshipData[tab] = data[tab];
-    // Gán lại scholarshipCount
     scholarshipData[tab].forEach(function(uni) {
       if (!uni.scholarshipCount) {
         uni.scholarshipCount = SCHOLARSHIP_COUNT_DATA[uni.short] || "Theo thông báo của trường";
       }
     });
   });
-  buildYearSelector();
   // Re-render tất cả tab
   Object.keys(scholarshipData).forEach(function(tab) { renderGrid(tab); });
 }
@@ -4593,16 +4692,26 @@ function buildCard(uni, meta) {
   const uniRegion = detectRegion(uni.city);
   const regionMatch = student.region && (uniRegion === student.region || uniRegion === "all");
   const regionBadge = student.region ? `<span class="sn-badge-out" style="${regionMatch ? 'background:rgba(16,185,129,.12);color:#047857;border-color:rgba(16,185,129,.18);' : ''}">📍 ${regionLabel(uniRegion)}</span>` : "";
-  const fallbackBanner = uni._isFallback
-    ? `<div class="sn-fallback-banner">
-        <span class="fb-icon">⚠️</span>
-        <span>Chưa có dữ liệu năm <strong>${activeYear}</strong> — đang hiển thị thông tin từ năm <strong>${uni._dataYear}</strong> để tham khảo. Tiêu chí có thể thay đổi.</span>
+  const fallbackBanner = uni._dataSourceNote
+    ? `<div class="sn-fallback-banner" style="background:rgba(99,102,241,0.08);border-color:rgba(99,102,241,0.2);color:#3730a3;flex-direction:column;gap:4px;align-items:flex-start;">
+        <div style="display:flex;align-items:center;gap:7px;font-weight:700;">
+          <span class="fb-icon">📊</span>
+          <span>${uni._dataSourceNote}</span>
+        </div>
+        ${uni._trendLines && uni._trendLines.length ? `<div style="font-size:.7rem;color:#4f46e5;padding-left:24px;">📈 Xu hướng: ${uni._trendLines.join(' · ')}</div>` : ''}
+        ${uni._predictions && uni._predictions.length ? `<div style="font-size:.7rem;color:#7c3aed;padding-left:24px;">🔮 Dự đoán: ${uni._predictions.join(' · ')}</div>` : ''}
+        ${uni._historyNote ? `<div style="font-size:.7rem;color:#1d4ed8;padding-left:24px;">📜 Lịch sử: ${uni._historyNote}</div>` : ''}
       </div>`
-    : (uni._dataYear && uni._dataYear !== activeYear ? `<div class="sn-fallback-banner" style="background:rgba(99,102,241,0.08);border-color:rgba(99,102,241,0.2);color:#3730a3;">
+    : uni._historyNote
+    ? `<div class="sn-fallback-banner" style="background:rgba(99,102,241,0.08);border-color:rgba(99,102,241,0.2);color:#3730a3;">
+        <span class="fb-icon">📜</span>
+        <span>${uni._historyNote}</span>
+      </div>`
+    : `<div class="sn-fallback-banner" style="background:rgba(99,102,241,0.08);border-color:rgba(99,102,241,0.2);color:#3730a3;">
         <span class="fb-icon">📋</span>
-        <span>Dữ liệu năm <strong>${uni._dataYear}</strong></span>
-      </div>` : "");
-  const fallbackCardClass = uni._isFallback ? " is-fallback" : "";
+        <span>Dữ liệu năm <strong>${uni._dataYear || "gần nhất"}</strong></span>
+      </div>`;
+  const fallbackCardClass = "";
 
   // ═ Huy hiệu Khuyến nghị & chip giá trị / Holland-fit ═
   const recRank = meta.recRank || 0;
